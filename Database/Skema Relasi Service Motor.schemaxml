@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="latin1" collation="latin1_swedish_ci">db_ta_basdat2_servicemotor</database>
+</source>
+<canvas zoom="100">
+<tables>
+<table name="t_bag_sparepart" view="colnames">
+<left>1204</left>
+<top>329</top>
+<width>151</width>
+<height>146</height>
+<sql_create_table>CREATE TABLE `t_bag_sparepart` (
+  `Id_BSparepart` int(5) NOT NULL AUTO_INCREMENT,
+  `Nama_BSparepart` varbinary(50) DEFAULT NULL,
+  `alamat` varchar(50) DEFAULT NULL,
+  `No_Telp` varchar(13) DEFAULT NULL,
+  PRIMARY KEY (`Id_BSparepart`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_customer" view="colnames">
+<left>137</left>
+<top>29</top>
+<width>142</width>
+<height>146</height>
+<sql_create_table>CREATE TABLE `t_customer` (
+  `Id_Customer` int(5) NOT NULL AUTO_INCREMENT,
+  `Nama_Customer` varchar(50) DEFAULT NULL,
+  `Alamat` varchar(50) DEFAULT NULL,
+  `No_Telp` varchar(13) DEFAULT NULL,
+  PRIMARY KEY (`Id_Customer`)
+) ENGINE=InnoDB AUTO_INCREMENT=123457 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_det_jasa" view="colnames">
+<left>732</left>
+<top>334</top>
+<width>101</width>
+<height>152</height>
+<sql_create_table>CREATE TABLE `t_det_jasa` (
+  `Id_DetJasa` int(11) NOT NULL AUTO_INCREMENT,
+  `Id_Faktur` int(11) DEFAULT NULL,
+  `Id_Jasa` int(5) DEFAULT NULL,
+  `Qty` int(5) DEFAULT NULL,
+  `Total` int(15) DEFAULT NULL,
+  PRIMARY KEY (`Id_DetJasa`),
+  KEY `Id_Faktur` (`Id_Faktur`),
+  KEY `Id_Jasa` (`Id_Jasa`),
+  CONSTRAINT `t_det_jasa_ibfk_1` FOREIGN KEY (`Id_Faktur`) REFERENCES `t_faktur` (`Id_Faktur`),
+  CONSTRAINT `t_det_jasa_ibfk_2` FOREIGN KEY (`Id_Jasa`) REFERENCES `t_jasa` (`Id_Jasa`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_det_sparepart" view="colnames">
+<left>606</left>
+<top>38</top>
+<width>122</width>
+<height>156</height>
+<sql_create_table>CREATE TABLE `t_det_sparepart` (
+  `Id_DetSparepart` int(11) NOT NULL AUTO_INCREMENT,
+  `Id_Faktur` int(11) DEFAULT NULL,
+  `Id_Sparepart` int(5) DEFAULT NULL,
+  `Qty` int(5) DEFAULT NULL,
+  `Total` int(15) DEFAULT NULL,
+  PRIMARY KEY (`Id_DetSparepart`),
+  KEY `Id_Sparepart_2` (`Id_Sparepart`),
+  KEY `Id_Faktur` (`Id_Faktur`),
+  CONSTRAINT `t_det_sparepart_ibfk_1` FOREIGN KEY (`Id_Sparepart`) REFERENCES `t_sparepart` (`Id_Sparepart`),
+  CONSTRAINT `t_det_sparepart_ibfk_2` FOREIGN KEY (`Id_Faktur`) REFERENCES `t_faktur` (`Id_Faktur`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_faktur" view="colnames">
+<left>482</left>
+<top>294</top>
+<width>124</width>
+<height>209</height>
+<sql_create_table>CREATE TABLE `t_faktur` (
+  `Id_Faktur` int(11) NOT NULL AUTO_INCREMENT,
+  `Tanggal` date DEFAULT NULL,
+  `Id_Teknisi` int(5) DEFAULT NULL,
+  `Id_Kasir` int(5) DEFAULT NULL,
+  `Id_Customer` int(5) DEFAULT NULL,
+  `Total_Harga` int(15) DEFAULT NULL,
+  `Lama_Garansi` date DEFAULT NULL,
+  `No_Polisi` varchar(12) DEFAULT NULL,
+  PRIMARY KEY (`Id_Faktur`),
+  KEY `Kd_Kasir` (`Id_Kasir`),
+  KEY `Id_Teknisi` (`Id_Teknisi`),
+  KEY `Id_Customer` (`Id_Customer`),
+  KEY `No_Polisi` (`No_Polisi`),
+  CONSTRAINT `t_faktur_ibfk_1` FOREIGN KEY (`Id_Kasir`) REFERENCES `t_kasir` (`Id_Kasir`),
+  CONSTRAINT `t_faktur_ibfk_2` FOREIGN KEY (`Id_Teknisi`) REFERENCES `t_teknisi` (`Id_Teknisi`),
+  CONSTRAINT `t_faktur_ibfk_3` FOREIGN KEY (`Id_Customer`) REFERENCES `t_customer` (`Id_Customer`),
+  CONSTRAINT `t_faktur_ibfk_4` FOREIGN KEY (`No_Polisi`) REFERENCES `t_motor` (`No_Polisi`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_jasa" view="colnames">
+<left>1139</left>
+<top>615</top>
+<width>112</width>
+<height>146</height>
+<sql_create_table>CREATE TABLE `t_jasa` (
+  `Id_Jasa` int(5) NOT NULL,
+  `Nama_Jasa` varchar(30) DEFAULT NULL,
+  `Id_Jenis` int(3) DEFAULT NULL,
+  `Harga_Jasa` int(15) DEFAULT NULL,
+  PRIMARY KEY (`Id_Jasa`),
+  KEY `Id_Jenis` (`Id_Jenis`),
+  CONSTRAINT `t_jasa_ibfk_1` FOREIGN KEY (`Id_Jenis`) REFERENCES `t_jenis` (`Id_Jenis`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_motor" view="colnames">
+<left>21</left>
+<top>241</top>
+<width>124</width>
+<height>163</height>
+<sql_create_table>CREATE TABLE `t_motor` (
+  `No_Polisi` varchar(12) NOT NULL,
+  `No_Rangka` varchar(20) DEFAULT NULL,
+  `No_Mesin` varchar(15) DEFAULT NULL,
+  `Id_Customer` int(5) DEFAULT NULL,
+  `Id_Tipe` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`No_Polisi`),
+  KEY `Id_Tipe` (`Id_Tipe`),
+  KEY `Id_Customer` (`Id_Customer`),
+  CONSTRAINT `t_motor_ibfk_2` FOREIGN KEY (`Id_Tipe`) REFERENCES `t_tipe` (`Id_Tipe`),
+  CONSTRAINT `t_motor_ibfk_3` FOREIGN KEY (`Id_Customer`) REFERENCES `t_customer` (`Id_Customer`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_sparepart" view="colnames">
+<left>745</left>
+<top>32</top>
+<width>144</width>
+<height>163</height>
+<sql_create_table>CREATE TABLE `t_sparepart` (
+  `Id_Sparepart` int(5) NOT NULL,
+  `Nama_Sparepart` varchar(30) DEFAULT NULL,
+  `Id_Jenis` int(3) DEFAULT NULL,
+  `Stok` int(10) DEFAULT NULL,
+  `Harga_Sparepart` int(15) DEFAULT NULL,
+  PRIMARY KEY (`Id_Sparepart`),
+  KEY `Id_Jenis` (`Id_Jenis`),
+  CONSTRAINT `t_sparepart_ibfk_1` FOREIGN KEY (`Id_Jenis`) REFERENCES `t_jenis` (`Id_Jenis`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_teknisi" view="colnames">
+<left>728</left>
+<top>524</top>
+<width>126</width>
+<height>136</height>
+<sql_create_table>CREATE TABLE `t_teknisi` (
+  `Id_Teknisi` int(5) NOT NULL AUTO_INCREMENT,
+  `Nama_Teknisi` varchar(50) DEFAULT NULL,
+  `Alamat` varchar(50) DEFAULT NULL,
+  `No_Telp` varchar(13) DEFAULT NULL,
+  PRIMARY KEY (`Id_Teknisi`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_tipe" view="colnames">
+<left>168</left>
+<top>396</top>
+<width>110</width>
+<height>129</height>
+<sql_create_table>CREATE TABLE `t_tipe` (
+  `Id_Tipe` varchar(10) NOT NULL,
+  `Nama_Tipe` varchar(20) DEFAULT NULL,
+  `Id_Jenis` int(3) DEFAULT NULL,
+  PRIMARY KEY (`Id_Tipe`),
+  KEY `Id_Jenis` (`Id_Jenis`),
+  CONSTRAINT `t_tipe_ibfk_1` FOREIGN KEY (`Id_Jenis`) REFERENCES `t_jenis` (`Id_Jenis`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_faktur_sparepart_masuk" view="colnames">
+<left>1103</left>
+<top>23</top>
+<width>132</width>
+<height>129</height>
+<sql_create_table>CREATE TABLE `t_faktur_sparepart_masuk` (
+  `Id_Sprt_Masuk` int(11) NOT NULL AUTO_INCREMENT,
+  `Tanggal` date DEFAULT NULL,
+  `Id_BSparepart` int(5) DEFAULT NULL,
+  PRIMARY KEY (`Id_Sprt_Masuk`),
+  KEY `Id_BSparepart` (`Id_BSparepart`),
+  CONSTRAINT `t_faktur_sparepart_masuk_ibfk_1` FOREIGN KEY (`Id_BSparepart`) REFERENCES `t_bag_sparepart` (`Id_BSparepart`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_det_sparepart_masuk" view="colnames">
+<left>955</left>
+<top>259</top>
+<width>141</width>
+<height>146</height>
+<sql_create_table>CREATE TABLE `t_det_sparepart_masuk` (
+  `Id_DetBrgMasuk` int(5) NOT NULL AUTO_INCREMENT,
+  `Id_Sparepart` int(5) DEFAULT NULL,
+  `Jmlh_Masuk` int(5) DEFAULT NULL,
+  `Id_Sprt_Masuk` int(11) DEFAULT NULL,
+  PRIMARY KEY (`Id_DetBrgMasuk`),
+  KEY `Id_Sparepart` (`Id_Sparepart`),
+  KEY `Id_Sprt_Masuk` (`Id_Sprt_Masuk`),
+  CONSTRAINT `t_det_sparepart_masuk_ibfk_1` FOREIGN KEY (`Id_Sparepart`) REFERENCES `t_sparepart` (`Id_Sparepart`),
+  CONSTRAINT `t_det_sparepart_masuk_ibfk_2` FOREIGN KEY (`Id_Sprt_Masuk`) REFERENCES `t_faktur_sparepart_masuk` (`Id_Sprt_Masuk`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_jenis" view="colnames">
+<left>891</left>
+<top>692</top>
+<width>114</width>
+<height>112</height>
+<sql_create_table>CREATE TABLE `t_jenis` (
+  `Id_Jenis` int(3) NOT NULL AUTO_INCREMENT,
+  `Nama_Jenis` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`Id_Jenis`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="t_kasir" view="colnames">
+<left>345</left>
+<top>33</top>
+<width>115</width>
+<height>140</height>
+<sql_create_table>CREATE TABLE `t_kasir` (
+  `Id_Kasir` int(5) NOT NULL AUTO_INCREMENT,
+  `Nama_Kasir` varchar(50) DEFAULT NULL,
+  `Alamat` varchar(50) DEFAULT NULL,
+  `No_Telp` varchar(13) DEFAULT NULL,
+  PRIMARY KEY (`Id_Kasir`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>
