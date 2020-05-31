@@ -34,3 +34,25 @@ WHERE T_Motor.Id_Customer = T_Customer.Id_Customer AND T_Tipe.Id_Tipe = T_Motor.
   
   // Transasksi
   SELECT * FROM T_Faktur WHERE STATUS = "PROSES"
+  
+// LAPORAN
+- HARIAN
+SELECT T_Faktur.
+//GET TAHUN
+SELECT YEAR(Tanggal) AS Tahun FROM t_Faktur GROUP BY Tahun ORDER BY Tahun ASC
+
+//PEMASUKAN PER BULAN
+SELECT T_Faktur.Id_Faktur, T_Faktur.Id_Customer, T_Faktur.Total_Jasa, T_Faktur.Total_Sparepart, T_Faktur.Total_Bayar FROM T_Faktur WHERE STATUS = 'BERES'
+SELECT SUM(T_Faktur.Total_Bayar),COUNT(Id_Faktur) AS BanyakService FROM T_Faktur WHERE STATUS = 'BERES'  AND Tanggal BETWEEN '2020-02-01' AND LAST_DAY('2020-02-30') GROUP BY MONTH(Tanggal)
+
+//PEMASUKAN PER TRIWULAN
+SELECT MONTH(Tanggal) AS Triwulan, SUM(T_Faktur.Total_Bayar) , LAST_DAY('2020-01-30' + INTERVAL 2 MONTH) FROM T_Faktur WHERE STATUS = 'BERES'  AND Tanggal BETWEEN '2020-03-01' AND LAST_DAY('2020-03-01' + INTERVAL 2 MONTH) GROUP BY MONTH(Tanggal)
+
+//PEMASUKAN PER SEMESTER
+SELECT MONTH(Tanggal) AS Triwulan, SUM(T_Faktur.Total_Bayar) , LAST_DAY('2020-01-30' + INTERVAL 5 MONTH) FROM T_Faktur WHERE STATUS = 'BERES'  AND Tanggal BETWEEN '2020-01-01' AND LAST_DAY('2020-01-30' + INTERVAL 5 MONTH) 
+
+// PEMASUKAN PER TAHUN
+SELECT MONTH(Tanggal) AS Triwulan, SUM(T_Faktur.Total_Bayar) , LAST_DAY('2020-01-30' + INTERVAL 11 MONTH) FROM T_Faktur WHERE STATUS = 'BERES'  AND Tanggal BETWEEN '2020-01-01' AND LAST_DAY('2020-01-30' + INTERVAL 11 MONTH) 
+
+//UPDATE STOK
+UPDATE t_sparepart SET stok = stok -10 WHERE Id_Sparepart = '2DPF580500000'

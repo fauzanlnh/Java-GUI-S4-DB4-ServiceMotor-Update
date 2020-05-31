@@ -6,7 +6,6 @@
 package Admin;
 
 import Class.Login;
-import Class.Teknisi.*;
 
 /**
  *

@@ -26,14 +26,19 @@ CREATE TABLE `t_customer` (
   `Alamat` varchar(50) DEFAULT NULL,
   `No_Telp` varchar(13) NOT NULL,
   PRIMARY KEY (`Id_Customer`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=242009 DEFAULT CHARSET=latin1;
 
 /*Data for the table `t_customer` */
 
 insert  into `t_customer`(`Id_Customer`,`Nama_Customer`,`Alamat`,`No_Telp`) values 
 (1,'FAUZAN LUKMANUL HAKIM','MARKEN','0897'),
 (2,'SAEPULOH','KOPO','8080'),
-(3,'STEPHAN','MANGLID','1');
+(3,'STEPHAN','MANGLID','1'),
+(234,'AS','AS','23245'),
+(2334,'ADA','GBA','08979'),
+(13132,'SOHIBUL','CIJAGRA','089894579'),
+(32459,'DJORDIE','CIJAGRA','0898048'),
+(242008,'DARSI','CIJAURA','04023840');
 
 /*Table structure for table `t_det_faktur_jasa` */
 
@@ -51,9 +56,14 @@ CREATE TABLE `t_det_faktur_jasa` (
   KEY `FK_IdJasaDetJasa` (`Id_Jasa`),
   CONSTRAINT `FK_IdFakturDetJasa` FOREIGN KEY (`Id_Faktur`) REFERENCES `t_faktur` (`Id_Faktur`),
   CONSTRAINT `t_det_faktur_jasa_ibfk_1` FOREIGN KEY (`Id_Jasa`) REFERENCES `t_jasa` (`Id_Jasa`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 /*Data for the table `t_det_faktur_jasa` */
+
+insert  into `t_det_faktur_jasa`(`Id_DetJasa`,`Id_Faktur`,`Id_Jasa`,`Harga`,`Qty`,`Total_Per_Detail`) values 
+(1,1,1,70000,1,70000),
+(2,2,1,70000,1,70000),
+(3,3,1,70000,1,70000);
 
 /*Table structure for table `t_det_faktur_sparepart` */
 
@@ -71,9 +81,17 @@ CREATE TABLE `t_det_faktur_sparepart` (
   KEY `FK_IdSparepartDetSparepart` (`Id_Sparepart`),
   CONSTRAINT `FK_IdFakturDetSparepart` FOREIGN KEY (`Id_Faktur`) REFERENCES `t_faktur` (`Id_Faktur`),
   CONSTRAINT `FK_IdSparepartDetSparepart` FOREIGN KEY (`Id_Sparepart`) REFERENCES `t_sparepart` (`Id_Sparepart`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 /*Data for the table `t_det_faktur_sparepart` */
+
+insert  into `t_det_faktur_sparepart`(`Id_DetSparepart`,`Id_Faktur`,`Id_Sparepart`,`Harga`,`Qty`,`Total_Per_Detail`) values 
+(1,1,'2DPF580500000',75000,2,150000),
+(2,2,'2DPF580500000',75000,1,75000),
+(3,6,'2DPF580500000',75000,2,150000),
+(4,6,'2DPF580500000',75000,2,150000),
+(5,6,'2DPF580500000',75000,2,150000),
+(6,6,'2DPF580500000',75000,2,150000);
 
 /*Table structure for table `t_det_pendaftaran_jasa` */
 
@@ -89,9 +107,16 @@ CREATE TABLE `t_det_pendaftaran_jasa` (
   KEY `Id_Faktur` (`Id_Faktur`),
   CONSTRAINT `t_det_pendaftaran_jasa_ibfk_1` FOREIGN KEY (`Id_Jasa`) REFERENCES `t_jasa` (`Id_Jasa`),
   CONSTRAINT `t_det_pendaftaran_jasa_ibfk_2` FOREIGN KEY (`Id_Faktur`) REFERENCES `t_faktur` (`Id_Faktur`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 /*Data for the table `t_det_pendaftaran_jasa` */
+
+insert  into `t_det_pendaftaran_jasa`(`Id_Det_Pend_Jasa`,`Id_Faktur`,`Id_Jasa`,`Harga`) values 
+(1,1,1,70000),
+(2,2,1,70000),
+(3,3,1,70000),
+(4,4,1,70000),
+(5,5,1,70000);
 
 /*Table structure for table `t_det_pendaftaran_sparepart` */
 
@@ -107,9 +132,14 @@ CREATE TABLE `t_det_pendaftaran_sparepart` (
   KEY `Id_Faktur` (`Id_Faktur`),
   CONSTRAINT `t_det_pendaftaran_sparepart_ibfk_1` FOREIGN KEY (`Id_Sparepart`) REFERENCES `t_sparepart` (`Id_Sparepart`),
   CONSTRAINT `t_det_pendaftaran_sparepart_ibfk_2` FOREIGN KEY (`Id_Faktur`) REFERENCES `t_faktur` (`Id_Faktur`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 /*Data for the table `t_det_pendaftaran_sparepart` */
+
+insert  into `t_det_pendaftaran_sparepart`(`Id_Det_Pend_Spare`,`Id_Faktur`,`Id_Sparepart`,`Harga`) values 
+(1,1,'2DPF580500000',75000),
+(2,2,'2DPF580500000',75000),
+(3,6,'2DPF580500000',75000);
 
 /*Table structure for table `t_det_sparepart_masuk` */
 
@@ -128,14 +158,16 @@ CREATE TABLE `t_det_sparepart_masuk` (
   KEY `Id_Sparepart` (`Id_Sparepart`),
   CONSTRAINT `t_det_sparepart_masuk_ibfk_2` FOREIGN KEY (`Id_Sparepart`) REFERENCES `t_sparepart` (`Id_Sparepart`),
   CONSTRAINT `t_det_sparepart_masuk_ibfk_3` FOREIGN KEY (`Id_Sprt_Masuk`) REFERENCES `t_faktur_sparepart_masuk` (`Id_Sprt_Masuk`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 /*Data for the table `t_det_sparepart_masuk` */
 
 insert  into `t_det_sparepart_masuk`(`Id_DetBrgMasuk`,`Id_Sprt_Masuk`,`Id_Sparepart`,`Jmlh_Masuk`,`Harga_Masuk`,`Total_Per_Detail`) values 
 (10,'TES1','2DPF580500000',300,70000,21000000),
 (11,'TES1','90793AJ44500',100,65000,6500000),
-(12,'','2DPF580500000',400,80000,32000000);
+(12,'','2DPF580500000',400,80000,32000000),
+(13,'TES2','44DE540070000',200,15000,3000000),
+(14,'TES2','2PHF624600000',300,10000,3000000);
 
 /*Table structure for table `t_faktur` */
 
@@ -165,6 +197,14 @@ CREATE TABLE `t_faktur` (
 
 /*Data for the table `t_faktur` */
 
+insert  into `t_faktur`(`Id_Faktur`,`Tanggal`,`Id_Teknisi`,`Id_Kasir`,`Id_Customer`,`Status`,`No_Polisi`,`Total_Sparepart`,`Total_Jasa`,`Total_Bayar`) values 
+(1,'2020-05-31',1,1,1,'BERES','D 4997 ZCC',150000,70000,220000),
+(2,'2020-01-31',1,1,3,'BERES','D 1313 ZSD',75000,70000,145000),
+(3,'2020-05-31',1,1,2,'BERES','D 6783 XC',0,70000,70000),
+(4,NULL,NULL,NULL,2,'PROSES','D 6783 XC',NULL,NULL,NULL),
+(5,NULL,NULL,NULL,2,'PROSES','D 6783 XC',NULL,NULL,NULL),
+(6,'2020-05-31',1,1,1,'BERES','D 4997 ZCC',150000,0,150000);
+
 /*Table structure for table `t_faktur_sparepart_masuk` */
 
 DROP TABLE IF EXISTS `t_faktur_sparepart_masuk`;
@@ -181,7 +221,8 @@ CREATE TABLE `t_faktur_sparepart_masuk` (
 
 insert  into `t_faktur_sparepart_masuk`(`Id_Sprt_Masuk`,`Tanggal`,`Total_Harga`) values 
 ('','2020-05-04',32000000),
-('TES1','2020-05-01',27500000);
+('TES1','2020-05-01',27500000),
+('TES2','2020-05-31',6000000);
 
 /*Table structure for table `t_jasa` */
 
@@ -283,6 +324,9 @@ CREATE TABLE `t_motor` (
 
 insert  into `t_motor`(`No_Polisi`,`No_Rangka`,`No_Mesin`,`Id_Customer`,`Id_Tipe`) values 
 ('D 1313 ZSD','131313DAD','3ASDKLJL1J3A',3,1),
+('D 3215 DG','KJFDSKJ43414','ADKLK34UF98',13132,2),
+('D 3264 XZY','ADSDFSD5','ASDAS4323',2334,2),
+('D 450 ZCX','LK423480','KASHD283',242008,1),
 ('D 4997 ZCC','13FALSJFI','13HISFHAIH',1,1),
 ('D 6783 XC','23748458C','JDKJI43142',2,2);
 
@@ -304,9 +348,9 @@ CREATE TABLE `t_sparepart` (
 /*Data for the table `t_sparepart` */
 
 insert  into `t_sparepart`(`Id_Sparepart`,`Nama_Sparepart`,`Id_Jenis`,`Stok`,`Harga_Sparepart`) values 
-('2DPF580500000','BRAKE PAD KIT',2,700,75000),
-('2PHF624600000','END, GRIP',2,0,15000),
-('44DE540070000','ELEMENT',2,0,18000),
+('2DPF580500000','BRAKE PAD KIT',2,696,75000),
+('2PHF624600000','END, GRIP',2,300,15000),
+('44DE540070000','ELEMENT',2,200,18000),
 ('90793AJ44500','YAMALUBE POWER MATIC',2,100,42500);
 
 /*Table structure for table `t_teknisi` */

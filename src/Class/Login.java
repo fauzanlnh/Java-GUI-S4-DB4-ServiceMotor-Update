@@ -6,8 +6,8 @@
 package Class;
 
 import Admin.HomeAdmin;
-import UI_Kasir_Done.HomeKasir;
-import Sparepart_Done.HomeSparepart;
+import Kasir.HomeKasir;
+import Sparepart.HomeSparepart;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
