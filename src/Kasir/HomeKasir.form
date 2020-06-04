@@ -387,7 +387,7 @@
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icon/HIS_Home2_VLB.png"/>
+                  <Image iconType="3" name="/Icon/HIS_Cash Register VLB.png"/>
                 </Property>
               </Properties>
             </Component>
@@ -446,7 +446,7 @@
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icon/HIS_Home2_VLB.png"/>
+                  <Image iconType="3" name="/Icon/HIS_Register_VLB.png"/>
                 </Property>
               </Properties>
             </Component>
@@ -506,7 +506,7 @@
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icon/HIS_Home2_VLB.png"/>
+                  <Image iconType="3" name="/Icon/HIS_Logout_VLB.png"/>
                 </Property>
               </Properties>
             </Component>
@@ -566,7 +566,7 @@
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/Icon/HIS_Home2_VLB.png"/>
+                  <Image iconType="3" name="/Icon/HIS_Report Business_VLB.png"/>
                 </Property>
               </Properties>
             </Component>

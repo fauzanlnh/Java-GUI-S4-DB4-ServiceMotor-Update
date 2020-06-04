@@ -235,7 +235,7 @@ public class HomeKasir extends javax.swing.JFrame {
         });
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Home2_VLB.png"))); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Cash Register VLB.png"))); // NOI18N
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(30, 132, 234));
@@ -278,7 +278,7 @@ public class HomeKasir extends javax.swing.JFrame {
         });
 
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Home2_VLB.png"))); // NOI18N
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Register_VLB.png"))); // NOI18N
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(30, 132, 234));
@@ -319,7 +319,7 @@ public class HomeKasir extends javax.swing.JFrame {
         });
 
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Home2_VLB.png"))); // NOI18N
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Logout_VLB.png"))); // NOI18N
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(30, 132, 234));
@@ -361,7 +361,7 @@ public class HomeKasir extends javax.swing.JFrame {
         });
 
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Home2_VLB.png"))); // NOI18N
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Report Business_VLB.png"))); // NOI18N
 
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(30, 132, 234));

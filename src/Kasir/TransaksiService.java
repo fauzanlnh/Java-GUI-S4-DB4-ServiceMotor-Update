@@ -135,12 +135,14 @@ public class TransaksiService extends javax.swing.JFrame {
             data[3] = qty;
             data[4] = TotalPerDetail;
             tableModel.addRow(data);
+            cmbService.setSelectedIndex(0);
+            txtQtyJasa.setText("");
         } else if (cmbService.getSelectedIndex() == 0 && !txtQtyJasa.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "ISI CMB SERVICE SERVICE DENGAN BENAR");
             cmbService.requestFocus();
         } else if (cmbService.getSelectedIndex() != 0 && txtQtyJasa.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "ISI QTY SERVICE SERVICE DENGAN BENAR");
-            cmbService.requestFocus();
+            txtQtyJasa.requestFocus();
         } else {
             JOptionPane.showMessageDialog(null, "ISI JASA SERVICE DENGAN BENAR");
             txtQtyJasa.requestFocus();
@@ -179,6 +181,8 @@ public class TransaksiService extends javax.swing.JFrame {
             data[3] = qty;
             data[4] = TotalPerDetail;
             tableModel.addRow(data);
+            cmbSparepart.setSelectedIndex(0);
+            txtQtySpare.setText("");
         } else if (cmbSparepart.getSelectedIndex() == 0 && !txtQtySpare.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "ISI CMB SPAREPART SERVICE DENGAN BENAR");
             cmbSparepart.requestFocus();
@@ -295,7 +299,7 @@ public class TransaksiService extends javax.swing.JFrame {
                 dtm.addRow(new String[]{Id_Sparepart, Nama_Sparepart, Harga, "", ""});
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Kesalahan Pada Database" + ex);
+            JOptionPane.showMessageDialog(null, "KESALAHAN PADA DATABASE" + ex);
         }
         tblSparepart.setModel(dtm);
     }
@@ -321,7 +325,7 @@ public class TransaksiService extends javax.swing.JFrame {
                 dtm.addRow(new String[]{Id_Jasa, Nama_Jasa, Harga, "", ""});
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Kesalahan Pada Database" + ex);
+            JOptionPane.showMessageDialog(null, "KESALAHAN PADA DATABASE" + ex);
         }
         tblService.setModel(dtm);
     }
@@ -345,7 +349,7 @@ public class TransaksiService extends javax.swing.JFrame {
                 no++;
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Kesalahan Pada Database" + ex);
+            JOptionPane.showMessageDialog(null, "KESALAHAN PADA DATABASE" + ex);
         }
         tblFaktur.setModel(dtm);
     }
@@ -386,11 +390,11 @@ public class TransaksiService extends javax.swing.JFrame {
         txtTotalSparepart.setText("0");
         int TotalBayar = 0;
         for (int i = 0; i < tblSparepart.getRowCount(); i++) {
-            if (tblSparepart.getValueAt(i, 3).equals("")) {
-                JOptionPane.showMessageDialog(null, "ISI QTY SPAREPART TERLBIH DAHULU");
-            } else if (tblSparepart.getRowCount() > 0) {
+            if (tblSparepart.getRowCount() > 0) {
                 int TotalPerDetail = Integer.parseInt(tblSparepart.getValueAt(i, 4) + "");
                 TotalBayar = TotalBayar + TotalPerDetail;
+            } else if (tblSparepart.getValueAt(i, 3).equals("")) {
+                JOptionPane.showMessageDialog(null, "ISI QTY SPAREPART TERLBIH DAHULU");
             }
         }
         txtTotalSparepart.setText("" + TotalBayar);
@@ -400,11 +404,11 @@ public class TransaksiService extends javax.swing.JFrame {
         txtTotalService.setText("0");
         int TotalBayar = 0;
         for (int i = 0; i < tblService.getRowCount(); i++) {
-            if (tblService.getValueAt(i, 3).equals("")) {
-                JOptionPane.showMessageDialog(null, "ISI QTY SERVICE TERLBIH DAHULU");
-            } else if (tblService.getRowCount() > 0) {
+            if (tblService.getRowCount() > 0) {
                 int TotalPerDetail = Integer.parseInt(tblService.getValueAt(i, 4) + "");
                 TotalBayar = TotalBayar + TotalPerDetail;
+            } else if (tblService.getValueAt(i, 3).equals("")) {
+                JOptionPane.showMessageDialog(null, "ISI QTY SERVICE TERLBIH DAHULU");
             }
         }
         txtTotalService.setText("" + TotalBayar);
@@ -419,6 +423,10 @@ public class TransaksiService extends javax.swing.JFrame {
 
     //INSERT * UPDATE
     public void InsertDataDetFaktur() {
+        //TIPE DATA
+        String InsertDetSparepart = null, UpdateStok = null, InsertDetService = null;
+
+        //GET FROM JFRAME
         DefaultTableModel tSparepart = (DefaultTableModel) tblSparepart.getModel();
         DefaultTableModel tService = (DefaultTableModel) tblService.getModel();
         String KdFaktur = txtNoFaktur.getText().toUpperCase();
@@ -429,13 +437,17 @@ public class TransaksiService extends javax.swing.JFrame {
         int BerhasilDetSparepart = 0, BerhasilDetService = 0, BerhasilUpdateStok = 0;
         String tanggalMySQL = "yyyy-MM-dd";
         SimpleDateFormat fm = new SimpleDateFormat(tanggalMySQL);
-
         String Tanggal = String.valueOf(fm.format(txtTanggal.getDate()));
-        if (cmbTeknisi.getSelectedItem().equals("-")) {
-            JOptionPane.showMessageDialog(null, "HARAP ISI NAMA TEKNISI");
+
+        //VALIDASI FORM
+        if (KdFaktur.equals("") || txtNoPol.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "NO POLISI TIDAK BOLEH KOSONG");
+            btnCariNopol.requestFocus();
+        } else if (cmbTeknisi.getSelectedItem().equals("-")) {
+            JOptionPane.showMessageDialog(null, "NAMA TEKNISI TIDAK BOLEH KOSONG");
             btnHitung.requestFocus();
         } else if (tblSparepart.getRowCount() < 1 && tblService.getRowCount() < 1) {
-            JOptionPane.showMessageDialog(null, "HARAP ISI PEMBELIAN SPAREPART ATAU PEMAKAIAN JASA SERVICE");
+            JOptionPane.showMessageDialog(null, "PEMBELIAN SPAREPART ATAU PEMAKAIAN JASA SERVICE TIDAK BOLEH KOSONG");
             cmbService.requestFocus();
         } else if (txtTotalSparepart.getText().equals("0") && txtTotalService.getText().equals("0") && (tSparepart.getRowCount() > 0 || tService.getRowCount() > 0)) {
             JOptionPane.showMessageDialog(null, "TEKAN TOMBOL HITUNG");
@@ -443,25 +455,30 @@ public class TransaksiService extends javax.swing.JFrame {
         } else {
             try {
                 Statement stmt = koneksi.createStatement();
+
                 //INSERT TABEL DETAIL FAKTUR SPAREPART
                 if (tSparepart.getRowCount() > 0) {
                     for (int i = 0; i < tSparepart.getRowCount(); i++) {
-                        String InsertDetSparepart = ("INSERT INTO T_Det_Faktur_Sparepart (Id_Faktur, Id_Sparepart, Harga, Qty, Total_Per_Detail) VALUES("
+                        InsertDetSparepart = ("INSERT INTO T_Det_Faktur_Sparepart (Id_Faktur, Id_Sparepart, Harga, Qty, Total_Per_Detail) VALUES("
                                 + "'" + KdFaktur + "',"
                                 + "'" + tSparepart.getValueAt(i, 0) + "',"
                                 + "'" + tSparepart.getValueAt(i, 2) + "',"
                                 + "'" + tSparepart.getValueAt(i, 3) + "',"
                                 + "'" + tSparepart.getValueAt(i, 4) + "')");
                         BerhasilDetSparepart = stmt.executeUpdate(InsertDetSparepart);
-                        String UpdateStok = "UPDATE T_Jenis_Sparepart SET Stok = Stok - '" + tSparepart.getValueAt(i, 3) + "' WHERE Id_Sparepart = '" + tSparepart.getValueAt(i, 0) + "'";
+                        UpdateStok = "UPDATE T_Jenis_Sparepart SET Stok = Stok - '" + tSparepart.getValueAt(i, 3) + "' WHERE Id_Sparepart = '" + tSparepart.getValueAt(i, 0) + "'";
                         BerhasilUpdateStok = stmt.executeUpdate(UpdateStok);
                         System.out.println(InsertDetSparepart);
                     }
+                } else if (tSparepart.getRowCount() < 1) {
+                    BerhasilDetSparepart = 1;
+                    BerhasilUpdateStok = 1;
                 }
+
                 //INSERT TABEL DETAIL FAKTUR SERVICE
                 if (tService.getRowCount() > 0) {
                     for (int i = 0; i < tService.getRowCount(); i++) {
-                        String InsertDetService = ("INSERT INTO T_Det_Faktur_Jasa (Id_Faktur, Id_Jasa, Harga, Qty, Total_Per_Detail) VALUES("
+                        InsertDetService = ("INSERT INTO T_Det_Faktur_Jasa (Id_Faktur, Id_Jasa, Harga, Qty, Total_Per_Detail) VALUES("
                                 + "'" + KdFaktur + "',"
                                 + "'" + tService.getValueAt(i, 0) + "',"
                                 + "'" + tService.getValueAt(i, 2) + "',"
@@ -470,39 +487,31 @@ public class TransaksiService extends javax.swing.JFrame {
                         BerhasilDetService = stmt.executeUpdate(InsertDetService);
                         System.out.println(InsertDetService);
                     }
+                } else if (tService.getRowCount() < 1) {
+                    BerhasilDetService = 1;
                 }
+
                 //UPDATE TABEL FAKTUR
                 String UpdateFaktur = "UPDATE T_FAKTUR SET Id_Teknisi = '" + getKdTeknisi() + "', Id_Kasir = '" + IdKasir + "', Tanggal = '" + Tanggal + "',Status = 'BERES', "
                         + "Total_Sparepart = '" + TotSparepart + "', Total_Jasa = '" + TotJasa + "', Total_Bayar = '" + TotBayar + "' WHERE Id_Faktur = '" + KdFaktur + "'";
                 int BerhasilUpdFaktur = stmt.executeUpdate(UpdateFaktur);
 
                 //VALIDASI BERHASIL INSERT DAN UPDATE
-                if (BerhasilDetService == 0 && tService.getRowCount() > 0) {
-                    JOptionPane.showMessageDialog(null, "QTY Det Service Tidak Boleh Kosong");
-                } else if (BerhasilDetSparepart == 0 && tSparepart.getRowCount() > 0) {
-                    JOptionPane.showMessageDialog(null, "QTY Det Sparepart Tidak Boleh Kosong");
-                } else if (BerhasilDetService == 1 && BerhasilDetSparepart == 1 && BerhasilUpdFaktur == 1) {
-                    Clear();
-                    JOptionPane.showMessageDialog(null, "Data Faktur Berhasil Dimasukkan");
-                } else if (BerhasilDetService == 1 && BerhasilDetSparepart == 1) {
-                    Clear();
-                    JOptionPane.showMessageDialog(null, "Data Faktur Berhasil Dimasukkan");
-                } else if (BerhasilDetService == 1 && BerhasilUpdFaktur == 1) {
-                    Clear();
-                    JOptionPane.showMessageDialog(null, "Data Faktur Berhasil Dimasukkan");
-                } else if (BerhasilDetService == 1 && BerhasilUpdFaktur == 1 && BerhasilDetSparepart == 1 && BerhasilUpdateStok == 1) {
-                    Clear();
-                    JOptionPane.showMessageDialog(null, "Data Faktur Berhasil Dimasukkan");
-                } else if (BerhasilUpdFaktur == 1 && BerhasilDetSparepart == 1 && BerhasilUpdateStok == 1) {
-                    Clear();
-                    JOptionPane.showMessageDialog(null, "Data Faktur Berhasil Dimasukkan");
-                } else if (BerhasilDetService == 0 && BerhasilUpdFaktur == 0 && BerhasilDetSparepart == 0 && BerhasilUpdateStok == 0) {
-                    JOptionPane.showMessageDialog(null, "Data Faktur Gagal Dimasukkan");
-                } else {
-                    Clear();
-                    JOptionPane.showMessageDialog(null, "Data Faktur Berhasil Dimasukkan");
+                if (BerhasilDetSparepart == 1 && BerhasilUpdateStok == 1 && BerhasilDetService == 1 && BerhasilUpdFaktur == 1) {
+                    JOptionPane.showMessageDialog(null, "DATA FAKTUR BERHASIL DIMASUKKAN");
+                } else if (BerhasilDetSparepart == 0) {
+                    JOptionPane.showMessageDialog(null, "DATA DET FAKTUR SPAREPART GAGAL DIMASUKKAN");
+                    System.out.println(InsertDetSparepart);
+                } else if (BerhasilUpdateStok == 0) {
+                    JOptionPane.showMessageDialog(null, "DATA STOK SPAREPART GAGAL DI UBAH");
+                    System.out.println(UpdateStok);
+                } else if (BerhasilDetService == 0) {
+                    JOptionPane.showMessageDialog(null, "DATA DET FAKTUR SERVICE GAGAL DIMASUKKAN");
+                    System.out.println(InsertDetService);
+                } else if (BerhasilUpdFaktur == 0) {
+                    JOptionPane.showMessageDialog(null, "UPDATE FAKTUR GAGAL DI UBAH");
+                    System.out.println(UpdateFaktur);
                 }
-
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Terjadi Kesalahan Pada Database" + ex);
@@ -1303,8 +1312,6 @@ public class TransaksiService extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPendaftaranMouseClicked
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-
-        System.out.println(getKdTeknisi());
         int ok = JOptionPane.showConfirmDialog(null, "Data Yang Dimasukkan Benar?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
         if (ok == 0) {
             InsertDataDetFaktur();
@@ -1314,17 +1321,14 @@ public class TransaksiService extends javax.swing.JFrame {
 
     private void btnHapusServicesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHapusServicesMouseClicked
         hapusTableService();
-
     }//GEN-LAST:event_btnHapusServicesMouseClicked
 
     private void btnHapusSparepartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHapusSparepartMouseClicked
         hapusTableSparepart();
-
     }//GEN-LAST:event_btnHapusSparepartMouseClicked
 
     private void btnTambahSparepartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahSparepartActionPerformed
         setTableSparepart();
-        cmbSparepart.setSelectedIndex(0);
         if (tblSparepart.getRowCount() > 0 || tblService.getRowCount() > 0) {
             btnCariNopol.setEnabled(false);
         } else {
@@ -1334,7 +1338,6 @@ public class TransaksiService extends javax.swing.JFrame {
 
     private void btnTambahServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahServiceActionPerformed
         setTableService();
-        cmbService.setSelectedIndex(0);
         if (tblSparepart.getRowCount() > 0 || tblService.getRowCount() > 0) {
             btnCariNopol.setEnabled(false);
         } else {
@@ -1365,6 +1368,9 @@ public class TransaksiService extends javax.swing.JFrame {
         int Harga = Integer.parseInt(getHarga);
         Total = Qty * Harga;
         tblSparepart.setValueAt(Total, tblSparepart.getSelectedRow(), 4);
+        setTotalSparepart();
+        setTotalService();
+        setTotalBayar();
 
     }//GEN-LAST:event_tblSparepartKeyReleased
 
@@ -1381,6 +1387,9 @@ public class TransaksiService extends javax.swing.JFrame {
         int Harga = Integer.parseInt(getHarga);
         Total = Qty * Harga;
         tblService.setValueAt(Total, tblService.getSelectedRow(), 4);
+        setTotalSparepart();
+        setTotalService();
+        setTotalBayar();
     }//GEN-LAST:event_tblServiceKeyReleased
 
     private void btnHitungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHitungActionPerformed

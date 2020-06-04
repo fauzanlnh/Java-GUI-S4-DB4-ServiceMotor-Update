@@ -64,7 +64,7 @@ public class BarangMasuk extends javax.swing.JFrame {
                 txtCari.requestFocus();
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Kesalahan Pada Database" + ex);
+            JOptionPane.showMessageDialog(null, "KESALAHAN PADA DATABASE" + ex);
         }
         tblLihat.setModel(dtm);
     }
@@ -86,7 +86,7 @@ public class BarangMasuk extends javax.swing.JFrame {
                 dtm.addRow(new String[]{KdSparepart, NamaSparepart, Stok, Nama_Jenis});
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Kesalahan Pada Database" + ex);
+            JOptionPane.showMessageDialog(null, "KESALAHAN PADA DATABASE" + ex);
         }
         tblLihat.setModel(dtm);
     }
@@ -154,18 +154,19 @@ public class BarangMasuk extends javax.swing.JFrame {
                 int HargaSatuan = Integer.valueOf(HS);
                 TotalFaktur = HargaSatuan + TotalFaktur;
             }
+            
             //QUERY 4
             String UpdateTotalHarga = "UPDATE T_Faktur_Sparepart_Masuk SET Total_Harga = '" + TotalFaktur + "' WHERE Id_Sprt_Masuk = '" + KdFaktur + "' ";
             BerhasilUpdateHarga = stmt.executeUpdate(UpdateTotalHarga);
 
             if (BerhasilInserFaktur == 1 && BerhasilInsertDetail == 1 && berhasilUpdate == 1 && BerhasilUpdateHarga == 1) {
-                JOptionPane.showMessageDialog(null, "Data Berhasil Dimasukan");
+                JOptionPane.showMessageDialog(null, "DATA BERHASIL DIMASUKKAN");
             } else {
-                JOptionPane.showMessageDialog(null, "Data Gagal Dimasukan");
+                JOptionPane.showMessageDialog(null, "DATA GAGAL DIMASUKKAN");
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Terjadi Kesalahan Pada Database" + ex);
+            JOptionPane.showMessageDialog(null, "KESALAHAN PADA DATABASE" + ex);
         }
     }
 
@@ -557,6 +558,7 @@ public class BarangMasuk extends javax.swing.JFrame {
         lblService7.setForeground(new java.awt.Color(51, 51, 51));
         lblService7.setText("Tanggal");
 
+        txtSparepart.setEditable(false);
         txtSparepart.setBackground(new java.awt.Color(255, 255, 255));
         txtSparepart.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         txtSparepart.setForeground(new java.awt.Color(51, 51, 51));
@@ -712,16 +714,16 @@ public class BarangMasuk extends javax.swing.JFrame {
         if (!txtSparepart.getText().equals("") && !txtHarga.getText().equals("") && !txtQty.getText().equals("")) {
             TambahTabel();
         } else if (txtSparepart.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Nama Sparepart Harus Diisi!!");
+            JOptionPane.showMessageDialog(null, "NANA SPAREPART MASIH KOSONG");
             txtSparepart.requestFocus();
         } else if (txtHarga.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Harga Beli Harus Diisi!!");
+            JOptionPane.showMessageDialog(null, "HARGA BELI MASIH KOSONG");
             txtHarga.requestFocus();
         } else if (txtQty.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Jumlah Yang Dibeli Harus Diisi!!");
+            JOptionPane.showMessageDialog(null, "JUMLAH YANG DIBELI MASIH KOSONG");
             txtQty.requestFocus();
         } else {
-            JOptionPane.showMessageDialog(null, "Data tidak boleh kosong!!");
+            JOptionPane.showMessageDialog(null, "DATA YANG AKAN DIMASUKKAN MASIH KOSONG");
             txtSparepart.requestFocus();
         }
     }//GEN-LAST:event_btnTambahTabelMouseClicked
@@ -734,13 +736,13 @@ public class BarangMasuk extends javax.swing.JFrame {
                 Clear();
             }
         } else if (txtNoFaktur.getText().equals("") && tblDetail.getRowCount() > 0) {
-            JOptionPane.showMessageDialog(null, "No Faktur Harus Diisi!!");
+            JOptionPane.showMessageDialog(null, "NO FAKTUR MASIH KOSONG");
             txtNoFaktur.requestFocus();
         } else if (txtNoFaktur.getText().equals("") && tblDetail.getRowCount() < 1) {
-            JOptionPane.showMessageDialog(null, "No Faktur Dan Detail Pembelian Masih Kosong");
+            JOptionPane.showMessageDialog(null, "NO FAKTUR DAN DETAIL PEMBELIAN MASIH KOSONG");
             txtNoFaktur.requestFocus();
         } else if (!txtNoFaktur.getText().equals("") && tblDetail.getRowCount() < 1) {
-            JOptionPane.showMessageDialog(null, "Detail Pembelian Masih Kosong");
+            JOptionPane.showMessageDialog(null, "DETAIL PEMBELIAN MASIH KOSONG");
             btnLihat.requestFocus();
         }
 

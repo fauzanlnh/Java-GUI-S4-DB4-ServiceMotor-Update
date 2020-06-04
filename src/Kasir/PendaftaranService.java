@@ -131,7 +131,7 @@ public class PendaftaranService extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "NO POLISi BELUM DIISI");
             btnCariNopol.requestFocus();
         } else if (cmbSparepart.getSelectedIndex() == 0 && !txtNoPol.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "ISI CMB SERVICE DENGAN BENAR");
+            JOptionPane.showMessageDialog(null, "ISI CMB SPAREPART DENGAN BENAR");
             cmbService.requestFocus();
         }
     }
@@ -239,7 +239,7 @@ public class PendaftaranService extends javax.swing.JFrame {
                 no++;
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Kesalahan Pada Database" + ex);
+            JOptionPane.showMessageDialog(null, "KESALAHAN PADA DATABASE" + ex);
         }
         tblNoPolisi.setModel(dtm);
     }
@@ -276,7 +276,7 @@ public class PendaftaranService extends javax.swing.JFrame {
             }
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Kesalahan Pada Database" + ex);
+            JOptionPane.showMessageDialog(null, "KESALAHAN PADA DATABASEF" + ex);
         }
         tblNoPolisi.setModel(dtm);
     }
@@ -347,59 +347,64 @@ public class PendaftaranService extends javax.swing.JFrame {
             Statement stmt = koneksi.createStatement();
             //INSERT TABEL CUSTOMER
             if (!txtIdCustomer.getText().equals("") && !txtNamaCustomer.getText().equals("") && !txtAlamat.getText().equals("") && !txtNoTelp.getText().equals("") && !txtNoPolisi.getText().equals("") && !txtNoRangka.getText().equals("") && !txtNoMesin.getText().equals("") && !cmbTipeMotor.getSelectedItem().equals("-")) {
+                //INSERT T_CUSTOMER
                 String InsertCustomer = "INSERT INTO T_Customer VALUES ('" + IdCustomer + "', '" + NamaCustomer + "','" + Alamat + "','" + NoTelp + "')";
                 System.out.println(InsertCustomer);
                 BerhasilCustomer = stmt.executeUpdate(InsertCustomer);
+
+                //INSERT T_MOTOR
                 String InsertMotor = "INSERT INTO T_Motor VALUES ('" + NoPolisi + "', '" + NoRangka + "','" + NoMesin + "','" + IdCustomer + "','" + GetKdTipeMotor() + "')";
                 System.out.println(InsertMotor);
                 BerhasilMotor = stmt.executeUpdate(InsertMotor);
-            } else if (txtIdCustomer.getText().equals("") && txtNamaCustomer.getText().equals("") && txtAlamat.getText().equals("") && txtNoTelp.getText().equals("") && txtNoPolisi.getText().equals("") && txtNoRangka.getText().equals("") && txtNoMesin.getText().equals("") && cmbTipeMotor.getSelectedItem().equals("-")) {
-                JOptionPane.showMessageDialog(null, "FORM MASIH KOSONG");
-            } else if (txtIdCustomer.getText().equals("") && txtNamaCustomer.getText().equals("") && txtAlamat.getText().equals("") && txtNoTelp.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "ISI FORM CUSTOMER DENGAN BENAR");
-                txtIdCustomer.requestFocus();
-            } else if (txtIdCustomer.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "ID CUSTOMER TIDAK BOLEH KOSONG");
-                txtIdCustomer.requestFocus();
-            } else if (txtNamaCustomer.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "NAMA CUSTOMER TIDAK BOLEH KOSONG");
-                txtNamaCustomer.requestFocus();
-            } else if (txtAlamat.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "ALAMAT CUSTOMER TIDAK BOLEH KOSONG");
-                txtAlamat.requestFocus();
-            } else if (txtNoTelp.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "NO TELP CUSTOMER TIDAK BOLEH KOSONG");
-                txtNoTelp.requestFocus();
-            } // INSERT TABEL MOTOR
-            else if (txtNoPolisi.getText().equals("") && txtNoRangka.getText().equals("") && txtNoMesin.getText().equals("") && cmbTipeMotor.getSelectedItem().equals("-")) {
-                JOptionPane.showMessageDialog(null, "ISI FORM MOTOR CUSTOMER DENGAN BENAR");
-                txtNoPolisi.requestFocus();
-            } else if (txtNoPolisi.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "NO POLISI TIDAK BOLEH KOSONG");
-                txtNoPolisi.requestFocus();
-            } else if (txtNoRangka.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "NO RANGKA TIDAK BOLEH KOSONG");
-                txtNoRangka.requestFocus();
-            } else if (txtNoMesin.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "NO MESIN TIDAK BOLEH KOSNONG");
-                txtNoMesin.requestFocus();
-            } else if (cmbTipeMotor.getSelectedItem().equals("-")) {
-                JOptionPane.showMessageDialog(null, "PILIHAM NO MOTOR SALAH");
-                cmbTipeMotor.requestFocus();
-            }
 
-            if (BerhasilCustomer == 1 && BerhasilMotor == 1) {
-                JOptionPane.showMessageDialog(null, "Data Customer Berhasi Dimasukan");
-                TambahCustomer.dispose();
-                CariNoPolisi.show();
-            } else if (BerhasilCustomer == 1 && BerhasilMotor == 0) {
-                JOptionPane.showMessageDialog(null, "Data Motor Gagal Dimasukan");
-            } else if (BerhasilCustomer == 0 && BerhasilMotor == 1) {
-                JOptionPane.showMessageDialog(null, "Data Customer Gagal Dimasukan");
-            } else if (BerhasilCustomer == 0 && BerhasilMotor == 0) {
-                JOptionPane.showMessageDialog(null, "Data Customer Gagal Dimasukan.");
+                //VALIDASI QUERY
+                if (BerhasilCustomer == 1 && BerhasilMotor == 1) {
+                    JOptionPane.showMessageDialog(null, "DATA CUSTOMER BERHASIL DIMASUKKAN");
+                    TambahCustomer.dispose();
+                    CariNoPolisi.show();
+                } else if (BerhasilCustomer == 1) {
+                    JOptionPane.showMessageDialog(null, "DATA FORM CUSTOMER GAGAL DIMASUKKAN");
+                } else if (BerhasilMotor == 1) {
+                    JOptionPane.showMessageDialog(null, "DATA FORM MOTOR CUSTOMER GAGAL DIMASUKKAN");
+                } else if (BerhasilCustomer == 0 && BerhasilMotor == 0) {
+                    JOptionPane.showMessageDialog(null, "DATA CUSTOMER GAGAL DIMASUKKAN");
+                }
+            } else {
+                if (txtIdCustomer.getText().equals("") && txtNamaCustomer.getText().equals("") && txtAlamat.getText().equals("") && txtNoTelp.getText().equals("") && txtNoPolisi.getText().equals("") && txtNoRangka.getText().equals("") && txtNoMesin.getText().equals("") && cmbTipeMotor.getSelectedItem().equals("-")) {
+                    JOptionPane.showMessageDialog(null, "FORM MASIH KOSONG");
+                } else if (txtIdCustomer.getText().equals("") && txtNamaCustomer.getText().equals("") && txtAlamat.getText().equals("") && txtNoTelp.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "ISI FORM CUSTOMER DENGAN BENAR");
+                    txtIdCustomer.requestFocus();
+                } else if (txtIdCustomer.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "ID CUSTOMER TIDAK BOLEH KOSONG");
+                    txtIdCustomer.requestFocus();
+                } else if (txtNamaCustomer.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "NAMA CUSTOMER TIDAK BOLEH KOSONG");
+                    txtNamaCustomer.requestFocus();
+                } else if (txtAlamat.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "ALAMAT CUSTOMER TIDAK BOLEH KOSONG");
+                    txtAlamat.requestFocus();
+                } else if (txtNoTelp.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "NO TELP CUSTOMER TIDAK BOLEH KOSONG");
+                    txtNoTelp.requestFocus();
+                } // INSERT TABEL MOTOR
+                else if (txtNoPolisi.getText().equals("") && txtNoRangka.getText().equals("") && txtNoMesin.getText().equals("") && cmbTipeMotor.getSelectedItem().equals("-")) {
+                    JOptionPane.showMessageDialog(null, "ISI FORM MOTOR CUSTOMER DENGAN BENAR");
+                    txtNoPolisi.requestFocus();
+                } else if (txtNoPolisi.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "NO POLISI TIDAK BOLEH KOSONG");
+                    txtNoPolisi.requestFocus();
+                } else if (txtNoRangka.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "NO RANGKA TIDAK BOLEH KOSONG");
+                    txtNoRangka.requestFocus();
+                } else if (txtNoMesin.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "NO MESIN TIDAK BOLEH KOSNONG");
+                    txtNoMesin.requestFocus();
+                } else if (cmbTipeMotor.getSelectedItem().equals("-")) {
+                    JOptionPane.showMessageDialog(null, "PILIHAM TIPE MOTOR SALAH");
+                    cmbTipeMotor.requestFocus();
+                }
             }
-
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Terjadi Kesalahan Pada Database" + ex);
@@ -417,51 +422,61 @@ public class PendaftaranService extends javax.swing.JFrame {
         try {
             Statement stmt = koneksi.createStatement();
 
-            //INSERT TABEL FAKTUR
-            String InsertFaktur = "INSERT INTO T_Faktur (Id_Faktur, No_Polisi, Id_Customer, Status)VALUES ('" + NoFaktur + "', '" + NoPolisi + "','" + GetIdCustomer() + "', 'PROSES')";
-            BerhasilFaktur = stmt.executeUpdate(InsertFaktur);
-            System.out.println("INSERT TABEL FAKTUR");
-            System.out.println(InsertFaktur);
-            //INSERT TABEL DETAIL PENDAFTARAN SPAREPART
-            if (tSparepart.getRowCount() > 0) {
-                System.out.println("INSERT TABEL DETAIL PENDAFTARAN SPAREPART");
-                for (int i = 0; i < tSparepart.getRowCount(); i++) {
-                    String InsertDetSparepart = ("INSERT INTO T_Det_Pendaftaran_Sparepart (Id_Faktur, Id_Sparepart, Harga) VALUES("
-                            + "'" + KdFaktur + "',"
-                            + "'" + tSparepart.getValueAt(i, 1) + "',"
-                            + "'" + tSparepart.getValueAt(i, 3) + "')");
-                    BerhasiDetSparepart = stmt.executeUpdate(InsertDetSparepart);
-                    System.out.println(InsertDetSparepart);
+            //QUERY
+            if (!NoPolisi.equals("")) {
+                //INSERT TABEL FAKTUR
+                String InsertFaktur = "INSERT INTO T_Faktur (Id_Faktur, No_Polisi, Id_Customer, Status)VALUES ('" + NoFaktur + "', '" + NoPolisi + "','" + GetIdCustomer() + "', 'PROSES')";
+                BerhasilFaktur = stmt.executeUpdate(InsertFaktur);
+                System.out.println("INSERT TABEL FAKTUR");
+                System.out.println(InsertFaktur);
+
+                //INSERT TABEL DETAIL PENDAFTARAN SPAREPART
+                if (tSparepart.getRowCount() > 0) {
+                    System.out.println("INSERT TABEL DETAIL PENDAFTARAN SPAREPART");
+                    for (int i = 0; i < tSparepart.getRowCount(); i++) {
+                        String InsertDetSparepart = ("INSERT INTO T_Det_Pendaftaran_Sparepart (Id_Faktur, Id_Sparepart, Harga) VALUES("
+                                + "'" + KdFaktur + "',"
+                                + "'" + tSparepart.getValueAt(i, 1) + "',"
+                                + "'" + tSparepart.getValueAt(i, 3) + "')");
+                        BerhasiDetSparepart = stmt.executeUpdate(InsertDetSparepart);
+                        System.out.println(InsertDetSparepart);
+                    }
+                } else {
+                    BerhasiDetSparepart = 1;
+                }
+
+                //INSERT TABEL DETAIL PENDAFTARAN SERVICE
+                if (tService.getRowCount() > 0) {
+                    System.out.println("INSERT TABEL DETAIL PENDAFTARAN SERVICE");
+                    for (int i = 0; i < tService.getRowCount(); i++) {
+                        String InsertDetService = ("INSERT INTO T_Det_Pendaftaran_Jasa (Id_Faktur, Id_Jasa, Harga) VALUES("
+                                + "'" + KdFaktur + "',"
+                                + "'" + tService.getValueAt(i, 1) + "',"
+                                + "'" + tService.getValueAt(i, 3) + "')");
+                        BerhasiDetService = stmt.executeUpdate(InsertDetService);
+                        System.out.println(InsertDetService);
+                    }
+                } else {
+                    BerhasiDetService = 1;
+                }
+
+                //VALIDASI QUERY
+                if (BerhasiDetSparepart == 1 && BerhasiDetService == 1 && BerhasilFaktur == 1) {
+                    JOptionPane.showMessageDialog(null, "DATA PENDAFTARAN BERHASIL DIMASUKKAN");
+                } else if (BerhasiDetSparepart == 0) {
+                    JOptionPane.showMessageDialog(null, "DATA DETAIL SPAREPART GAGAL DIMASUKKAN");
+                } else if (BerhasiDetService == 0) {
+                    JOptionPane.showMessageDialog(null, "DATA DETAIL SERVICE GAGAL DIMASUKKAN");
+                } else if (BerhasilFaktur == 0) {
+                    JOptionPane.showMessageDialog(null, "DATA FAKTUR GAGAL DIMASUKKAN");
+                } else if (BerhasiDetSparepart == 0 && BerhasiDetService == 0 && BerhasilFaktur == 0) {
+                    JOptionPane.showMessageDialog(null, "DATA PENDAFTARAN GAGAL DIMASUKKAN");
                 }
             } else {
-                BerhasiDetSparepart = 1;
-            }
-            //INSERT TABEL DETAIL PENDAFTARAN SERVICE
-            if (tService.getRowCount() > 0) {
-                System.out.println("INSERT TABEL DETAIL PENDAFTARAN SERVICE");
-                for (int i = 0; i < tService.getRowCount(); i++) {
-                    String InsertDetService = ("INSERT INTO T_Det_Pendaftaran_Jasa (Id_Faktur, Id_Jasa, Harga) VALUES("
-                            + "'" + KdFaktur + "',"
-                            + "'" + tService.getValueAt(i, 1) + "',"
-                            + "'" + tService.getValueAt(i, 3) + "')");
-                    BerhasiDetService = stmt.executeUpdate(InsertDetService);
-                    System.out.println(InsertDetService);
-                }
-            } else {
-                BerhasiDetService = 1;
+                JOptionPane.showMessageDialog(null, "NO POLISI HARUS DI ISI");
+                btnCariNopol.requestFocus();
             }
 
-            if (BerhasiDetSparepart == 1 && BerhasiDetService == 1 && BerhasilFaktur == 1) {
-                JOptionPane.showMessageDialog(null, "Data Berhasil Dimasukan");
-            } else if (BerhasiDetSparepart == 0 && BerhasiDetService == 1 && BerhasilFaktur == 1) {
-                JOptionPane.showMessageDialog(null, "Data Detail Sparepart Gagal Dimasukan");
-            } else if (BerhasiDetService == 0 && BerhasiDetSparepart == 1 && BerhasilFaktur == 1) {
-                JOptionPane.showMessageDialog(null, "Data Detail Service Gagal Dimasukan");
-            } else if (BerhasilFaktur == 0 && BerhasiDetSparepart == 1 && BerhasiDetService == 1) {
-                JOptionPane.showMessageDialog(null, "Data Faktur Gagal Dimasukan");
-            } else if (BerhasiDetSparepart == 0 && BerhasiDetService == 0 && BerhasilFaktur == 0) {
-                JOptionPane.showMessageDialog(null, "Data Gagal Dimasukan");
-            }
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Terjadi Kesalahan Pada Database" + ex);
@@ -489,7 +504,6 @@ public class PendaftaranService extends javax.swing.JFrame {
         btnNewCustomer = new javax.swing.JButton();
         btnCancelCari = new javax.swing.JButton();
         txtDataTidakDitemukan = new javax.swing.JLabel();
-        btnPilihCustomer1 = new javax.swing.JButton();
         TambahCustomer = new javax.swing.JFrame();
         mainPanel2 = new javax.swing.JPanel();
         PanelDirectory2 = new javax.swing.JPanel();
@@ -561,7 +575,7 @@ public class PendaftaranService extends javax.swing.JFrame {
             .addGroup(PanelDirectory1Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(jLabel10)
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(148, Short.MAX_VALUE))
         );
         PanelDirectory1Layout.setVerticalGroup(
             PanelDirectory1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -637,17 +651,6 @@ public class PendaftaranService extends javax.swing.JFrame {
         txtDataTidakDitemukan.setForeground(new java.awt.Color(255, 255, 255));
         txtDataTidakDitemukan.setText("Data Yang Dicari Tidak Ditemukan");
 
-        btnPilihCustomer1.setBackground(new java.awt.Color(240, 240, 240));
-        btnPilihCustomer1.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        btnPilihCustomer1.setForeground(new java.awt.Color(51, 51, 51));
-        btnPilihCustomer1.setText("Cari");
-        btnPilihCustomer1.setBorder(null);
-        btnPilihCustomer1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnPilihCustomer1MouseClicked(evt);
-            }
-        });
-
         javax.swing.GroupLayout mainPanel1Layout = new javax.swing.GroupLayout(mainPanel1);
         mainPanel1.setLayout(mainPanel1Layout);
         mainPanel1Layout.setHorizontalGroup(
@@ -666,10 +669,7 @@ public class PendaftaranService extends javax.swing.JFrame {
                                 .addComponent(btnPilihCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(lblNoPol3)
-                                .addGroup(mainPanel1Layout.createSequentialGroup()
-                                    .addComponent(txtCariNopol, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnPilihCustomer1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtCariNopol, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(tblDetSparepart1, javax.swing.GroupLayout.PREFERRED_SIZE, 537, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(txtDataTidakDitemukan)))))
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -682,9 +682,7 @@ public class PendaftaranService extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblNoPol3)
                 .addGap(18, 18, 18)
-                .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtCariNopol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPilihCustomer1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(txtCariNopol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(tblDetSparepart1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15)
@@ -1364,14 +1362,11 @@ public class PendaftaranService extends javax.swing.JFrame {
         txtCariNopol.setText("");
     }//GEN-LAST:event_btnCancelCariMouseClicked
 
-    private void btnPilihCustomer1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPilihCustomer1MouseClicked
-        // TODO add your handling code here:
-        CariDataCustomer();
-    }//GEN-LAST:event_btnPilihCustomer1MouseClicked
-
     private void txtCariNopolKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCariNopolKeyReleased
         // TODO add your handling code here:
-        if (txtCariNopol.getText().equals("")) {
+        if (!txtCariNopol.getText().equals("")) {
+            CariDataCustomer();
+        } else if (txtCariNopol.getText().equals("")) {
             txtDataTidakDitemukan.setForeground(new java.awt.Color(255, 255, 255));
             TampilDataCustomer();
         }
@@ -1530,7 +1525,6 @@ public class PendaftaranService extends javax.swing.JFrame {
     private javax.swing.JPanel btnLaporan;
     private javax.swing.JButton btnNewCustomer;
     private javax.swing.JButton btnPilihCustomer;
-    private javax.swing.JButton btnPilihCustomer1;
     private javax.swing.JButton btnSubmit;
     private javax.swing.JButton btnTambahCustomer;
     private javax.swing.JButton btnTambahService;

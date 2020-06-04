@@ -240,7 +240,7 @@ public class HomeAdmin extends javax.swing.JFrame {
         });
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Home2_VLB.png"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Cash Register VLB.png"))); // NOI18N
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(30, 132, 234));
@@ -254,17 +254,18 @@ public class HomeAdmin extends javax.swing.JFrame {
             .addGroup(pnlKasirLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlKasirLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         pnlKasirLayout.setVerticalGroup(
             pnlKasirLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlKasirLayout.createSequentialGroup()
-                .addContainerGap(52, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel13)
-                .addGap(12, 12, 12))
+                .addGap(8, 8, 8))
         );
 
         pnlSparepart.setBackground(new java.awt.Color(234, 234, 234));
@@ -282,7 +283,7 @@ public class HomeAdmin extends javax.swing.JFrame {
         });
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Home2_VLB.png"))); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Sparepart_VLB.png"))); // NOI18N
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(30, 132, 234));
@@ -296,8 +297,8 @@ public class HomeAdmin extends javax.swing.JFrame {
             .addGroup(pnlSparepartLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlSparepartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlSparepartLayout.setVerticalGroup(
@@ -305,9 +306,9 @@ public class HomeAdmin extends javax.swing.JFrame {
             .addGroup(pnlSparepartLayout.createSequentialGroup()
                 .addGap(49, 49, 49)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel14)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
 
         pnlLaporan.setBackground(new java.awt.Color(234, 234, 234));
@@ -324,7 +325,7 @@ public class HomeAdmin extends javax.swing.JFrame {
         });
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Home2_VLB.png"))); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Report Business_VLB.png"))); // NOI18N
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(30, 132, 234));
@@ -339,18 +340,17 @@ public class HomeAdmin extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlLaporanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLaporanLayout.createSequentialGroup()
-                        .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                    .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
+                .addContainerGap())
         );
         pnlLaporanLayout.setVerticalGroup(
             pnlLaporanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlLaporanLayout.createSequentialGroup()
                 .addGap(49, 49, 49)
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel15)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlMaster.setBackground(new java.awt.Color(234, 234, 234));
@@ -367,7 +367,7 @@ public class HomeAdmin extends javax.swing.JFrame {
         });
 
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Home2_VLB.png"))); // NOI18N
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Master_VLB.png"))); // NOI18N
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(30, 132, 234));
@@ -378,25 +378,25 @@ public class HomeAdmin extends javax.swing.JFrame {
         pnlMaster.setLayout(pnlMasterLayout);
         pnlMasterLayout.setHorizontalGroup(
             pnlMasterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlMasterLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMasterLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlMasterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlMasterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(pnlMasterLayout.createSequentialGroup()
-                        .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
-                        .addContainerGap())))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
+                .addContainerGap())
         );
         pnlMasterLayout.setVerticalGroup(
             pnlMasterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMasterLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(49, Short.MAX_VALUE)
                 .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel16)
-                .addGap(15, 15, 15))
+                .addGap(9, 9, 9))
         );
 
         pnlLogout.setBackground(new java.awt.Color(234, 234, 234));
+        pnlLogout.setPreferredSize(new java.awt.Dimension(182, 163));
         pnlLogout.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 pnlLogoutMouseClicked(evt);
@@ -410,7 +410,7 @@ public class HomeAdmin extends javax.swing.JFrame {
         });
 
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Home2_VLB.png"))); // NOI18N
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Logout_VLB.png"))); // NOI18N
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(30, 132, 234));
@@ -424,18 +424,18 @@ public class HomeAdmin extends javax.swing.JFrame {
             .addGroup(pnlLogoutLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlLogoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                    .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlLogoutLayout.setVerticalGroup(
             pnlLogoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLogoutLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(49, Short.MAX_VALUE)
                 .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel17)
-                .addGap(15, 15, 15))
+                .addGap(9, 9, 9))
         );
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
@@ -476,10 +476,10 @@ public class HomeAdmin extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(pnlHome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGap(101, 101, 101)
+                        .addGap(105, 105, 105)
                         .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pnlKasir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnlSparepart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(pnlSparepart, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pnlKasir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(10, 10, 10)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnlLaporan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -541,16 +541,19 @@ public class HomeAdmin extends javax.swing.JFrame {
     private void pnlKasirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlKasirMouseClicked
         MenuKasir ps = new MenuKasir();
         ps.show();
+        this.dispose();
     }//GEN-LAST:event_pnlKasirMouseClicked
 
     private void pnlSparepartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlSparepartMouseClicked
         MenuSparepart ps = new MenuSparepart();
         ps.show();
+        this.dispose();
     }//GEN-LAST:event_pnlSparepartMouseClicked
 
     private void pnlLaporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlLaporanMouseClicked
         MenuLaporan ps = new MenuLaporan();
         ps.show();
+        this.dispose();
     }//GEN-LAST:event_pnlLaporanMouseClicked
 
     private void pnlLogoutMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlLogoutMouseExited
@@ -579,8 +582,9 @@ public class HomeAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_pnlMasterMouseEntered
 
     private void pnlMasterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlMasterMouseClicked
-        Master ps = new Master();
+        MenuMaster ps = new MenuMaster();
         ps.show();
+        this.dispose();
     }//GEN-LAST:event_pnlMasterMouseClicked
 
     private void minimizePanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_minimizePanelMouseClicked

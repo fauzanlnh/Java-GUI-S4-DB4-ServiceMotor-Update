@@ -61,7 +61,7 @@ public class Gudang extends javax.swing.JFrame {
                 no++;
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Kesalahan Pada Database" + ex);
+            JOptionPane.showMessageDialog(null, "KESALAHAN PADA DATABASE" + ex);
         }
         tblSparepart.setModel(dtm);
     }
@@ -99,7 +99,7 @@ public class Gudang extends javax.swing.JFrame {
                 no++;
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Kesalahan Pada Database" + ex);
+            JOptionPane.showMessageDialog(null, "KESALAHAN PADA DATABASE" + ex);
         }
         tblSparepart.setModel(dtm);
     }
@@ -124,20 +124,27 @@ public class Gudang extends javax.swing.JFrame {
         String KdBarang = txtKdBarang.getText().toUpperCase();
         String NamaBarang = txtNamaBarang.getText().toUpperCase();
         String HargaJual = txtHarga.getText().toUpperCase();
-
         try {
-            Statement stmt = koneksi.createStatement();
-            String query = "UPDATE T_Jenis_Sparepart SET Nama_Sparepart = '" + NamaBarang + "', Harga_Sparepart = '" + HargaJual + "' WHERE Id_Sparepart = '" + KdBarang + "'";
-            System.out.println(query);
-            int berhasil = stmt.executeUpdate(query);
-            if (berhasil == 1) {
-                JOptionPane.showMessageDialog(null, "Data Berhasil Diubah");
-            } else {
-                JOptionPane.showMessageDialog(null, "Data Gagal Dimasukan");
+            if (!NamaBarang.equals("") && !HargaJual.equals("")) {
+                Statement stmt = koneksi.createStatement();
+                String query = "UPDATE T_Jenis_Sparepart SET Nama_Sparepart = '" + NamaBarang + "', Harga_Sparepart = '" + HargaJual + "' WHERE Id_Sparepart = '" + KdBarang + "'";
+                System.out.println(query);
+                int berhasil = stmt.executeUpdate(query);
+                if (berhasil == 1) {
+                    JOptionPane.showMessageDialog(null, "DATA BERHASIL DIUBAH");
+                } else {
+                    JOptionPane.showMessageDialog(null, "DATA GAGAL DIUBAH");
+                }
+            } else if (NamaBarang.equals("")) {
+                JOptionPane.showMessageDialog(null, "NAMA BARANG MASIH KOSONG");
+                txtNamaBarang.requestFocus();
+            } else if (HargaJual.equals("")) {
+                JOptionPane.showMessageDialog(null, "HARGA JUAL MASIH KOSONG");
+                txtHarga.requestFocus();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Terjadi Kesalahan Pada Database" + ex);
+            JOptionPane.showMessageDialog(null, "KESALAHAN PADA DATABASE" + ex);
         }
     }
 
@@ -561,7 +568,7 @@ public class Gudang extends javax.swing.JFrame {
 
     private void btnBarangMasukMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBarangMasukMouseClicked
         // TODO add your handling code here:
-        BarangMasuk ts= new BarangMasuk();
+        BarangMasuk ts = new BarangMasuk();
         ts.show();
         this.dispose();
     }//GEN-LAST:event_btnBarangMasukMouseClicked

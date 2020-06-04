@@ -35,16 +35,32 @@ public class BarangBaru extends javax.swing.JFrame {
         int TipeMotor = cmbTipeMotor.getSelectedIndex();
         String Harga = txtHarga.getText();
         try {
-            Statement stmt = koneksi.createStatement();
-            String query = "INSERT INTO T_Jenis_Sparepart VALUES "
-                    + "('" + KdBarang + "', '" + NamaBarang + "','" + TipeMotor + "','0','" + Harga + "')";
-            System.out.println(query);
-            int berhasil = stmt.executeUpdate(query);
-            if (berhasil == 1) {
-                JOptionPane.showMessageDialog(null, "Data Berhasil Dimasukan");
-            } else {
-                JOptionPane.showMessageDialog(null, "Data Gagal Dimasukan");
+            if (!txtKdBarang.getText().equals("") && !txtNamaBarang.getText().equals("") && !txtHarga.getText().equals("") && cmbTipeMotor.getSelectedIndex() != 0) {
+                Statement stmt = koneksi.createStatement();
+                String query = "INSERT INTO T_Jenis_Sparepart VALUES "
+                        + "('" + KdBarang + "', '" + NamaBarang + "','" + TipeMotor + "','0','" + Harga + "')";
+                System.out.println(query);
+                int berhasil = stmt.executeUpdate(query);
+                if (berhasil == 1) {
+                    JOptionPane.showMessageDialog(null, "DATA BERHASIL DIMASUKKAM");
+                    System.out.println(query);
+                    Reset();
+                } else {
+                    JOptionPane.showMessageDialog(null, "DATA GAGAL DIMASUKKAM");
+                    System.out.println(query);
+                }
+            } else if (txtKdBarang.getText().equals("") && txtNamaBarang.getText().equals("") && txtHarga.getText().equals("") && cmbTipeMotor.getSelectedIndex() == 0) {
+                JOptionPane.showMessageDialog(null, "FORM MASIH KOSONG");
+            } else if (txtKdBarang.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "KODE BARANG MASIH KOSONG");
+            } else if (txtNamaBarang.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "NAMA BARANG MASIH KOSONG");
+            } else if (txtHarga.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "HARGA BARANG MASIH KOSONG");
+            } else if (cmbTipeMotor.getSelectedIndex() == 0) {
+                JOptionPane.showMessageDialog(null, "TIPE MOTOR SALAH");
             }
+
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Terjadi Kesalahan Pada Database" + ex);
@@ -205,9 +221,9 @@ public class BarangBaru extends javax.swing.JFrame {
         btnSubmit.setForeground(new java.awt.Color(51, 51, 51));
         btnSubmit.setText("Submit");
         btnSubmit.setBorder(null);
-        btnSubmit.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnSubmitMouseClicked(evt);
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
             }
         });
 
@@ -320,24 +336,6 @@ public class BarangBaru extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSubmitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSubmitMouseClicked
-        // TODO add your handling code here:
-        if (!txtKdBarang.getText().equals("") && !txtNamaBarang.getText().equals("") && !txtHarga.getText().equals("") && cmbTipeMotor.getSelectedIndex() != 0) {
-            SimpanData();
-            Reset();
-        } else if (txtKdBarang.getText().equals("") && txtNamaBarang.getText().equals("") && txtHarga.getText().equals("") && cmbTipeMotor.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(null, "Form Masih Kosong");
-        } else if (txtKdBarang.getText().equals("") && !txtNamaBarang.getText().equals("") && !txtHarga.getText().equals("") && cmbTipeMotor.getSelectedIndex() != 0) {
-            JOptionPane.showMessageDialog(null, "Kode Barang Masih Kosong");
-        } else if (!txtKdBarang.getText().equals("") && txtNamaBarang.getText().equals("") && !txtHarga.getText().equals("") && cmbTipeMotor.getSelectedIndex() != 0) {
-            JOptionPane.showMessageDialog(null, "Nama Barang Masih Kosong");
-        } else if (!txtKdBarang.getText().equals("") && !txtNamaBarang.getText().equals("") && txtHarga.getText().equals("") && cmbTipeMotor.getSelectedIndex() != 0) {
-            JOptionPane.showMessageDialog(null, "Harga Masih Kosong");
-        } else if (!txtKdBarang.getText().equals("") && !txtNamaBarang.getText().equals("") && !txtHarga.getText().equals("") && cmbTipeMotor.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(null, "Tipe Motor Masih Kosong");
-        }
-    }//GEN-LAST:event_btnSubmitMouseClicked
-
     private void btnResetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnResetMouseClicked
         // TODO add your handling code here:
         Reset();
@@ -361,6 +359,10 @@ public class BarangBaru extends javax.swing.JFrame {
         ps.show();
         this.dispose();
     }//GEN-LAST:event_btnCekStokMouseClicked
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        SimpanData();
+    }//GEN-LAST:event_btnSubmitActionPerformed
 
     /**
      * @param args the command line arguments

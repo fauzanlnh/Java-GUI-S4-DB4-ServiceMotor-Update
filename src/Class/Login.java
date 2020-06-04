@@ -35,10 +35,10 @@ public class Login extends javax.swing.JFrame {
         String user = txtUsername.getText().toUpperCase();
         // setId();
         try {
-            Statement stmt = koneksi.createStatement();
-            String query = "SELECT * from T_Login WHERE username = '" + user + "' AND password='" + pass + "' ";
-            ResultSet rs = stmt.executeQuery(query);
             if (!user.equals("") && !pass.equals("")) {
+                Statement stmt = koneksi.createStatement();
+                String query = "SELECT * from T_Login WHERE username = '" + user + "' AND password='" + pass + "' ";
+                ResultSet rs = stmt.executeQuery(query);
                 if (rs.next()) {
                     String Username = rs.getString("Id_Pegawai");
                     String IdPegawai = rs.getString("Id_Pegawai");
@@ -59,9 +59,9 @@ public class Login extends javax.swing.JFrame {
                         this.dispose();
                         HomeAdmin mn = new HomeAdmin();
                         mn.setVisible(true);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "LOGIN GAGAL \n PERIKSA KEMBALI USERNAME DAN PASSWORD");
                     }
+                } else {
+                    JOptionPane.showMessageDialog(null, "LOGIN GAGAL \n PERIKSA KEMBALI USERNAME DAN PASSWORD");
                 }
             } else {
                 if (user.equals("")) {

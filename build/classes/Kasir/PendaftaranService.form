@@ -49,11 +49,7 @@
                                   </Group>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="lblNoPol3" min="-2" max="-2" attributes="0"/>
-                                      <Group type="102" attributes="0">
-                                          <Component id="txtCariNopol" min="-2" pref="130" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="btnPilihCustomer1" min="-2" pref="104" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="txtCariNopol" min="-2" pref="130" max="-2" attributes="0"/>
                                       <Component id="tblDetSparepart1" alignment="0" min="-2" pref="537" max="-2" attributes="0"/>
                                       <Component id="txtDataTidakDitemukan" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
@@ -72,10 +68,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="lblNoPol3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="txtCariNopol" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnPilihCustomer1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="txtCariNopol" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="tblDetSparepart1" min="-2" pref="130" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
@@ -108,7 +101,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                           <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="42" max="32767" attributes="0"/>
+                          <EmptySpace pref="148" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -294,26 +287,6 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Data Yang Dicari Tidak Ditemukan"/>
               </Properties>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnPilihCustomer1">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="f0" green="f0" red="f0" type="rgb"/>
-                </Property>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Calibri" size="14" style="0"/>
-                </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="33" green="33" red="33" type="rgb"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Cari"/>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="null"/>
-                </Property>
-              </Properties>
-              <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnPilihCustomer1MouseClicked"/>
-              </Events>
             </Component>
           </SubComponents>
         </Container>
