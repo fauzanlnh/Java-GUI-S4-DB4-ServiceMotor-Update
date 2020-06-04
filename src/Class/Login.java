@@ -7,7 +7,9 @@ package Class;
 
 import Admin.HomeAdmin;
 import Kasir.HomeKasir;
+import Kasir.TransaksiService;
 import Sparepart.HomeSparepart;
+import java.awt.Color;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
@@ -29,30 +31,48 @@ public class Login extends javax.swing.JFrame {
     }
 
     public void cek() {
-        String pass = txtPassword.getText();
-        String user = txtUsername.getText();
+        String pass = txtPassword.getText().toUpperCase();
+        String user = txtUsername.getText().toUpperCase();
+        // setId();
         try {
             Statement stmt = koneksi.createStatement();
-            String query = "select * from t_login where username = '" + user + "' and password='" + pass + "' ";
+            String query = "SELECT * from T_Login WHERE username = '" + user + "' AND password='" + pass + "' ";
             ResultSet rs = stmt.executeQuery(query);
-            if (rs.next()) {
-                if (rs.getString("level").equals("Kasir")) {
-                    JOptionPane.showMessageDialog(null, "Login Succes ");
-                    this.dispose();
-                    HomeKasir mn = new HomeKasir();
-                    mn.setVisible(true);
-                } else if (rs.getString("level").equals("Sparepart")) {
-                    JOptionPane.showMessageDialog(null, "Login Succes ");
-                    this.dispose();
-                    HomeSparepart mn = new HomeSparepart();
-                    mn.setVisible(true);
-                } else if (rs.getString("level").equals("Admin")) {
-                    JOptionPane.showMessageDialog(null, "Login Succes ");
-                    this.dispose();
-                    HomeAdmin mn = new HomeAdmin();
-                    mn.setVisible(true);
+            if (!user.equals("") && !pass.equals("")) {
+                if (rs.next()) {
+                    String Username = rs.getString("Id_Pegawai");
+                    String IdPegawai = rs.getString("Id_Pegawai");
+                    LoginSession.setUsername(Username);
+                    LoginSession.setIdPegawai(IdPegawai);
+                    if (rs.getString("level").equals("KASIR")) {
+                        JOptionPane.showMessageDialog(null, "LOGIN SUCCES ");
+                        HomeKasir mn = new HomeKasir();
+                        mn.setVisible(true);
+                        this.dispose();
+                    } else if (rs.getString("level").equals("SPAREPART")) {
+                        JOptionPane.showMessageDialog(null, "LOGIN SUCCES ");
+                        this.dispose();
+                        HomeSparepart mn = new HomeSparepart();
+                        mn.setVisible(true);
+                    } else if (rs.getString("level").equals("ADMIN")) {
+                        JOptionPane.showMessageDialog(null, "LOGIN SUCCES ");
+                        this.dispose();
+                        HomeAdmin mn = new HomeAdmin();
+                        mn.setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "LOGIN GAGAL \n PERIKSA KEMBALI USERNAME DAN PASSWORD");
+                    }
+                }
+            } else {
+                if (user.equals("")) {
+                    JOptionPane.showMessageDialog(null, "USERNAME HARUS DI ISI");
+                    txtUsername.requestFocus();
+                } else if (pass.equals("")) {
+                    JOptionPane.showMessageDialog(null, "PASSWORD HARUS DI ISI");
+                    txtPassword.requestFocus();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Login Failed ");
+                    JOptionPane.showMessageDialog(null, "FORM HARUS DI ISI");
+                    txtUsername.requestFocus();
                 }
             }
         } catch (SQLException ex) {
@@ -80,7 +100,7 @@ public class Login extends javax.swing.JFrame {
         minimizePanel = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         closePanel = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
+        txtClose = new javax.swing.JLabel();
         sidePanel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -124,15 +144,21 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        minimizePanel.setBackground(new java.awt.Color(0, 102, 204));
+        minimizePanel.setBackground(new java.awt.Color(255, 255, 255));
         minimizePanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 minimizePanelMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                minimizePanelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                minimizePanelMouseExited(evt);
+            }
         });
 
         jLabel7.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setForeground(new java.awt.Color(30, 130, 234));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("_");
 
@@ -153,17 +179,23 @@ public class Login extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        closePanel.setBackground(new java.awt.Color(0, 102, 204));
+        closePanel.setBackground(new java.awt.Color(255, 255, 255));
         closePanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 closePanelMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                closePanelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                closePanelMouseExited(evt);
+            }
         });
 
-        jLabel8.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("X");
+        txtClose.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        txtClose.setForeground(new java.awt.Color(30, 130, 234));
+        txtClose.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        txtClose.setText("X");
 
         javax.swing.GroupLayout closePanelLayout = new javax.swing.GroupLayout(closePanel);
         closePanel.setLayout(closePanelLayout);
@@ -171,14 +203,14 @@ public class Login extends javax.swing.JFrame {
             closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, closePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                .addComponent(txtClose, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
                 .addContainerGap())
         );
         closePanelLayout.setVerticalGroup(
             closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, closePanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel8)
+                .addComponent(txtClose)
                 .addContainerGap())
         );
 
@@ -232,6 +264,7 @@ public class Login extends javax.swing.JFrame {
         sidePanel.setBackground(new java.awt.Color(0, 102, 204));
         sidePanel.setPreferredSize(new java.awt.Dimension(350, 0));
 
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/M_User White.png"))); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
@@ -244,19 +277,16 @@ public class Login extends javax.swing.JFrame {
         sidePanelLayout.setHorizontalGroup(
             sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sidePanelLayout.createSequentialGroup()
-                .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(sidePanelLayout.createSequentialGroup()
-                        .addGap(63, 63, 63)
-                        .addComponent(jLabel5))
-                    .addGroup(sidePanelLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(20, 20, 20)
+                .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         sidePanelLayout.setVerticalGroup(
             sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sidePanelLayout.createSequentialGroup()
-                .addGap(74, 74, 74)
+                .addGap(109, 109, 109)
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
@@ -284,19 +314,38 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginMouseClicked
-        // TODO add your handling code here:
         cek();
     }//GEN-LAST:event_btnLoginMouseClicked
 
     private void minimizePanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_minimizePanelMouseClicked
-        // TODO add your handling code here:
         this.setState(Login.ICONIFIED);
     }//GEN-LAST:event_minimizePanelMouseClicked
 
     private void closePanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closePanelMouseClicked
-        // TODO add your handling code here:
-        System.exit(0);
+        int ok = JOptionPane.showConfirmDialog(null, "Anda Akan Keluar Dari Program?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if (ok == 0) {
+            dispose();
+            System.exit(0);
+        }
     }//GEN-LAST:event_closePanelMouseClicked
+
+    private void closePanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closePanelMouseEntered
+        closePanel.setBackground(Color.red);
+        txtClose.setForeground(Color.white);
+    }//GEN-LAST:event_closePanelMouseEntered
+
+    private void closePanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closePanelMouseExited
+        closePanel.setBackground(new java.awt.Color(255, 255, 255));
+        txtClose.setForeground(new java.awt.Color(30, 130, 234));
+    }//GEN-LAST:event_closePanelMouseExited
+
+    private void minimizePanelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_minimizePanelMouseEntered
+        minimizePanel.setBackground(new java.awt.Color(234, 234, 234));
+    }//GEN-LAST:event_minimizePanelMouseEntered
+
+    private void minimizePanelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_minimizePanelMouseExited
+        minimizePanel.setBackground(new java.awt.Color(255, 255, 255));
+    }//GEN-LAST:event_minimizePanelMouseExited
 
     /**
      * @param args the command line arguments
@@ -340,12 +389,12 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JPanel minimizePanel;
     private javax.swing.JPanel sidePanel;
+    private javax.swing.JLabel txtClose;
     private javax.swing.JLabel txtLogin;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;

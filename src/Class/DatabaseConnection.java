@@ -22,13 +22,12 @@ public class DatabaseConnection {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             koneksi = DriverManager.getConnection(konString, username, password);
-            System.out.println("Koneksi Berhasil");
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Koneksi Database Error" + ex);
+            JOptionPane.showMessageDialog(null, "KONEKSI DATABASE ERROR" + ex);
             koneksi = null;
         } catch (ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "JDBC Driver Tidak Ditemukan");
+            JOptionPane.showMessageDialog(null, "JDBC DRIVER TIDAK DITEMUKAN");
         }
 
         return koneksi;

@@ -5,8 +5,10 @@
  */
 package Kasir;
 
+import Admin.MenuKasir;
 import Class.DatabaseConnection;
 import Class.Login;
+import Class.LoginSession;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -25,7 +27,8 @@ public class TransaksiService extends javax.swing.JFrame {
      * Creates new form TransaksiService
      */
     Connection koneksi;
-    String KdJenisMotor, KdTeknisi;
+    String KdJenisMotor, IdPegawai;
+    int KdTeknisi;
 
     public TransaksiService() {
         initComponents();
@@ -35,10 +38,13 @@ public class TransaksiService extends javax.swing.JFrame {
         CariNoFaktur.setLocationRelativeTo(null);
         getListTeknisi();
         setJDate();
+        txtKasir.setText(LoginSession.getIdPegawai());
+
     }
 
     //FORM
     public void Clear() {
+        btnCariNopol.setEnabled(true);
         cmbSparepart.removeAllItems();
         cmbSparepart.addItem("-");
         cmbService.removeAllItems();
@@ -106,7 +112,7 @@ public class TransaksiService extends javax.swing.JFrame {
         String Nama_Jasa = cmbService.getSelectedItem().toString();
         String qty = txtQtyJasa.getText();
         try {
-            String query = "SELECT * FROM T_Jasa WHERE Nama_Jasa = '" + Nama_Jasa + "'";
+            String query = "SELECT * FROM T_Jenis_Jasa WHERE Nama_Jasa = '" + Nama_Jasa + "'";
             Statement st = koneksi.createStatement();
             ResultSet rs = st.executeQuery(query);
             if (rs.next()) {
@@ -148,7 +154,7 @@ public class TransaksiService extends javax.swing.JFrame {
         String NamaSparepart = cmbSparepart.getSelectedItem().toString();
         String qty = txtQtySpare.getText();
         try {
-            String query = "SELECT * FROM t_sparepart WHERE nama_sparepart = '" + NamaSparepart + "'";
+            String query = "SELECT * FROM T_Jenis_Sparepart WHERE Nama_Sparepart = '" + NamaSparepart + "'";
             Statement st = koneksi.createStatement();
             ResultSet rs = st.executeQuery(query);
             if (rs.next()) {
@@ -223,7 +229,7 @@ public class TransaksiService extends javax.swing.JFrame {
         cmbSparepart.removeAllItems();
         cmbSparepart.addItem("-");
         try {
-            String SelectKD = "SELECT * FROM T_Sparepart WHERE Id_Jenis = '" + KdJenisMotor + "'";
+            String SelectKD = "SELECT * FROM T_Jenis_Sparepart WHERE Id_Jenis = '" + KdJenisMotor + "'";
             Statement st = koneksi.createStatement();
             ResultSet rs = st.executeQuery(SelectKD);
             while (rs.next()) {
@@ -242,7 +248,7 @@ public class TransaksiService extends javax.swing.JFrame {
         cmbService.removeAllItems();
         cmbService.addItem("-");
         try {
-            String SelectKD = "SELECT * FROM T_Jasa WHERE Id_Jenis = '" + KdJenisMotor + "'";
+            String SelectKD = "SELECT * FROM T_Jenis_Jasa WHERE Id_Jenis = '" + KdJenisMotor + "'";
             Statement st = koneksi.createStatement();
             ResultSet rs = st.executeQuery(SelectKD);
             while (rs.next()) {
@@ -258,11 +264,11 @@ public class TransaksiService extends javax.swing.JFrame {
         cmbTeknisi.removeAllItems();
         cmbTeknisi.addItem("-");
         try {
-            String SelectKD = "SELECT * FROM T_Teknisi";
+            String SelectKD = "SELECT * FROM T_Pegawai WHERE Bagian = 'TEKNISI' AND Nama_Pegawai != 'TEKNISI'";
             Statement st = koneksi.createStatement();
             ResultSet rs = st.executeQuery(SelectKD);
             while (rs.next()) {
-                String Nama_Teknisi = rs.getString("Nama_Teknisi");
+                String Nama_Teknisi = rs.getString("Nama_Pegawai");
                 cmbTeknisi.addItem(Nama_Teknisi);
             }
         } catch (SQLException e) {
@@ -277,9 +283,9 @@ public class TransaksiService extends javax.swing.JFrame {
         String KdFaktur = txtNoFaktur.getText();
         try {
             Statement stmt = koneksi.createStatement();
-            query = "SELECT  T_Det_Pendaftaran_Sparepart.Id_Sparepart, T_Sparepart.Nama_Sparepart, T_Det_Pendaftaran_Sparepart.Harga "
-                    + "FROM T_Det_Pendaftaran_Sparepart,T_Sparepart "
-                    + "WHERE T_Sparepart.Id_Sparepart = T_Det_Pendaftaran_Sparepart.Id_Sparepart AND "
+            query = "SELECT  T_Det_Pendaftaran_Sparepart.Id_Sparepart, T_Jenis_Sparepart.Nama_Sparepart, T_Det_Pendaftaran_Sparepart.Harga "
+                    + "FROM T_Det_Pendaftaran_Sparepart,T_Jenis_Sparepart "
+                    + "WHERE T_Jenis_Sparepart.Id_Sparepart = T_Det_Pendaftaran_Sparepart.Id_Sparepart AND "
                     + "Id_Faktur = '" + KdFaktur + "' ";
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
@@ -303,9 +309,9 @@ public class TransaksiService extends javax.swing.JFrame {
         int Total = 0;
         try {
             Statement stmt = koneksi.createStatement();
-            query = "SELECT T_Det_Pendaftaran_Jasa.Id_Jasa, T_Jasa.Nama_Jasa, T_Det_Pendaftaran_Jasa.Harga "
-                    + "FROM T_Det_Pendaftaran_Jasa,T_Jasa "
-                    + "WHERE T_Jasa.Id_Jasa = T_Det_Pendaftaran_Jasa.Id_Jasa AND "
+            query = "SELECT T_Det_Pendaftaran_Jasa.Id_Jasa, T_Jenis_Jasa.Nama_Jasa, T_Det_Pendaftaran_Jasa.Harga "
+                    + "FROM T_Det_Pendaftaran_Jasa,T_Jenis_Jasa "
+                    + "WHERE T_Jenis_Jasa.Id_Jasa = T_Det_Pendaftaran_Jasa.Id_Jasa AND "
                     + "Id_Faktur = '" + KdFaktur + "' ";
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
@@ -360,15 +366,14 @@ public class TransaksiService extends javax.swing.JFrame {
         return KdJenisMotor;
     }
 
-    public String getKdTeknisi() {
-        String KdTeknisi = cmbTeknisi.getSelectedItem().toString();
+    public int getKdTeknisi() {
+        String NamaTeknisi = cmbTeknisi.getSelectedItem().toString();
         try {
-            String SelectKD = "SELECT * FROM T_Teknisi WHERE Nama_Teknisi = '" + KdTeknisi + "'";
+            String SelectKD = "SELECT * FROM T_Pegawai WHERE Nama_Pegawai = '" + NamaTeknisi + "' AND Bagian = 'TEKNISI'";
             Statement st = koneksi.createStatement();
             ResultSet rs = st.executeQuery(SelectKD);
             while (rs.next()) {
-                KdTeknisi = rs.getString("Id_Teknisi");
-
+                KdTeknisi = rs.getInt("Id_Pegawai");
             }
         } catch (SQLException e) {
 
@@ -379,30 +384,30 @@ public class TransaksiService extends javax.swing.JFrame {
     //HITUNG
     public void setTotalSparepart() {
         txtTotalSparepart.setText("0");
+        int TotalBayar = 0;
         for (int i = 0; i < tblSparepart.getRowCount(); i++) {
-            int TotalBayar = 0;
             if (tblSparepart.getValueAt(i, 3).equals("")) {
                 JOptionPane.showMessageDialog(null, "ISI QTY SPAREPART TERLBIH DAHULU");
             } else if (tblSparepart.getRowCount() > 0) {
                 int TotalPerDetail = Integer.parseInt(tblSparepart.getValueAt(i, 4) + "");
                 TotalBayar = TotalBayar + TotalPerDetail;
-                txtTotalSparepart.setText("" + TotalBayar);
             }
         }
+        txtTotalSparepart.setText("" + TotalBayar);
     }
 
     public void setTotalService() {
         txtTotalService.setText("0");
+        int TotalBayar = 0;
         for (int i = 0; i < tblService.getRowCount(); i++) {
-            int TotalBayar = 0;
             if (tblService.getValueAt(i, 3).equals("")) {
                 JOptionPane.showMessageDialog(null, "ISI QTY SERVICE TERLBIH DAHULU");
             } else if (tblService.getRowCount() > 0) {
                 int TotalPerDetail = Integer.parseInt(tblService.getValueAt(i, 4) + "");
                 TotalBayar = TotalBayar + TotalPerDetail;
-                txtTotalService.setText("" + TotalBayar);
             }
         }
+        txtTotalService.setText("" + TotalBayar);
     }
 
     public void setTotalBayar() {
@@ -448,7 +453,7 @@ public class TransaksiService extends javax.swing.JFrame {
                                 + "'" + tSparepart.getValueAt(i, 3) + "',"
                                 + "'" + tSparepart.getValueAt(i, 4) + "')");
                         BerhasilDetSparepart = stmt.executeUpdate(InsertDetSparepart);
-                        String UpdateStok = "UPDATE T_Sparepart SET Stok = Stok - '" + tSparepart.getValueAt(i, 3) + "' WHERE Id_Sparepart = '" + tSparepart.getValueAt(i, 0) + "'";
+                        String UpdateStok = "UPDATE T_Jenis_Sparepart SET Stok = Stok - '" + tSparepart.getValueAt(i, 3) + "' WHERE Id_Sparepart = '" + tSparepart.getValueAt(i, 0) + "'";
                         BerhasilUpdateStok = stmt.executeUpdate(UpdateStok);
                         System.out.println(InsertDetSparepart);
                     }
@@ -525,65 +530,53 @@ public class TransaksiService extends javax.swing.JFrame {
         tblFaktur = new javax.swing.JTable();
         btnCancelCari = new javax.swing.JButton();
         txtDataTidakDitemukan = new javax.swing.JLabel();
-        sidePanel = new javax.swing.JPanel();
-        pnlPendataran = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        pnlKeluar = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        pnlTransaksi = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        pnlHome = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        pnlLaporan = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        mainPanel3 = new javax.swing.JPanel();
+        PanelDirectory3 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
-        mainPanel = new javax.swing.JPanel();
-        PanelDirectory = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        lblNoPol = new javax.swing.JLabel();
-        lblService = new javax.swing.JLabel();
+        btnLaporan = new javax.swing.JPanel();
+        lblNoPol6 = new javax.swing.JLabel();
+        btnPendaftaran = new javax.swing.JPanel();
+        lblNoPol7 = new javax.swing.JLabel();
+        lblNoPol8 = new javax.swing.JLabel();
+        lblService3 = new javax.swing.JLabel();
         cmbService = new javax.swing.JComboBox<>();
-        lblSparepart = new javax.swing.JLabel();
+        lblSparepart1 = new javax.swing.JLabel();
         cmbSparepart = new javax.swing.JComboBox<>();
-        lblNoPol1 = new javax.swing.JLabel();
-        closePanel = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        minimizePanel = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
-        btnHapusService = new javax.swing.JButton();
+        lblNoPol9 = new javax.swing.JLabel();
+        btnSubmit = new javax.swing.JButton();
+        btnHapusServices = new javax.swing.JButton();
         btnHapusSparepart = new javax.swing.JButton();
         btnTambahSparepart = new javax.swing.JButton();
         btnTambahService = new javax.swing.JButton();
         btnCariNopol = new javax.swing.JButton();
-        txtNoFaktur = new javax.swing.JTextField();
         txtNoPol = new javax.swing.JTextField();
-        lblDetServices = new javax.swing.JLabel();
-        tblDetServices = new javax.swing.JScrollPane();
+        txtNoFaktur = new javax.swing.JTextField();
+        lblDetServices1 = new javax.swing.JLabel();
+        tblDetServices1 = new javax.swing.JScrollPane();
         tblSparepart = new javax.swing.JTable();
-        tblDetSparepart = new javax.swing.JScrollPane();
+        tblDetSparepart2 = new javax.swing.JScrollPane();
         tblService = new javax.swing.JTable();
-        lblNoPol2 = new javax.swing.JLabel();
-        txtTanggal = new com.toedter.calendar.JDateChooser();
-        lblSparepart1 = new javax.swing.JLabel();
-        cmbTeknisi = new javax.swing.JComboBox<>();
-        lblDetSparepart1 = new javax.swing.JLabel();
-        lblService1 = new javax.swing.JLabel();
-        txtQtyJasa = new javax.swing.JTextField();
-        txtQtySpare = new javax.swing.JTextField();
-        lblService2 = new javax.swing.JLabel();
+        lblDetSparepart2 = new javax.swing.JLabel();
+        btnClear = new javax.swing.JButton();
         lblService15 = new javax.swing.JLabel();
-        lblService16 = new javax.swing.JLabel();
-        lblService17 = new javax.swing.JLabel();
-        lblService18 = new javax.swing.JLabel();
-        lblService19 = new javax.swing.JLabel();
         lblService20 = new javax.swing.JLabel();
         txtTotalService = new javax.swing.JLabel();
         txtTotalSparepart = new javax.swing.JLabel();
-        lblSparepart2 = new javax.swing.JLabel();
+        lblService19 = new javax.swing.JLabel();
+        lblService16 = new javax.swing.JLabel();
+        lblService17 = new javax.swing.JLabel();
+        lblService18 = new javax.swing.JLabel();
         txtTotalBayar = new javax.swing.JLabel();
+        cmbTeknisi = new javax.swing.JComboBox<>();
+        lblSparepart2 = new javax.swing.JLabel();
+        lblSparepart3 = new javax.swing.JLabel();
         txtKasir = new javax.swing.JLabel();
-        btnClear = new javax.swing.JButton();
-        btnSubmit = new javax.swing.JButton();
+        txtQtyJasa = new javax.swing.JTextField();
+        lblService1 = new javax.swing.JLabel();
+        lblService2 = new javax.swing.JLabel();
+        txtQtySpare = new javax.swing.JTextField();
+        txtTanggal = new com.toedter.calendar.JDateChooser();
+        lblNoPol2 = new javax.swing.JLabel();
         btnHitung = new javax.swing.JButton();
 
         CariNoFaktur.setUndecorated(true);
@@ -721,323 +714,138 @@ public class TransaksiService extends javax.swing.JFrame {
             .addComponent(mainPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setUndecorated(true);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Transaksi Service");
 
-        sidePanel.setBackground(new java.awt.Color(0, 102, 204));
+        mainPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        mainPanel3.setPreferredSize(new java.awt.Dimension(710, 673));
 
-        pnlPendataran.setBackground(new java.awt.Color(30, 130, 234));
-        pnlPendataran.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pnlPendataranMouseClicked(evt);
-            }
-        });
+        PanelDirectory3.setBackground(new java.awt.Color(30, 130, 234));
+        PanelDirectory3.setPreferredSize(new java.awt.Dimension(636, 100));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/Register.png"))); // NOI18N
-        jLabel1.setText("Pendaftaran");
-        jLabel1.setIconTextGap(30);
-
-        javax.swing.GroupLayout pnlPendataranLayout = new javax.swing.GroupLayout(pnlPendataran);
-        pnlPendataran.setLayout(pnlPendataranLayout);
-        pnlPendataranLayout.setHorizontalGroup(
-            pnlPendataranLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlPendataranLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel1)
-                .addContainerGap(188, Short.MAX_VALUE))
-        );
-        pnlPendataranLayout.setVerticalGroup(
-            pnlPendataranLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlPendataranLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jLabel1)
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
-
-        pnlKeluar.setBackground(new java.awt.Color(30, 130, 234));
-        pnlKeluar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pnlKeluarMouseClicked(evt);
-            }
-        });
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/Logout White.png"))); // NOI18N
-        jLabel2.setText("Keluar");
-        jLabel2.setIconTextGap(30);
-
-        javax.swing.GroupLayout pnlKeluarLayout = new javax.swing.GroupLayout(pnlKeluar);
-        pnlKeluar.setLayout(pnlKeluarLayout);
-        pnlKeluarLayout.setHorizontalGroup(
-            pnlKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlKeluarLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        pnlKeluarLayout.setVerticalGroup(
-            pnlKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlKeluarLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jLabel2)
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
-
-        pnlTransaksi.setBackground(new java.awt.Color(30, 130, 234));
-        pnlTransaksi.setPreferredSize(new java.awt.Dimension(303, 58));
-        pnlTransaksi.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pnlTransaksiMouseClicked(evt);
-            }
-        });
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/Cash Register.png"))); // NOI18N
-        jLabel3.setText("Transaksi");
-        jLabel3.setIconTextGap(30);
-
-        javax.swing.GroupLayout pnlTransaksiLayout = new javax.swing.GroupLayout(pnlTransaksi);
-        pnlTransaksi.setLayout(pnlTransaksiLayout);
-        pnlTransaksiLayout.setHorizontalGroup(
-            pnlTransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlTransaksiLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        pnlTransaksiLayout.setVerticalGroup(
-            pnlTransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlTransaksiLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jLabel3)
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
-
-        pnlHome.setBackground(new java.awt.Color(30, 130, 234));
-        pnlHome.setPreferredSize(new java.awt.Dimension(303, 58));
-        pnlHome.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pnlHomeMouseClicked(evt);
-            }
-        });
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/Home.png"))); // NOI18N
-        jLabel5.setText("Home");
-        jLabel5.setIconTextGap(30);
-
-        javax.swing.GroupLayout pnlHomeLayout = new javax.swing.GroupLayout(pnlHome);
-        pnlHome.setLayout(pnlHomeLayout);
-        pnlHomeLayout.setHorizontalGroup(
-            pnlHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlHomeLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel5)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        pnlHomeLayout.setVerticalGroup(
-            pnlHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlHomeLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jLabel5)
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
-
-        pnlLaporan.setBackground(new java.awt.Color(30, 130, 234));
-        pnlLaporan.setRequestFocusEnabled(false);
-        pnlLaporan.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pnlLaporanMouseClicked(evt);
-            }
-        });
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/Report White.png"))); // NOI18N
-        jLabel4.setText("Laporan");
-        jLabel4.setIconTextGap(30);
-
-        javax.swing.GroupLayout pnlLaporanLayout = new javax.swing.GroupLayout(pnlLaporan);
-        pnlLaporan.setLayout(pnlLaporanLayout);
-        pnlLaporanLayout.setHorizontalGroup(
-            pnlLaporanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlLaporanLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        pnlLaporanLayout.setVerticalGroup(
-            pnlLaporanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlLaporanLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jLabel4)
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
-
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/SS_Support.png"))); // NOI18N
-        jLabel9.setText("    Service Motor");
+        jLabel9.setText("Kasir/Pendaftaran Service");
 
-        javax.swing.GroupLayout sidePanelLayout = new javax.swing.GroupLayout(sidePanel);
-        sidePanel.setLayout(sidePanelLayout);
-        sidePanelLayout.setHorizontalGroup(
-            sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlPendataran, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(pnlKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(pnlTransaksi, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
-            .addComponent(pnlHome, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
-            .addComponent(pnlLaporan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(sidePanelLayout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        sidePanelLayout.setVerticalGroup(
-            sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(sidePanelLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jLabel9)
-                .addGap(40, 40, 40)
-                .addComponent(pnlHome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(pnlPendataran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(pnlTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(pnlLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(pnlKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        mainPanel.setBackground(new java.awt.Color(255, 255, 255));
-
-        PanelDirectory.setBackground(new java.awt.Color(30, 130, 234));
-        PanelDirectory.setPreferredSize(new java.awt.Dimension(636, 100));
-
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("Kasir/Transaksi Service");
-
-        javax.swing.GroupLayout PanelDirectoryLayout = new javax.swing.GroupLayout(PanelDirectory);
-        PanelDirectory.setLayout(PanelDirectoryLayout);
-        PanelDirectoryLayout.setHorizontalGroup(
-            PanelDirectoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanelDirectoryLayout.createSequentialGroup()
+        javax.swing.GroupLayout PanelDirectory3Layout = new javax.swing.GroupLayout(PanelDirectory3);
+        PanelDirectory3.setLayout(PanelDirectory3Layout);
+        PanelDirectory3Layout.setHorizontalGroup(
+            PanelDirectory3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelDirectory3Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addComponent(jLabel7)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jLabel9)
+                .addContainerGap(431, Short.MAX_VALUE))
         );
-        PanelDirectoryLayout.setVerticalGroup(
-            PanelDirectoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelDirectoryLayout.createSequentialGroup()
+        PanelDirectory3Layout.setVerticalGroup(
+            PanelDirectory3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelDirectory3Layout.createSequentialGroup()
                 .addContainerGap(29, Short.MAX_VALUE)
-                .addComponent(jLabel7)
+                .addComponent(jLabel9)
                 .addGap(39, 39, 39))
         );
 
-        lblNoPol.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblNoPol.setForeground(new java.awt.Color(51, 51, 51));
-        lblNoPol.setText("No Polisi");
+        btnLaporan.setBackground(new java.awt.Color(255, 255, 255));
+        btnLaporan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnLaporanMouseClicked(evt);
+            }
+        });
 
-        lblService.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblService.setForeground(new java.awt.Color(51, 51, 51));
-        lblService.setText("Service");
+        lblNoPol6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblNoPol6.setForeground(new java.awt.Color(51, 51, 51));
+        lblNoPol6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblNoPol6.setText("  Laporan   >");
+
+        javax.swing.GroupLayout btnLaporanLayout = new javax.swing.GroupLayout(btnLaporan);
+        btnLaporan.setLayout(btnLaporanLayout);
+        btnLaporanLayout.setHorizontalGroup(
+            btnLaporanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnLaporanLayout.createSequentialGroup()
+                .addContainerGap(33, Short.MAX_VALUE)
+                .addComponent(lblNoPol6)
+                .addGap(20, 20, 20))
+        );
+        btnLaporanLayout.setVerticalGroup(
+            btnLaporanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnLaporanLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblNoPol6, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        btnPendaftaran.setBackground(new java.awt.Color(255, 255, 255));
+        btnPendaftaran.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnPendaftaranMouseClicked(evt);
+            }
+        });
+
+        lblNoPol7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblNoPol7.setForeground(new java.awt.Color(51, 51, 51));
+        lblNoPol7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblNoPol7.setText("    < Pendaftaran");
+
+        javax.swing.GroupLayout btnPendaftaranLayout = new javax.swing.GroupLayout(btnPendaftaran);
+        btnPendaftaran.setLayout(btnPendaftaranLayout);
+        btnPendaftaranLayout.setHorizontalGroup(
+            btnPendaftaranLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnPendaftaranLayout.createSequentialGroup()
+                .addComponent(lblNoPol7)
+                .addGap(0, 53, Short.MAX_VALUE))
+        );
+        btnPendaftaranLayout.setVerticalGroup(
+            btnPendaftaranLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnPendaftaranLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblNoPol7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        lblNoPol8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblNoPol8.setForeground(new java.awt.Color(51, 51, 51));
+        lblNoPol8.setText("No Faktur");
+
+        lblService3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblService3.setForeground(new java.awt.Color(51, 51, 51));
+        lblService3.setText("Service");
 
         cmbService.setBackground(new java.awt.Color(255, 255, 255));
         cmbService.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         cmbService.setForeground(new java.awt.Color(51, 51, 51));
         cmbService.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-" }));
 
-        lblSparepart.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblSparepart.setForeground(new java.awt.Color(51, 51, 51));
-        lblSparepart.setText("Sparepart");
+        lblSparepart1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblSparepart1.setForeground(new java.awt.Color(51, 51, 51));
+        lblSparepart1.setText("Sparepart");
 
         cmbSparepart.setBackground(new java.awt.Color(255, 255, 255));
         cmbSparepart.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         cmbSparepart.setForeground(new java.awt.Color(51, 51, 51));
         cmbSparepart.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-" }));
 
-        lblNoPol1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblNoPol1.setForeground(new java.awt.Color(51, 51, 51));
-        lblNoPol1.setText("No Faktur");
+        lblNoPol9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblNoPol9.setForeground(new java.awt.Color(51, 51, 51));
+        lblNoPol9.setText("No Polisi");
 
-        closePanel.setBackground(new java.awt.Color(0, 102, 204));
-        closePanel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                closePanelMouseClicked(evt);
-            }
-        });
-
-        jLabel8.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("X");
-
-        javax.swing.GroupLayout closePanelLayout = new javax.swing.GroupLayout(closePanel);
-        closePanel.setLayout(closePanelLayout);
-        closePanelLayout.setHorizontalGroup(
-            closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, closePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        closePanelLayout.setVerticalGroup(
-            closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, closePanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addContainerGap())
-        );
-
-        minimizePanel.setBackground(new java.awt.Color(0, 102, 204));
-        minimizePanel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                minimizePanelMouseClicked(evt);
-            }
-        });
-
-        jLabel11.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("_");
-
-        javax.swing.GroupLayout minimizePanelLayout = new javax.swing.GroupLayout(minimizePanel);
-        minimizePanel.setLayout(minimizePanelLayout);
-        minimizePanelLayout.setHorizontalGroup(
-            minimizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, minimizePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        minimizePanelLayout.setVerticalGroup(
-            minimizePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, minimizePanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel11)
-                .addContainerGap())
-        );
-
-        btnHapusService.setBackground(new java.awt.Color(240, 240, 240));
-        btnHapusService.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnHapusService.setForeground(new java.awt.Color(51, 51, 51));
-        btnHapusService.setText("Hapus");
-        btnHapusService.setBorder(null);
-        btnHapusService.addActionListener(new java.awt.event.ActionListener() {
+        btnSubmit.setBackground(new java.awt.Color(240, 240, 240));
+        btnSubmit.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        btnSubmit.setForeground(new java.awt.Color(51, 51, 51));
+        btnSubmit.setText("Submit");
+        btnSubmit.setBorder(null);
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHapusServiceActionPerformed(evt);
+                btnSubmitActionPerformed(evt);
+            }
+        });
+
+        btnHapusServices.setBackground(new java.awt.Color(240, 240, 240));
+        btnHapusServices.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        btnHapusServices.setForeground(new java.awt.Color(51, 51, 51));
+        btnHapusServices.setText("Hapus");
+        btnHapusServices.setBorder(null);
+        btnHapusServices.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnHapusServicesMouseClicked(evt);
             }
         });
 
@@ -1046,16 +854,16 @@ public class TransaksiService extends javax.swing.JFrame {
         btnHapusSparepart.setForeground(new java.awt.Color(51, 51, 51));
         btnHapusSparepart.setText("Hapus");
         btnHapusSparepart.setBorder(null);
-        btnHapusSparepart.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHapusSparepartActionPerformed(evt);
+        btnHapusSparepart.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnHapusSparepartMouseClicked(evt);
             }
         });
 
         btnTambahSparepart.setBackground(new java.awt.Color(240, 240, 240));
         btnTambahSparepart.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTambahSparepart.setForeground(new java.awt.Color(51, 51, 51));
-        btnTambahSparepart.setText("Tambah");
+        btnTambahSparepart.setText("+");
         btnTambahSparepart.setBorder(null);
         btnTambahSparepart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1066,7 +874,7 @@ public class TransaksiService extends javax.swing.JFrame {
         btnTambahService.setBackground(new java.awt.Color(240, 240, 240));
         btnTambahService.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnTambahService.setForeground(new java.awt.Color(51, 51, 51));
-        btnTambahService.setText("Tambah");
+        btnTambahService.setText("+");
         btnTambahService.setBorder(null);
         btnTambahService.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1085,30 +893,30 @@ public class TransaksiService extends javax.swing.JFrame {
             }
         });
 
-        txtNoFaktur.setEditable(false);
-        txtNoFaktur.setBackground(new java.awt.Color(255, 255, 255));
-        txtNoFaktur.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
-        txtNoFaktur.setForeground(new java.awt.Color(51, 51, 51));
-        txtNoFaktur.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
-
         txtNoPol.setEditable(false);
         txtNoPol.setBackground(new java.awt.Color(255, 255, 255));
         txtNoPol.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         txtNoPol.setForeground(new java.awt.Color(51, 51, 51));
         txtNoPol.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
 
-        lblDetServices.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblDetServices.setForeground(new java.awt.Color(51, 51, 51));
-        lblDetServices.setText("List Sparepart");
+        txtNoFaktur.setEditable(false);
+        txtNoFaktur.setBackground(new java.awt.Color(255, 255, 255));
+        txtNoFaktur.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        txtNoFaktur.setForeground(new java.awt.Color(51, 51, 51));
+        txtNoFaktur.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+
+        lblDetServices1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblDetServices1.setForeground(new java.awt.Color(51, 51, 51));
+        lblDetServices1.setText("List Sparepart");
 
         tblSparepart.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        tblSparepart.setForeground(new java.awt.Color(0, 0, 0));
+        tblSparepart.setForeground(new java.awt.Color(51, 51, 51));
         tblSparepart.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Nomor Item", "Nama Item", "Harga", "Qty", "Total"
+                "No", "Kode Sparepart", "Nama Sparepart", "Harga"
             }
         ));
         tblSparepart.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1116,16 +924,16 @@ public class TransaksiService extends javax.swing.JFrame {
                 tblSparepartKeyReleased(evt);
             }
         });
-        tblDetServices.setViewportView(tblSparepart);
+        tblDetServices1.setViewportView(tblSparepart);
 
         tblService.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        tblService.setForeground(new java.awt.Color(0, 0, 0));
+        tblService.setForeground(new java.awt.Color(51, 51, 51));
         tblService.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Nomor Item", "Nama Item", "Harga", "Qty", "Total"
+                "No", "Kode Service", "Nama Service", "Harga"
             }
         ));
         tblService.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1133,64 +941,26 @@ public class TransaksiService extends javax.swing.JFrame {
                 tblServiceKeyReleased(evt);
             }
         });
-        tblDetSparepart.setViewportView(tblService);
+        tblDetSparepart2.setViewportView(tblService);
 
-        lblNoPol2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblNoPol2.setForeground(new java.awt.Color(51, 51, 51));
-        lblNoPol2.setText("Tanggal");
+        lblDetSparepart2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblDetSparepart2.setForeground(new java.awt.Color(51, 51, 51));
+        lblDetSparepart2.setText("List Services");
 
-        txtTanggal.setBackground(new java.awt.Color(255, 255, 255));
-        txtTanggal.setForeground(new java.awt.Color(51, 51, 51));
-
-        lblSparepart1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblSparepart1.setForeground(new java.awt.Color(51, 51, 51));
-        lblSparepart1.setText("Teknisi");
-
-        cmbTeknisi.setBackground(new java.awt.Color(255, 255, 255));
-        cmbTeknisi.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        cmbTeknisi.setForeground(new java.awt.Color(51, 51, 51));
-
-        lblDetSparepart1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblDetSparepart1.setForeground(new java.awt.Color(51, 51, 51));
-        lblDetSparepart1.setText("List Service");
-
-        lblService1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblService1.setForeground(new java.awt.Color(51, 51, 51));
-        lblService1.setText("Qty");
-
-        txtQtyJasa.setBackground(new java.awt.Color(255, 255, 255));
-        txtQtyJasa.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
-        txtQtyJasa.setForeground(new java.awt.Color(51, 51, 51));
-        txtQtyJasa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
-
-        txtQtySpare.setBackground(new java.awt.Color(255, 255, 255));
-        txtQtySpare.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
-        txtQtySpare.setForeground(new java.awt.Color(51, 51, 51));
-        txtQtySpare.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
-
-        lblService2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblService2.setForeground(new java.awt.Color(51, 51, 51));
-        lblService2.setText("Qty");
+        btnClear.setBackground(new java.awt.Color(240, 240, 240));
+        btnClear.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        btnClear.setForeground(new java.awt.Color(51, 51, 51));
+        btnClear.setText("Clear");
+        btnClear.setBorder(null);
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
 
         lblService15.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblService15.setForeground(new java.awt.Color(51, 51, 51));
         lblService15.setText("Total Service");
-
-        lblService16.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblService16.setForeground(new java.awt.Color(51, 51, 51));
-        lblService16.setText("Total Spare Part");
-
-        lblService17.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblService17.setForeground(new java.awt.Color(51, 51, 51));
-        lblService17.setText("Total Bayar");
-
-        lblService18.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblService18.setForeground(new java.awt.Color(51, 51, 51));
-        lblService18.setText("Rp.");
-
-        lblService19.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblService19.setForeground(new java.awt.Color(51, 51, 51));
-        lblService19.setText("Rp.");
 
         lblService20.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblService20.setForeground(new java.awt.Color(51, 51, 51));
@@ -1206,40 +976,66 @@ public class TransaksiService extends javax.swing.JFrame {
         txtTotalSparepart.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         txtTotalSparepart.setText("0");
 
-        lblSparepart2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblSparepart2.setForeground(new java.awt.Color(51, 51, 51));
-        lblSparepart2.setText("Kasir");
+        lblService19.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblService19.setForeground(new java.awt.Color(51, 51, 51));
+        lblService19.setText("Rp.");
+
+        lblService16.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblService16.setForeground(new java.awt.Color(51, 51, 51));
+        lblService16.setText("Total Spare Part");
+
+        lblService17.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblService17.setForeground(new java.awt.Color(51, 51, 51));
+        lblService17.setText("Total Bayar");
+
+        lblService18.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblService18.setForeground(new java.awt.Color(51, 51, 51));
+        lblService18.setText("Rp.");
 
         txtTotalBayar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         txtTotalBayar.setForeground(new java.awt.Color(51, 51, 51));
         txtTotalBayar.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         txtTotalBayar.setText("0");
 
+        cmbTeknisi.setBackground(new java.awt.Color(255, 255, 255));
+        cmbTeknisi.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        cmbTeknisi.setForeground(new java.awt.Color(51, 51, 51));
+
+        lblSparepart2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblSparepart2.setForeground(new java.awt.Color(51, 51, 51));
+        lblSparepart2.setText("Teknisi");
+
+        lblSparepart3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblSparepart3.setForeground(new java.awt.Color(51, 51, 51));
+        lblSparepart3.setText("Kasir");
+
         txtKasir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         txtKasir.setForeground(new java.awt.Color(51, 51, 51));
-        txtKasir.setText("1");
 
-        btnClear.setBackground(new java.awt.Color(240, 240, 240));
-        btnClear.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnClear.setForeground(new java.awt.Color(51, 51, 51));
-        btnClear.setText("Clear");
-        btnClear.setBorder(null);
-        btnClear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClearActionPerformed(evt);
-            }
-        });
+        txtQtyJasa.setBackground(new java.awt.Color(255, 255, 255));
+        txtQtyJasa.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        txtQtyJasa.setForeground(new java.awt.Color(51, 51, 51));
+        txtQtyJasa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
 
-        btnSubmit.setBackground(new java.awt.Color(240, 240, 240));
-        btnSubmit.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        btnSubmit.setForeground(new java.awt.Color(51, 51, 51));
-        btnSubmit.setText("Submit");
-        btnSubmit.setBorder(null);
-        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSubmitActionPerformed(evt);
-            }
-        });
+        lblService1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblService1.setForeground(new java.awt.Color(51, 51, 51));
+        lblService1.setText("Qty");
+
+        lblService2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblService2.setForeground(new java.awt.Color(51, 51, 51));
+        lblService2.setText("Qty");
+
+        txtQtySpare.setBackground(new java.awt.Color(255, 255, 255));
+        txtQtySpare.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        txtQtySpare.setForeground(new java.awt.Color(51, 51, 51));
+        txtQtySpare.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+
+        txtTanggal.setBackground(new java.awt.Color(255, 255, 255));
+        txtTanggal.setForeground(new java.awt.Color(51, 51, 51));
+
+        lblNoPol2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblNoPol2.setForeground(new java.awt.Color(51, 51, 51));
+        lblNoPol2.setText("Tanggal");
 
         btnHitung.setBackground(new java.awt.Color(240, 240, 240));
         btnHitung.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -1252,259 +1048,221 @@ public class TransaksiService extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
-        mainPanel.setLayout(mainPanelLayout);
-        mainPanelLayout.setHorizontalGroup(
-            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PanelDirectory, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addComponent(txtNoFaktur, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCariNopol, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(mainPanelLayout.createSequentialGroup()
-                                        .addComponent(txtNoPol, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(mainPanelLayout.createSequentialGroup()
-                                        .addComponent(lblNoPol)
-                                        .addGap(65, 65, 65)
-                                        .addComponent(lblNoPol2)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblSparepart2)
-                                    .addComponent(txtKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblNoPol1)
-                                    .addComponent(lblService))
-                                .addGap(81, 81, 81)
-                                .addComponent(lblService1)
-                                .addGap(41, 41, 41)
-                                .addComponent(lblSparepart))
-                            .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(lblService15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(lblService16, javax.swing.GroupLayout.Alignment.LEADING))
-                                    .addComponent(lblService17, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(mainPanelLayout.createSequentialGroup()
-                                        .addComponent(lblService18, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+        javax.swing.GroupLayout mainPanel3Layout = new javax.swing.GroupLayout(mainPanel3);
+        mainPanel3.setLayout(mainPanel3Layout);
+        mainPanel3Layout.setHorizontalGroup(
+            mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanel3Layout.createSequentialGroup()
+                .addComponent(btnPendaftaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34))
+            .addGroup(mainPanel3Layout.createSequentialGroup()
+                .addComponent(PanelDirectory3, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(mainPanel3Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(mainPanel3Layout.createSequentialGroup()
+                        .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(mainPanel3Layout.createSequentialGroup()
+                                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(tblDetSparepart2, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(mainPanel3Layout.createSequentialGroup()
+                                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(txtTotalBayar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(mainPanelLayout.createSequentialGroup()
-                                        .addComponent(lblService19, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtTotalSparepart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(mainPanelLayout.createSequentialGroup()
-                                        .addComponent(lblService20, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtTotalService, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(minimizePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btnTambahService, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(mainPanelLayout.createSequentialGroup()
-                                        .addComponent(cmbService, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnHapusServices, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(18, 18, 18)
+                                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(mainPanel3Layout.createSequentialGroup()
+                                        .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(lblService15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(lblService16, javax.swing.GroupLayout.Alignment.LEADING))
+                                            .addComponent(lblService17, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtQtyJasa, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(mainPanel3Layout.createSequentialGroup()
+                                                .addComponent(lblService18, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(txtTotalBayar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addGroup(mainPanel3Layout.createSequentialGroup()
+                                                .addComponent(lblService19, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(txtTotalSparepart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addGroup(mainPanel3Layout.createSequentialGroup()
+                                                .addComponent(lblService20, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(txtTotalService, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(mainPanel3Layout.createSequentialGroup()
+                                        .addComponent(btnHitung, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(mainPanel3Layout.createSequentialGroup()
+                                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(tblDetServices1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(mainPanel3Layout.createSequentialGroup()
+                                        .addComponent(lblDetSparepart2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnHapusSparepart, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cmbSparepart, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnTambahSparepart, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(mainPanelLayout.createSequentialGroup()
-                                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtQtySpare, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(lblService2))
-                                        .addGap(52, 52, 52)
-                                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lblSparepart1)
-                                            .addComponent(cmbTeknisi, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblSparepart2)
+                                    .addComponent(cmbTeknisi, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblSparepart3)
+                                    .addComponent(txtKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblNoPol2))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(mainPanel3Layout.createSequentialGroup()
+                        .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblDetServices1)
+                            .addGroup(mainPanel3Layout.createSequentialGroup()
+                                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblNoPol9)
+                                    .addComponent(txtNoPol, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(6, 6, 6)
-                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(mainPanelLayout.createSequentialGroup()
-                                        .addComponent(tblDetServices, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnHapusSparepart, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(lblDetSparepart1)
-                                    .addComponent(lblDetServices)
-                                    .addGroup(mainPanelLayout.createSequentialGroup()
-                                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addGroup(mainPanelLayout.createSequentialGroup()
-                                                .addComponent(btnHitung, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(btnSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(tblDetSparepart, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnHapusService, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addContainerGap(40, Short.MAX_VALUE))))
-        );
-        mainPanelLayout.setVerticalGroup(
-            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(minimizePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(32, 32, 32)
-                        .addComponent(PanelDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(lblNoPol2)
-                                .addComponent(lblNoPol)
-                                .addComponent(lblSparepart2))
-                            .addComponent(lblNoPol1))
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addComponent(btnCariNopol, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtNoFaktur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblNoPol8)
+                                    .addComponent(txtNoFaktur, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(12, 12, 12)
+                                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblService3)
+                                    .addComponent(cmbService, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(mainPanel3Layout.createSequentialGroup()
+                                .addComponent(lblService1)
+                                .addGap(10, 10, 10))
+                            .addComponent(txtQtyJasa, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnTambahService, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(mainPanel3Layout.createSequentialGroup()
+                                .addComponent(lblSparepart1)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(cmbSparepart, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblService2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnTambahSparepart, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                            .addComponent(txtQtySpare))
+                        .addGap(58, 58, 58))))
+        );
+        mainPanel3Layout.setVerticalGroup(
+            mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanel3Layout.createSequentialGroup()
+                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnLaporan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPendaftaran, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(PanelDirectory3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(mainPanel3Layout.createSequentialGroup()
+                        .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(mainPanel3Layout.createSequentialGroup()
+                                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblSparepart1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(lblNoPol9)
+                                        .addComponent(lblNoPol8)
+                                        .addComponent(lblService3)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(btnCariNopol, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtNoPol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(txtKasir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addComponent(txtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblService)
-                    .addComponent(lblService1)
-                    .addComponent(lblSparepart)
-                    .addComponent(lblService2)
-                    .addComponent(lblSparepart1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbService, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtQtyJasa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbSparepart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtQtySpare, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbTeknisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTambahService, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTambahSparepart, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(3, 3, 3)
-                .addComponent(lblDetServices)
-                .addGap(18, 18, 18)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(tblDetServices, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHapusSparepart, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblDetSparepart1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(tblDetSparepart, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHapusService, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblService15)
-                            .addComponent(lblService20)
-                            .addComponent(txtTotalService))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblService16)
-                            .addComponent(lblService19)
-                            .addComponent(txtTotalSparepart))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblService18)
-                            .addComponent(lblService17)
-                            .addComponent(txtTotalBayar)))
-                    .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnHitung, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(28, 28, 28))
+                                    .addComponent(txtNoPol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtNoFaktur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cmbService, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cmbSparepart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtQtyJasa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(22, 22, 22)
+                                .addComponent(lblDetServices1))
+                            .addGroup(mainPanel3Layout.createSequentialGroup()
+                                .addComponent(lblService2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtQtySpare, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnTambahSparepart, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(14, 14, 14)
+                        .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(mainPanel3Layout.createSequentialGroup()
+                                .addComponent(tblDetServices1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(mainPanel3Layout.createSequentialGroup()
+                                        .addGap(42, 42, 42)
+                                        .addComponent(lblDetSparepart2))
+                                    .addGroup(mainPanel3Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(mainPanel3Layout.createSequentialGroup()
+                                                .addComponent(lblSparepart3)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(txtKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(btnHapusSparepart, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(mainPanel3Layout.createSequentialGroup()
+                                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(mainPanel3Layout.createSequentialGroup()
+                                        .addComponent(lblNoPol2)
+                                        .addGap(35, 35, 35))
+                                    .addComponent(txtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblSparepart2)
+                                .addGap(12, 12, 12)
+                                .addComponent(cmbTeknisi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(61, 61, 61)))
+                        .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(mainPanel3Layout.createSequentialGroup()
+                                .addComponent(tblDetSparepart2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanel3Layout.createSequentialGroup()
+                                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblService15)
+                                    .addComponent(lblService20)
+                                    .addComponent(txtTotalService))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblService16)
+                                    .addComponent(lblService19)
+                                    .addComponent(txtTotalSparepart))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblService18)
+                                    .addComponent(lblService17)
+                                    .addComponent(txtTotalBayar))
+                                .addGap(20, 20, 20)))
+                        .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnHapusServices, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnHitung, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnClear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(mainPanel3Layout.createSequentialGroup()
+                            .addComponent(lblService1)
+                            .addGap(69, 69, 69))
+                        .addComponent(btnTambahService, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 42, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(mainPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, 0))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(mainPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void pnlPendataranMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlPendataranMouseClicked
-        dispose();
-        PendaftaranService ps = new PendaftaranService();
-        ps.show();
-    }//GEN-LAST:event_pnlPendataranMouseClicked
-
-    private void pnlKeluarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlKeluarMouseClicked
-        dispose();
-        Login ps = new Login();
-        ps.show();
-    }//GEN-LAST:event_pnlKeluarMouseClicked
-
-    private void pnlTransaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlTransaksiMouseClicked
-        dispose();
-        TransaksiService ps = new TransaksiService();
-        ps.show();
-    }//GEN-LAST:event_pnlTransaksiMouseClicked
-
-    private void pnlHomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlHomeMouseClicked
-        dispose();
-        HomeKasir hk = new HomeKasir();
-        hk.show();
-    }//GEN-LAST:event_pnlHomeMouseClicked
-
-    private void pnlLaporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlLaporanMouseClicked
-        dispose();
-        Laporan ps = new Laporan();
-        ps.show();
-    }//GEN-LAST:event_pnlLaporanMouseClicked
-
-    private void closePanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closePanelMouseClicked
-        System.exit(0);
-    }//GEN-LAST:event_closePanelMouseClicked
-
-    private void minimizePanelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_minimizePanelMouseClicked
-        this.setState(this.ICONIFIED);
-    }//GEN-LAST:event_minimizePanelMouseClicked
-
-    private void btnCariNopolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariNopolActionPerformed
-        CariNoFaktur.show();
-        TampiDataFaktur();
-    }//GEN-LAST:event_btnCariNopolActionPerformed
 
     private void txtCariNoPolisiKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCariNoPolisiKeyReleased
         if (!txtCariNoPolisi.getText().equals("")) {
@@ -1527,23 +1285,71 @@ public class TransaksiService extends javax.swing.JFrame {
 
     private void btnCancelCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelCariActionPerformed
         CariNoFaktur.dispose();
+        txtCariNoPolisi.setText("");
     }//GEN-LAST:event_btnCancelCariActionPerformed
 
-    private void tblServiceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblServiceKeyReleased
+    private void btnLaporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLaporanMouseClicked
         // TODO add your handling code here:
-        int Total = 0;
-        int Qty = 0;
-        String getHarga = tblService.getValueAt(tblService.getSelectedRow(), 2).toString();
-        String getQty = tblService.getValueAt(tblService.getSelectedRow(), 3).toString();
-        try {
-            Qty = Integer.parseInt(getQty);
-        } catch (NumberFormatException e) {
+        LaporanPemasukan ts = new LaporanPemasukan();
+        ts.show();
+        this.dispose();
+    }//GEN-LAST:event_btnLaporanMouseClicked
 
+    private void btnPendaftaranMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPendaftaranMouseClicked
+        // TODO add your handling code here:
+        PendaftaranService ps = new PendaftaranService();
+        ps.show();
+        this.dispose();
+    }//GEN-LAST:event_btnPendaftaranMouseClicked
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+
+        System.out.println(getKdTeknisi());
+        int ok = JOptionPane.showConfirmDialog(null, "Data Yang Dimasukkan Benar?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if (ok == 0) {
+            InsertDataDetFaktur();
         }
-        int Harga = Integer.parseInt(getHarga);
-        Total = Qty * Harga;
-        tblService.setValueAt(Total, tblService.getSelectedRow(), 4);
-    }//GEN-LAST:event_tblServiceKeyReleased
+
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
+    private void btnHapusServicesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHapusServicesMouseClicked
+        hapusTableService();
+
+    }//GEN-LAST:event_btnHapusServicesMouseClicked
+
+    private void btnHapusSparepartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHapusSparepartMouseClicked
+        hapusTableSparepart();
+
+    }//GEN-LAST:event_btnHapusSparepartMouseClicked
+
+    private void btnTambahSparepartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahSparepartActionPerformed
+        setTableSparepart();
+        cmbSparepart.setSelectedIndex(0);
+        if (tblSparepart.getRowCount() > 0 || tblService.getRowCount() > 0) {
+            btnCariNopol.setEnabled(false);
+        } else {
+            btnCariNopol.setEnabled(true);
+        }
+    }//GEN-LAST:event_btnTambahSparepartActionPerformed
+
+    private void btnTambahServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahServiceActionPerformed
+        setTableService();
+        cmbService.setSelectedIndex(0);
+        if (tblSparepart.getRowCount() > 0 || tblService.getRowCount() > 0) {
+            btnCariNopol.setEnabled(false);
+        } else {
+            btnCariNopol.setEnabled(true);
+        }
+    }//GEN-LAST:event_btnTambahServiceActionPerformed
+
+    private void btnCariNopolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariNopolActionPerformed
+        CariNoFaktur.show();
+        TampiDataFaktur();
+    }//GEN-LAST:event_btnCariNopolActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        Clear();
+    }//GEN-LAST:event_btnClearActionPerformed
 
     private void tblSparepartKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblSparepartKeyReleased
         int Total = 0;
@@ -1562,40 +1368,22 @@ public class TransaksiService extends javax.swing.JFrame {
 
     }//GEN-LAST:event_tblSparepartKeyReleased
 
-    private void btnTambahServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahServiceActionPerformed
-        setTableService();
-    }//GEN-LAST:event_btnTambahServiceActionPerformed
+    private void tblServiceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblServiceKeyReleased
+        int Total = 0;
+        int Qty = 0;
+        String getHarga = tblService.getValueAt(tblService.getSelectedRow(), 2).toString();
+        String getQty = tblService.getValueAt(tblService.getSelectedRow(), 3).toString();
+        try {
+            Qty = Integer.parseInt(getQty);
+        } catch (NumberFormatException e) {
 
-    private void btnTambahSparepartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahSparepartActionPerformed
-        setTableSparepart();
-    }//GEN-LAST:event_btnTambahSparepartActionPerformed
-
-    private void btnHapusServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusServiceActionPerformed
-        hapusTableService();
-        setTotalService();
-        setTotalBayar();
-    }//GEN-LAST:event_btnHapusServiceActionPerformed
-
-    private void btnHapusSparepartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusSparepartActionPerformed
-        hapusTableSparepart();
-        setTotalSparepart();
-        setTotalBayar();
-    }//GEN-LAST:event_btnHapusSparepartActionPerformed
-
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        Clear();
-    }//GEN-LAST:event_btnClearActionPerformed
-
-    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-        int ok = JOptionPane.showConfirmDialog(null, "Data Yang Dimasukkan Benar?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
-        if (ok == 0) {
-            InsertDataDetFaktur();
         }
-
-    }//GEN-LAST:event_btnSubmitActionPerformed
+        int Harga = Integer.parseInt(getHarga);
+        Total = Qty * Harga;
+        tblService.setValueAt(Total, tblService.getSelectedRow(), 4);
+    }//GEN-LAST:event_tblServiceKeyReleased
 
     private void btnHitungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHitungActionPerformed
-        // TODO add your handling code here:
         setTotalSparepart();
         setTotalService();
         setTotalBayar();
@@ -1646,39 +1434,33 @@ public class TransaksiService extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFrame CariNoFaktur;
-    private javax.swing.JPanel PanelDirectory;
     private javax.swing.JPanel PanelDirectory1;
+    private javax.swing.JPanel PanelDirectory3;
     private javax.swing.JButton btnCancelCari;
     private javax.swing.JButton btnCariNopol;
     private javax.swing.JButton btnClear;
-    private javax.swing.JButton btnHapusService;
+    private javax.swing.JButton btnHapusServices;
     private javax.swing.JButton btnHapusSparepart;
     private javax.swing.JButton btnHitung;
+    private javax.swing.JPanel btnLaporan;
+    private javax.swing.JPanel btnPendaftaran;
     private javax.swing.JButton btnPilihFaktur;
     private javax.swing.JButton btnSubmit;
     private javax.swing.JButton btnTambahService;
     private javax.swing.JButton btnTambahSparepart;
-    private javax.swing.JPanel closePanel;
     private javax.swing.JComboBox<String> cmbService;
     private javax.swing.JComboBox<String> cmbSparepart;
     private javax.swing.JComboBox<String> cmbTeknisi;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel lblDetServices;
-    private javax.swing.JLabel lblDetSparepart1;
-    private javax.swing.JLabel lblNoPol;
-    private javax.swing.JLabel lblNoPol1;
+    private javax.swing.JLabel lblDetServices1;
+    private javax.swing.JLabel lblDetSparepart2;
     private javax.swing.JLabel lblNoPol2;
     private javax.swing.JLabel lblNoPol3;
-    private javax.swing.JLabel lblService;
+    private javax.swing.JLabel lblNoPol6;
+    private javax.swing.JLabel lblNoPol7;
+    private javax.swing.JLabel lblNoPol8;
+    private javax.swing.JLabel lblNoPol9;
     private javax.swing.JLabel lblService1;
     private javax.swing.JLabel lblService15;
     private javax.swing.JLabel lblService16;
@@ -1687,27 +1469,21 @@ public class TransaksiService extends javax.swing.JFrame {
     private javax.swing.JLabel lblService19;
     private javax.swing.JLabel lblService2;
     private javax.swing.JLabel lblService20;
-    private javax.swing.JLabel lblSparepart;
+    private javax.swing.JLabel lblService3;
     private javax.swing.JLabel lblSparepart1;
     private javax.swing.JLabel lblSparepart2;
-    private javax.swing.JPanel mainPanel;
+    private javax.swing.JLabel lblSparepart3;
     private javax.swing.JPanel mainPanel1;
-    private javax.swing.JPanel minimizePanel;
-    private javax.swing.JPanel pnlHome;
-    private javax.swing.JPanel pnlKeluar;
-    private javax.swing.JPanel pnlLaporan;
-    private javax.swing.JPanel pnlPendataran;
-    private javax.swing.JPanel pnlTransaksi;
-    private javax.swing.JPanel sidePanel;
-    private javax.swing.JScrollPane tblDetServices;
-    private javax.swing.JScrollPane tblDetSparepart;
+    private javax.swing.JPanel mainPanel3;
+    private javax.swing.JScrollPane tblDetServices1;
     private javax.swing.JScrollPane tblDetSparepart1;
+    private javax.swing.JScrollPane tblDetSparepart2;
     private javax.swing.JTable tblFaktur;
     private javax.swing.JTable tblService;
     private javax.swing.JTable tblSparepart;
     private javax.swing.JTextField txtCariNoPolisi;
     private javax.swing.JLabel txtDataTidakDitemukan;
-    private javax.swing.JLabel txtKasir;
+    public javax.swing.JLabel txtKasir;
     private javax.swing.JTextField txtNoFaktur;
     private javax.swing.JTextField txtNoPol;
     private javax.swing.JTextField txtQtyJasa;
