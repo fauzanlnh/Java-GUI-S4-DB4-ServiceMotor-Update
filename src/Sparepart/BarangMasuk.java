@@ -204,10 +204,6 @@ public class BarangMasuk extends javax.swing.JFrame {
         mainPanel2 = new javax.swing.JPanel();
         PanelDirectory = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        btnCekStok = new javax.swing.JPanel();
-        lblNoPol6 = new javax.swing.JLabel();
-        btnBarangBaru = new javax.swing.JPanel();
-        lblNoPol7 = new javax.swing.JLabel();
         lblService1 = new javax.swing.JLabel();
         txtNoFaktur = new javax.swing.JTextField();
         txtTanggal = new com.toedter.calendar.JDateChooser();
@@ -390,7 +386,7 @@ public class BarangMasuk extends javax.swing.JFrame {
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("Kasir/Cek Stok");
+        jLabel8.setText("Kasir/Barang Masuk");
 
         javax.swing.GroupLayout PanelDirectoryLayout = new javax.swing.GroupLayout(PanelDirectory);
         PanelDirectory.setLayout(PanelDirectoryLayout);
@@ -407,67 +403,6 @@ public class BarangMasuk extends javax.swing.JFrame {
                 .addContainerGap(29, Short.MAX_VALUE)
                 .addComponent(jLabel8)
                 .addGap(39, 39, 39))
-        );
-
-        btnCekStok.setBackground(new java.awt.Color(255, 255, 255));
-        btnCekStok.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnCekStokMouseClicked(evt);
-            }
-        });
-
-        lblNoPol6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        lblNoPol6.setForeground(new java.awt.Color(51, 51, 51));
-        lblNoPol6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblNoPol6.setText(" Cek Stok >");
-
-        javax.swing.GroupLayout btnCekStokLayout = new javax.swing.GroupLayout(btnCekStok);
-        btnCekStok.setLayout(btnCekStokLayout);
-        btnCekStokLayout.setHorizontalGroup(
-            btnCekStokLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 143, Short.MAX_VALUE)
-            .addGroup(btnCekStokLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(btnCekStokLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(lblNoPol6)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        btnCekStokLayout.setVerticalGroup(
-            btnCekStokLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 65, Short.MAX_VALUE)
-            .addGroup(btnCekStokLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(btnCekStokLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(lblNoPol6)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-
-        btnBarangBaru.setBackground(new java.awt.Color(255, 255, 255));
-        btnBarangBaru.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnBarangBaruMouseClicked(evt);
-            }
-        });
-
-        lblNoPol7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        lblNoPol7.setForeground(new java.awt.Color(51, 51, 51));
-        lblNoPol7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblNoPol7.setText("    < Barang Baru");
-
-        javax.swing.GroupLayout btnBarangBaruLayout = new javax.swing.GroupLayout(btnBarangBaru);
-        btnBarangBaru.setLayout(btnBarangBaruLayout);
-        btnBarangBaruLayout.setHorizontalGroup(
-            btnBarangBaruLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnBarangBaruLayout.createSequentialGroup()
-                .addComponent(lblNoPol7)
-                .addGap(0, 53, Short.MAX_VALUE))
-        );
-        btnBarangBaruLayout.setVerticalGroup(
-            btnBarangBaruLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnBarangBaruLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblNoPol7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
         );
 
         lblService1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -598,14 +533,11 @@ public class BarangMasuk extends javax.swing.JFrame {
         mainPanel2.setLayout(mainPanel2Layout);
         mainPanel2Layout.setHorizontalGroup(
             mainPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanel2Layout.createSequentialGroup()
-                .addComponent(btnBarangBaru, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 401, Short.MAX_VALUE)
-                .addComponent(btnCekStok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(PanelDirectory, javax.swing.GroupLayout.DEFAULT_SIZE, 710, Short.MAX_VALUE)
             .addGroup(mainPanel2Layout.createSequentialGroup()
-                .addGap(50, 50, 50)
+                .addGap(30, 30, 30)
                 .addGroup(mainPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tblDetServices, javax.swing.GroupLayout.PREFERRED_SIZE, 565, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(mainPanel2Layout.createSequentialGroup()
                         .addGroup(mainPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(mainPanel2Layout.createSequentialGroup()
@@ -642,19 +574,13 @@ public class BarangMasuk extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnHapusService, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(mainPanel2Layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(tblDetServices, javax.swing.GroupLayout.PREFERRED_SIZE, 532, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnSubmit, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(115, Short.MAX_VALUE))
         );
         mainPanel2Layout.setVerticalGroup(
             mainPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanel2Layout.createSequentialGroup()
-                .addGroup(mainPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnCekStok, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnBarangBaru, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(71, 71, 71)
                 .addComponent(PanelDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(mainPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -797,20 +723,6 @@ public class BarangMasuk extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtCariKeyReleased
 
-    private void btnCekStokMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCekStokMouseClicked
-        // TODO add your handling code here:
-        Gudang ts = new Gudang();
-        ts.show();
-        this.dispose();
-    }//GEN-LAST:event_btnCekStokMouseClicked
-
-    private void btnBarangBaruMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBarangBaruMouseClicked
-        // TODO add your handling code here:
-        BarangBaru ps = new BarangBaru();
-        ps.show();
-        this.dispose();
-    }//GEN-LAST:event_btnBarangBaruMouseClicked
-
     private void tblDetailKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblDetailKeyReleased
         int Total = 0;
         int Qty = 0;
@@ -890,9 +802,7 @@ public class BarangMasuk extends javax.swing.JFrame {
     private javax.swing.JFrame F_LihatBarang;
     private javax.swing.JPanel PanelDirectory;
     private javax.swing.JButton btnAdd;
-    private javax.swing.JPanel btnBarangBaru;
     private javax.swing.JButton btnCancel;
-    private javax.swing.JPanel btnCekStok;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnHapusService;
     private javax.swing.JButton btnLihat;
@@ -902,8 +812,6 @@ public class BarangMasuk extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lblNoPol2;
-    private javax.swing.JLabel lblNoPol6;
-    private javax.swing.JLabel lblNoPol7;
     private javax.swing.JLabel lblService1;
     private javax.swing.JLabel lblService4;
     private javax.swing.JLabel lblService5;

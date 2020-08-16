@@ -579,7 +579,7 @@
                   <Color blue="ea" green="84" red="1e" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
-                <Property name="text" type="java.lang.String" value="Laporan"/>
+                <Property name="text" type="java.lang.String" value="Data Pemasukan"/>
               </Properties>
             </Component>
           </SubComponents>

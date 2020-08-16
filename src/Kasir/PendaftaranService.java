@@ -531,10 +531,6 @@ public class PendaftaranService extends javax.swing.JFrame {
         mainPanel3 = new javax.swing.JPanel();
         PanelDirectory3 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
-        btnTransaksi = new javax.swing.JPanel();
-        lblNoPol6 = new javax.swing.JLabel();
-        btnLaporan = new javax.swing.JPanel();
-        lblNoPol7 = new javax.swing.JLabel();
         lblNoPol8 = new javax.swing.JLabel();
         lblService3 = new javax.swing.JLabel();
         cmbService = new javax.swing.JComboBox<>();
@@ -1002,63 +998,6 @@ public class PendaftaranService extends javax.swing.JFrame {
                 .addGap(39, 39, 39))
         );
 
-        btnTransaksi.setBackground(new java.awt.Color(255, 255, 255));
-        btnTransaksi.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnTransaksiMouseClicked(evt);
-            }
-        });
-
-        lblNoPol6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        lblNoPol6.setForeground(new java.awt.Color(51, 51, 51));
-        lblNoPol6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblNoPol6.setText("  Transaksi >");
-
-        javax.swing.GroupLayout btnTransaksiLayout = new javax.swing.GroupLayout(btnTransaksi);
-        btnTransaksi.setLayout(btnTransaksiLayout);
-        btnTransaksiLayout.setHorizontalGroup(
-            btnTransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnTransaksiLayout.createSequentialGroup()
-                .addContainerGap(33, Short.MAX_VALUE)
-                .addComponent(lblNoPol6)
-                .addGap(20, 20, 20))
-        );
-        btnTransaksiLayout.setVerticalGroup(
-            btnTransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnTransaksiLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblNoPol6, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        btnLaporan.setBackground(new java.awt.Color(255, 255, 255));
-        btnLaporan.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnLaporanMouseClicked(evt);
-            }
-        });
-
-        lblNoPol7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        lblNoPol7.setForeground(new java.awt.Color(51, 51, 51));
-        lblNoPol7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblNoPol7.setText("    < Laporan");
-
-        javax.swing.GroupLayout btnLaporanLayout = new javax.swing.GroupLayout(btnLaporan);
-        btnLaporan.setLayout(btnLaporanLayout);
-        btnLaporanLayout.setHorizontalGroup(
-            btnLaporanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnLaporanLayout.createSequentialGroup()
-                .addComponent(lblNoPol7)
-                .addGap(0, 53, Short.MAX_VALUE))
-        );
-        btnLaporanLayout.setVerticalGroup(
-            btnLaporanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnLaporanLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblNoPol7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
         lblNoPol8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblNoPol8.setForeground(new java.awt.Color(51, 51, 51));
         lblNoPol8.setText("No Faktur");
@@ -1215,11 +1154,6 @@ public class PendaftaranService extends javax.swing.JFrame {
         mainPanel3.setLayout(mainPanel3Layout);
         mainPanel3Layout.setHorizontalGroup(
             mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanel3Layout.createSequentialGroup()
-                .addComponent(btnLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34))
             .addGroup(mainPanel3Layout.createSequentialGroup()
                 .addComponent(PanelDirectory3, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -1268,10 +1202,7 @@ public class PendaftaranService extends javax.swing.JFrame {
         mainPanel3Layout.setVerticalGroup(
             mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanel3Layout.createSequentialGroup()
-                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnTransaksi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnLaporan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(71, 71, 71)
                 .addComponent(PanelDirectory3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanel3Layout.createSequentialGroup()
@@ -1391,20 +1322,6 @@ public class PendaftaranService extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCancelTambahActionPerformed
 
-    private void btnTransaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTransaksiMouseClicked
-        // TODO add your handling code here:
-        TransaksiService ts = new TransaksiService();
-        ts.show();
-        this.dispose();
-    }//GEN-LAST:event_btnTransaksiMouseClicked
-
-    private void btnLaporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLaporanMouseClicked
-        // TODO add your handling code here:
-        LaporanPemasukan ps = new LaporanPemasukan();
-        ps.show();
-        this.dispose();
-    }//GEN-LAST:event_btnLaporanMouseClicked
-
     private void btnSubmitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSubmitMouseClicked
 
     }//GEN-LAST:event_btnSubmitMouseClicked
@@ -1522,14 +1439,12 @@ public class PendaftaranService extends javax.swing.JFrame {
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnHapusServices;
     private javax.swing.JButton btnHapusSparepart;
-    private javax.swing.JPanel btnLaporan;
     private javax.swing.JButton btnNewCustomer;
     private javax.swing.JButton btnPilihCustomer;
     private javax.swing.JButton btnSubmit;
     private javax.swing.JButton btnTambahCustomer;
     private javax.swing.JButton btnTambahService;
     private javax.swing.JButton btnTambahSparepart;
-    private javax.swing.JPanel btnTransaksi;
     private javax.swing.JComboBox<String> cmbService;
     private javax.swing.JComboBox<String> cmbSparepart;
     private javax.swing.JComboBox<String> cmbTipeMotor;
@@ -1544,8 +1459,6 @@ public class PendaftaranService extends javax.swing.JFrame {
     private javax.swing.JLabel lblNoPol3;
     private javax.swing.JLabel lblNoPol4;
     private javax.swing.JLabel lblNoPol5;
-    private javax.swing.JLabel lblNoPol6;
-    private javax.swing.JLabel lblNoPol7;
     private javax.swing.JLabel lblNoPol8;
     private javax.swing.JLabel lblNoPol9;
     private javax.swing.JLabel lblService1;

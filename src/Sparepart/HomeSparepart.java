@@ -412,7 +412,7 @@ public class HomeSparepart extends javax.swing.JFrame {
         jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(30, 132, 234));
         jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel19.setText("Laporan");
+        jLabel19.setText("Data");
 
         javax.swing.GroupLayout pnlLaporanLayout = new javax.swing.GroupLayout(pnlLaporan);
         pnlLaporan.setLayout(pnlLaporanLayout);

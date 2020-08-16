@@ -280,7 +280,7 @@ public class MenuSparepart extends javax.swing.JFrame {
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(30, 132, 234));
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel16.setText("Barang Baru");
+        jLabel16.setText("Tambah");
 
         javax.swing.GroupLayout pnlBarangBaruLayout = new javax.swing.GroupLayout(pnlBarangBaru);
         pnlBarangBaru.setLayout(pnlBarangBaruLayout);
@@ -477,7 +477,7 @@ public class MenuSparepart extends javax.swing.JFrame {
     }//GEN-LAST:event_pnlBarangBaruMouseExited
 
     private void pnlGudangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlGudangMouseClicked
-        GudangAdmin ps = new GudangAdmin();
+        Gudang ps = new Gudang();
         ps.show();
     }//GEN-LAST:event_pnlGudangMouseClicked
 

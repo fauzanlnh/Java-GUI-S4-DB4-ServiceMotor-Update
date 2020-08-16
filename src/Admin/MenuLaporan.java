@@ -5,13 +5,11 @@
  */
 package Admin;
 
-import Kasir.*;
 import Class.DatabaseConnection;
 import Class.Login;
 import java.awt.Color;
 import java.sql.*;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -27,7 +25,6 @@ public class MenuLaporan extends javax.swing.JFrame {
 
     public MenuLaporan() {
         initComponents();
-        this.setLocationRelativeTo(null);
         this.setLocationRelativeTo(null);
         koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
     }
@@ -63,6 +60,18 @@ public class MenuLaporan extends javax.swing.JFrame {
         pnlLaporanPembelian = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
+        pnlJasa = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        pnlLaporanPembelian1 = new javax.swing.JPanel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        pnlMotor = new javax.swing.JPanel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        pnlLogout4 = new javax.swing.JPanel();
+        jLabel29 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -85,7 +94,7 @@ public class MenuLaporan extends javax.swing.JFrame {
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("Laporan/");
+        jLabel12.setText("Data/");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -98,7 +107,7 @@ public class MenuLaporan extends javax.swing.JFrame {
                 .addComponent(jLabel9)
                 .addGap(10, 10, 10)
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(389, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -247,7 +256,7 @@ public class MenuLaporan extends javax.swing.JFrame {
         jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(30, 132, 234));
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel15.setText("Laporan Penjualan");
+        jLabel15.setText("Data Penjualan");
 
         javax.swing.GroupLayout pnlLaporanPenjualanLayout = new javax.swing.GroupLayout(pnlLaporanPenjualan);
         pnlLaporanPenjualan.setLayout(pnlLaporanPenjualanLayout);
@@ -289,7 +298,7 @@ public class MenuLaporan extends javax.swing.JFrame {
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(30, 132, 234));
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel16.setText("Laporan Pemasukan");
+        jLabel16.setText("Data Faktur Penjualan");
 
         javax.swing.GroupLayout pnlLaporanPemasukanLayout = new javax.swing.GroupLayout(pnlLaporanPemasukan);
         pnlLaporanPemasukan.setLayout(pnlLaporanPemasukanLayout);
@@ -331,7 +340,7 @@ public class MenuLaporan extends javax.swing.JFrame {
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(30, 132, 234));
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel18.setText("Laporan Pembelian");
+        jLabel18.setText("Data Pembelian");
 
         javax.swing.GroupLayout pnlLaporanPembelianLayout = new javax.swing.GroupLayout(pnlLaporanPembelian);
         pnlLaporanPembelian.setLayout(pnlLaporanPembelianLayout);
@@ -340,7 +349,7 @@ public class MenuLaporan extends javax.swing.JFrame {
             .addGroup(pnlLaporanPembelianLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlLaporanPembelianLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -354,6 +363,178 @@ public class MenuLaporan extends javax.swing.JFrame {
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
+        pnlJasa.setBackground(new java.awt.Color(234, 234, 234));
+        pnlJasa.setPreferredSize(new java.awt.Dimension(182, 163));
+        pnlJasa.setRequestFocusEnabled(false);
+        pnlJasa.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlJasaMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pnlJasaMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                pnlJasaMouseExited(evt);
+            }
+        });
+
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Report Business_VLB.png"))); // NOI18N
+
+        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(30, 132, 234));
+        jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel19.setText("Data Jasa");
+
+        javax.swing.GroupLayout pnlJasaLayout = new javax.swing.GroupLayout(pnlJasa);
+        pnlJasa.setLayout(pnlJasaLayout);
+        pnlJasaLayout.setHorizontalGroup(
+            pnlJasaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlJasaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        pnlJasaLayout.setVerticalGroup(
+            pnlJasaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlJasaLayout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(jLabel8)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel19)
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+
+        pnlLaporanPembelian1.setBackground(new java.awt.Color(234, 234, 234));
+        pnlLaporanPembelian1.setPreferredSize(new java.awt.Dimension(182, 163));
+        pnlLaporanPembelian1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlLaporanPembelian1MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pnlLaporanPembelian1MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                pnlLaporanPembelian1MouseExited(evt);
+            }
+        });
+
+        jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Report Business_VLB.png"))); // NOI18N
+
+        jLabel22.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel22.setForeground(new java.awt.Color(30, 132, 234));
+        jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel22.setText("Data Faktur Pembelian");
+
+        javax.swing.GroupLayout pnlLaporanPembelian1Layout = new javax.swing.GroupLayout(pnlLaporanPembelian1);
+        pnlLaporanPembelian1.setLayout(pnlLaporanPembelian1Layout);
+        pnlLaporanPembelian1Layout.setHorizontalGroup(
+            pnlLaporanPembelian1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlLaporanPembelian1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlLaporanPembelian1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        pnlLaporanPembelian1Layout.setVerticalGroup(
+            pnlLaporanPembelian1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlLaporanPembelian1Layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(jLabel21)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel22)
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+
+        pnlMotor.setBackground(new java.awt.Color(234, 234, 234));
+        pnlMotor.setPreferredSize(new java.awt.Dimension(182, 163));
+        pnlMotor.setRequestFocusEnabled(false);
+        pnlMotor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlMotorMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pnlMotorMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                pnlMotorMouseExited(evt);
+            }
+        });
+
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Report Business_VLB.png"))); // NOI18N
+
+        jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(30, 132, 234));
+        jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel23.setText("Data Tipe Motor");
+
+        javax.swing.GroupLayout pnlMotorLayout = new javax.swing.GroupLayout(pnlMotor);
+        pnlMotor.setLayout(pnlMotorLayout);
+        pnlMotorLayout.setHorizontalGroup(
+            pnlMotorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
+            .addGroup(pnlMotorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        pnlMotorLayout.setVerticalGroup(
+            pnlMotorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMotorLayout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(jLabel17)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel23)
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+
+        pnlLogout4.setBackground(new java.awt.Color(234, 234, 234));
+        pnlLogout4.setPreferredSize(new java.awt.Dimension(182, 163));
+        pnlLogout4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlLogout4MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pnlLogout4MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                pnlLogout4MouseExited(evt);
+            }
+        });
+
+        jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel29.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Logout_VLB.png"))); // NOI18N
+
+        jLabel30.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel30.setForeground(new java.awt.Color(30, 132, 234));
+        jLabel30.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel30.setText("Logout");
+
+        javax.swing.GroupLayout pnlLogout4Layout = new javax.swing.GroupLayout(pnlLogout4);
+        pnlLogout4.setLayout(pnlLogout4Layout);
+        pnlLogout4Layout.setHorizontalGroup(
+            pnlLogout4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlLogout4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlLogout4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel30, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        pnlLogout4Layout.setVerticalGroup(
+            pnlLogout4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLogout4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel29)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel30)
+                .addGap(9, 9, 9))
+        );
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -365,37 +546,56 @@ public class MenuLaporan extends javax.swing.JFrame {
                 .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 958, Short.MAX_VALUE)
             .addGroup(mainPanelLayout.createSequentialGroup()
-                .addGap(291, 291, 291)
+                .addGap(100, 100, 100)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(pnlLaporanPembelian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnlLaporanPenjualan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(pnlLaporanPenjualan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(pnlMotor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8)
+                        .addComponent(pnlJasa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addComponent(pnlHome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
-                        .addComponent(pnlLaporanPemasukan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(pnlLaporanPemasukan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(pnlLaporanPembelian1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(10, 10, 10)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pnlLaporanPembelian, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlLogout4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(minimizePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(pnlLaporanPenjualan, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(pnlLaporanPembelian1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
                         .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(minimizePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(pnlLaporanPenjualan, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pnlJasa, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pnlMotor, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(mainPanelLayout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(pnlLaporanPemasukan, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                            .addComponent(pnlHome, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnlLaporanPembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(pnlLaporanPemasukan, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                                    .addComponent(pnlHome, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE))
+                                .addGap(187, 187, 187))
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addGap(73, 73, 73)
+                                .addComponent(pnlLaporanPembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(pnlLogout4, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)))))
                 .addGap(104, 104, 104))
         );
 
@@ -407,7 +607,7 @@ public class MenuLaporan extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -498,6 +698,71 @@ public class MenuLaporan extends javax.swing.JFrame {
         pnlLaporanPembelian.setBackground(new java.awt.Color(234, 234, 234));
     }//GEN-LAST:event_pnlLaporanPembelianMouseExited
 
+    private void pnlJasaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlJasaMouseClicked
+        // TODO add your handling code here:
+        LaporanDataJasa L = new LaporanDataJasa();
+        L.show();
+    }//GEN-LAST:event_pnlJasaMouseClicked
+
+    private void pnlJasaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlJasaMouseEntered
+        // TODO add your handling code here:
+        pnlJasa.setBackground(new java.awt.Color(115, 163, 239));
+    }//GEN-LAST:event_pnlJasaMouseEntered
+
+    private void pnlJasaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlJasaMouseExited
+        // TODO add your handling code here:
+        pnlJasa.setBackground(new java.awt.Color(234, 234, 234));
+    }//GEN-LAST:event_pnlJasaMouseExited
+
+    private void pnlLaporanPembelian1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlLaporanPembelian1MouseClicked
+        // TODO add your handling code here:
+        LaporanPengeluaranAdmin l = new LaporanPengeluaranAdmin();
+        l.show();
+    }//GEN-LAST:event_pnlLaporanPembelian1MouseClicked
+
+    private void pnlLaporanPembelian1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlLaporanPembelian1MouseEntered
+        // TODO add your handling code here:
+        pnlLaporanPembelian1.setBackground(new java.awt.Color(115, 163, 239));
+    }//GEN-LAST:event_pnlLaporanPembelian1MouseEntered
+
+    private void pnlLaporanPembelian1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlLaporanPembelian1MouseExited
+        // TODO add your handling code here:
+        pnlLaporanPembelian1.setBackground(new java.awt.Color(234, 234, 234));
+    }//GEN-LAST:event_pnlLaporanPembelian1MouseExited
+
+    private void pnlMotorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlMotorMouseClicked
+        // TODO add your handling code here:
+        LaporanDataMotor L = new LaporanDataMotor();
+        L.show();
+    }//GEN-LAST:event_pnlMotorMouseClicked
+
+    private void pnlMotorMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlMotorMouseEntered
+        // TODO add your handling code here:
+        pnlMotor.setBackground(new java.awt.Color(115, 163, 239));
+    }//GEN-LAST:event_pnlMotorMouseEntered
+
+    private void pnlMotorMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlMotorMouseExited
+        // TODO add your handling code here:
+        pnlMotor.setBackground(new java.awt.Color(234, 234, 234));
+    }//GEN-LAST:event_pnlMotorMouseExited
+
+    private void pnlLogout4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlLogout4MouseClicked
+        int ok = JOptionPane.showConfirmDialog(null, "Anda Akan Logout?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if (ok == 0) {
+            dispose();
+            Login ps = new Login();
+            ps.show();
+        }
+    }//GEN-LAST:event_pnlLogout4MouseClicked
+
+    private void pnlLogout4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlLogout4MouseEntered
+        pnlLogout4.setBackground(new java.awt.Color(115, 163, 239));
+    }//GEN-LAST:event_pnlLogout4MouseEntered
+
+    private void pnlLogout4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlLogout4MouseExited
+        pnlLogout4.setBackground(new java.awt.Color(234, 234, 234));
+    }//GEN-LAST:event_pnlLogout4MouseExited
+
     /**
      * @param args the command line arguments
      */
@@ -557,18 +822,30 @@ public class MenuLaporan extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JPanel minimizePanel;
     private javax.swing.JPanel pnlHome;
+    private javax.swing.JPanel pnlJasa;
     private javax.swing.JPanel pnlLaporanPemasukan;
     private javax.swing.JPanel pnlLaporanPembelian;
+    private javax.swing.JPanel pnlLaporanPembelian1;
     private javax.swing.JPanel pnlLaporanPenjualan;
+    private javax.swing.JPanel pnlLogout4;
+    private javax.swing.JPanel pnlMotor;
     private javax.swing.JLabel txtClose;
     // End of variables declaration//GEN-END:variables
 }

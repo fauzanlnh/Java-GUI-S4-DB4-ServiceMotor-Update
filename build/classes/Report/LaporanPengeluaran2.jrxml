@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="17567eb9-1674-4ca6-9878-28de6187560e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="bds" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tglAwal" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tglAkhir" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[IF($P{bds} = 'Semua Pengeluaran') THEN
+SELECT * FROM t_faktur_sparepart_masuk JOIN T_Pegawai USING(Id_Pegawai);
+
+ELSEIF($P{bds} = 'Tanggal') THEN
+SELECT * FROM t_faktur_sparepart_masuk JOIN T_Pegawai USING(Id_Pegawai) WHERE Tanggal BETWEEN $P{tglAwal} AND $P{tglAkhir};
+END IF;]]>
+	</queryString>
+	<field name="Id_Pegawai" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Id_Sprt_Masuk" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Tanggal" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Total_Harga" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Nama_Pegawai" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Alamat" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="No_Telp" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Bagian" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="27749ac9-8e94-4a6b-8d92-38530acda167"/>
+				<staticText>
+					<reportElement x="20" y="20" width="234" height="43" forecolor="#FFFFFF" uuid="42144bde-e837-420c-9a6a-f2ff2ee672bd"/>
+					<textElement>
+						<font size="20" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Laporan Pengeluaran]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="527" y="50" width="9" height="20" forecolor="#FFFFFF" uuid="c6256fd1-1d86-4394-8a46-b7eb95591606"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[-]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="470" y="50" width="57" height="20" forecolor="#FFFFFF" uuid="2c0a0e62-cc54-4f19-9906-fd6ab177dae9"/>
+					<textElement textAlignment="Right">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{tglAwal}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="351" y="50" width="109" height="20" forecolor="#FFFFFF" uuid="2f3603c9-c640-442d-bda0-6b51a5137af1"/>
+					<textElement textAlignment="Right">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{bds}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="536" y="50" width="57" height="20" forecolor="#FFFFFF" uuid="6f4e8ae3-6565-4edf-a7ac-4af742b2fd10"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{tglAkhir}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21">
+			<line>
+				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="1b4de881-8e0a-483f-aa4b-e0c9641e6529"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="143" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="4be8c7d1-64b9-41c2-8cdb-abd378b062a0"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No Faktur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="143" y="0" width="188" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="594bb54f-ee17-4392-b7f5-f573ec8d6211"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama_Pegawai]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="331" y="0" width="109" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="2cb905b4-475f-452a-a677-11670f037490"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tanggal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="440" y="0" width="112" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="fbc8cb6f-5ed4-4988-bd61-816b14862235"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Pengeluaran]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="9282e8c2-a2ee-4e08-8a3f-ef874ab3762e"/>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="143" height="20" uuid="96f85c34-2c8f-41e6-9788-4bcce4cdbb30"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Id_Sprt_Masuk}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="143" y="0" width="188" height="20" uuid="82ba2d18-900f-417f-be78-542301d62966"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Nama_Pegawai}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="331" y="0" width="109" height="20" uuid="f7ba7844-0b15-40e1-a006-c01eaaa6b301"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Tanggal}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="440" y="0" width="112" height="20" uuid="f92fa7a4-a14d-4b8c-8c5d-51d7704e5518"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Total_Harga}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="fdfe4e9a-e30d-43b3-8466-9da7a1b0a21e"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="fba93563-037f-4a24-b496-008e5ae38401"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="107730c6-6c53-4106-b706-ca0897e5c7ee"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

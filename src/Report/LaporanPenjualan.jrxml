@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="252a6af9-fb64-4430-a999-fae60b85daae">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="bds" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tglAwal" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tglAkhir" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[IF($P{bds} = 'Semua Pembelian') THEN
+SELECT T_Det_Faktur_Sparepart.Id_Sparepart, T_Jenis_Sparepart.Nama_Sparepart, SUM(T_Det_Faktur_Sparepart.Qty) AS JmlhPenjualan, SUM(T_Det_Faktur_Sparepart.Harga) AS TotalPemasukan
+FROM T_Det_Faktur_Sparepart, T_Jenis_Sparepart
+WHERE T_Jenis_Sparepart.Id_Sparepart = T_Det_Faktur_Sparepart.Id_Sparepart
+GROUP BY T_Det_Faktur_Sparepart.Id_Sparepart;
+
+ELSEIF($P{bds} = 'Tanggal') THEN
+SELECT T_Det_Faktur_Sparepart.Id_Sparepart, T_Jenis_Sparepart.Nama_Sparepart, SUM(T_Det_Faktur_Sparepart.Qty) AS JmlhPenjualan, SUM(T_Det_Faktur_Sparepart.Harga) AS TotalPemasukan
+FROM T_Det_Faktur_Sparepart, T_Jenis_Sparepart, T_Faktur
+WHERE T_Jenis_Sparepart.Id_Sparepart = T_Det_Faktur_Sparepart.Id_Sparepart AND T_Faktur.Id_Faktur = T_Det_Faktur_Sparepart.Id_Faktur AND T_Faktur.Tanggal BETWEEN $P{tglAwal} AND $P{tglAkhir}
+GROUP BY T_Det_Faktur_Sparepart.Id_Sparepart;
+END IF;]]>
+	</queryString>
+	<field name="Id_Sparepart" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Nama_Sparepart" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="JmlhPenjualan" class="java.math.BigDecimal"/>
+	<field name="TotalPemasukan" class="java.math.BigDecimal"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699" uuid="04411322-27b5-4345-a8db-9262af7a4408"/>
+				<staticText>
+					<reportElement x="20" y="20" width="286" height="43" forecolor="#FFFFFF" uuid="63eadd30-34b2-4afd-b55b-7d9b76396195"/>
+					<textElement>
+						<font size="20" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Laporan Penjualan Sparepart]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="526" y="51" width="9" height="20" forecolor="#FFFFFF" uuid="d9394c96-8fe9-4482-bf53-6b00f61014ba"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[-]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="350" y="51" width="109" height="20" forecolor="#FFFFFF" uuid="ab0d68f1-a163-4274-bbce-a28ab824da89"/>
+					<textElement textAlignment="Right">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{bds}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="535" y="51" width="57" height="20" forecolor="#FFFFFF" uuid="18473b27-336e-4049-b116-74a7cace6b05"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{tglAkhir}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="469" y="51" width="57" height="20" forecolor="#FFFFFF" uuid="7b40d9a5-0299-4146-8635-fee3bb55f57d"/>
+					<textElement textAlignment="Right">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{tglAwal}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21">
+			<line>
+				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="4c7bad56-835f-49bd-a39e-be973941af26"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="100" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="f82d5fc8-dfbe-4614-bf69-b3cb4dbd3741"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kode Sparepart]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="100" y="0" width="240" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="9c20876d-e564-4baa-9d3a-991b3f1a1fd3"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama Sparepart]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="340" y="0" width="109" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="95299a32-6333-4ba9-8be7-14da5c3a9a0a"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Penjualan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="449" y="0" width="103" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="ecc3cb49-e288-45a9-841c-91ebdb65cf60"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pemasukkan]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="27f9e185-4745-4541-9465-988e25d2d8bb"/>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="100" height="20" uuid="ac3de93b-1b6f-49f0-9e6d-9c95e08678b6"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Id_Sparepart}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="100" y="0" width="230" height="20" uuid="8d7ed886-8a4c-4d43-8e5c-5b463d92c9d8"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Nama_Sparepart}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="340" y="0" width="109" height="20" uuid="13a5212d-2ed7-4aa4-86f5-4ca782cd6603"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{JmlhPenjualan}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="449" y="0" width="103" height="20" uuid="62a8764e-6ea1-4207-969a-8f17e97ffbbc"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TotalPemasukan}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="5d8811d7-2c69-4309-8536-67f3351c4aaa"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="e2efa1da-dba6-488f-841f-24f438439d98"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="1159f7a6-6e25-4aa5-ac6a-9fe67436285a"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

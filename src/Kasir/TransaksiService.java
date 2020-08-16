@@ -268,7 +268,7 @@ public class TransaksiService extends javax.swing.JFrame {
         cmbTeknisi.removeAllItems();
         cmbTeknisi.addItem("-");
         try {
-            String SelectKD = "SELECT * FROM T_Pegawai WHERE Bagian = 'TEKNISI' AND Nama_Pegawai != 'TEKNISI'";
+            String SelectKD = "SELECT * FROM T_Pegawai WHERE Bagian = 'TEKNISI'";
             Statement st = koneksi.createStatement();
             ResultSet rs = st.executeQuery(SelectKD);
             while (rs.next()) {
@@ -391,8 +391,13 @@ public class TransaksiService extends javax.swing.JFrame {
         int TotalBayar = 0;
         for (int i = 0; i < tblSparepart.getRowCount(); i++) {
             if (tblSparepart.getRowCount() > 0) {
-                int TotalPerDetail = Integer.parseInt(tblSparepart.getValueAt(i, 4) + "");
-                TotalBayar = TotalBayar + TotalPerDetail;
+                if (tblSparepart.getValueAt(i, 4).toString().equals("")) {
+                    JOptionPane.showMessageDialog(null, "QTY DAN TOTAL SPAREPART MASIH KOSONG");
+                } else {
+                    int TotalPerDetail = Integer.parseInt(tblSparepart.getValueAt(i, 4) + "");
+                    TotalBayar = TotalBayar + TotalPerDetail;
+                }
+
             } else if (tblSparepart.getValueAt(i, 3).equals("")) {
                 JOptionPane.showMessageDialog(null, "ISI QTY SPAREPART TERLBIH DAHULU");
             }
@@ -405,8 +410,12 @@ public class TransaksiService extends javax.swing.JFrame {
         int TotalBayar = 0;
         for (int i = 0; i < tblService.getRowCount(); i++) {
             if (tblService.getRowCount() > 0) {
-                int TotalPerDetail = Integer.parseInt(tblService.getValueAt(i, 4) + "");
-                TotalBayar = TotalBayar + TotalPerDetail;
+                if (tblService.getValueAt(i, 4).toString().equals("")) {
+                    JOptionPane.showMessageDialog(null, "QTY DAN TOTAL SERVICE MASIH KOSONG");
+                } else {
+                    int TotalPerDetail = Integer.parseInt(tblService.getValueAt(i, 4) + "");
+                    TotalBayar = TotalBayar + TotalPerDetail;
+                }
             } else if (tblService.getValueAt(i, 3).equals("")) {
                 JOptionPane.showMessageDialog(null, "ISI QTY SERVICE TERLBIH DAHULU");
             }
@@ -499,6 +508,7 @@ public class TransaksiService extends javax.swing.JFrame {
                 //VALIDASI BERHASIL INSERT DAN UPDATE
                 if (BerhasilDetSparepart == 1 && BerhasilUpdateStok == 1 && BerhasilDetService == 1 && BerhasilUpdFaktur == 1) {
                     JOptionPane.showMessageDialog(null, "DATA FAKTUR BERHASIL DIMASUKKAN");
+                    Clear();
                 } else if (BerhasilDetSparepart == 0) {
                     JOptionPane.showMessageDialog(null, "DATA DET FAKTUR SPAREPART GAGAL DIMASUKKAN");
                     System.out.println(InsertDetSparepart);
@@ -542,10 +552,6 @@ public class TransaksiService extends javax.swing.JFrame {
         mainPanel3 = new javax.swing.JPanel();
         PanelDirectory3 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
-        btnLaporan = new javax.swing.JPanel();
-        lblNoPol6 = new javax.swing.JLabel();
-        btnPendaftaran = new javax.swing.JPanel();
-        lblNoPol7 = new javax.swing.JLabel();
         lblNoPol8 = new javax.swing.JLabel();
         lblService3 = new javax.swing.JLabel();
         cmbService = new javax.swing.JComboBox<>();
@@ -751,63 +757,6 @@ public class TransaksiService extends javax.swing.JFrame {
                 .addContainerGap(29, Short.MAX_VALUE)
                 .addComponent(jLabel9)
                 .addGap(39, 39, 39))
-        );
-
-        btnLaporan.setBackground(new java.awt.Color(255, 255, 255));
-        btnLaporan.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnLaporanMouseClicked(evt);
-            }
-        });
-
-        lblNoPol6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        lblNoPol6.setForeground(new java.awt.Color(51, 51, 51));
-        lblNoPol6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblNoPol6.setText("  Laporan   >");
-
-        javax.swing.GroupLayout btnLaporanLayout = new javax.swing.GroupLayout(btnLaporan);
-        btnLaporan.setLayout(btnLaporanLayout);
-        btnLaporanLayout.setHorizontalGroup(
-            btnLaporanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnLaporanLayout.createSequentialGroup()
-                .addContainerGap(33, Short.MAX_VALUE)
-                .addComponent(lblNoPol6)
-                .addGap(20, 20, 20))
-        );
-        btnLaporanLayout.setVerticalGroup(
-            btnLaporanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnLaporanLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblNoPol6, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        btnPendaftaran.setBackground(new java.awt.Color(255, 255, 255));
-        btnPendaftaran.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnPendaftaranMouseClicked(evt);
-            }
-        });
-
-        lblNoPol7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        lblNoPol7.setForeground(new java.awt.Color(51, 51, 51));
-        lblNoPol7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblNoPol7.setText("    < Pendaftaran");
-
-        javax.swing.GroupLayout btnPendaftaranLayout = new javax.swing.GroupLayout(btnPendaftaran);
-        btnPendaftaran.setLayout(btnPendaftaranLayout);
-        btnPendaftaranLayout.setHorizontalGroup(
-            btnPendaftaranLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnPendaftaranLayout.createSequentialGroup()
-                .addComponent(lblNoPol7)
-                .addGap(0, 53, Short.MAX_VALUE))
-        );
-        btnPendaftaranLayout.setVerticalGroup(
-            btnPendaftaranLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnPendaftaranLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblNoPol7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
         );
 
         lblNoPol8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -1061,11 +1010,6 @@ public class TransaksiService extends javax.swing.JFrame {
         mainPanel3.setLayout(mainPanel3Layout);
         mainPanel3Layout.setHorizontalGroup(
             mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanel3Layout.createSequentialGroup()
-                .addComponent(btnPendaftaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnLaporan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34))
             .addGroup(mainPanel3Layout.createSequentialGroup()
                 .addComponent(PanelDirectory3, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -1142,9 +1086,7 @@ public class TransaksiService extends javax.swing.JFrame {
                                     .addComponent(cmbService, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(mainPanel3Layout.createSequentialGroup()
-                                .addComponent(lblService1)
-                                .addGap(10, 10, 10))
+                            .addComponent(lblService1)
                             .addComponent(txtQtyJasa, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnTambahService, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1163,10 +1105,7 @@ public class TransaksiService extends javax.swing.JFrame {
         mainPanel3Layout.setVerticalGroup(
             mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanel3Layout.createSequentialGroup()
-                .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnLaporan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnPendaftaran, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(71, 71, 71)
                 .addComponent(PanelDirectory3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1296,20 +1235,6 @@ public class TransaksiService extends javax.swing.JFrame {
         CariNoFaktur.dispose();
         txtCariNoPolisi.setText("");
     }//GEN-LAST:event_btnCancelCariActionPerformed
-
-    private void btnLaporanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLaporanMouseClicked
-        // TODO add your handling code here:
-        LaporanPemasukan ts = new LaporanPemasukan();
-        ts.show();
-        this.dispose();
-    }//GEN-LAST:event_btnLaporanMouseClicked
-
-    private void btnPendaftaranMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPendaftaranMouseClicked
-        // TODO add your handling code here:
-        PendaftaranService ps = new PendaftaranService();
-        ps.show();
-        this.dispose();
-    }//GEN-LAST:event_btnPendaftaranMouseClicked
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
         int ok = JOptionPane.showConfirmDialog(null, "Data Yang Dimasukkan Benar?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
@@ -1451,8 +1376,6 @@ public class TransaksiService extends javax.swing.JFrame {
     private javax.swing.JButton btnHapusServices;
     private javax.swing.JButton btnHapusSparepart;
     private javax.swing.JButton btnHitung;
-    private javax.swing.JPanel btnLaporan;
-    private javax.swing.JPanel btnPendaftaran;
     private javax.swing.JButton btnPilihFaktur;
     private javax.swing.JButton btnSubmit;
     private javax.swing.JButton btnTambahService;
@@ -1466,8 +1389,6 @@ public class TransaksiService extends javax.swing.JFrame {
     private javax.swing.JLabel lblDetSparepart2;
     private javax.swing.JLabel lblNoPol2;
     private javax.swing.JLabel lblNoPol3;
-    private javax.swing.JLabel lblNoPol6;
-    private javax.swing.JLabel lblNoPol7;
     private javax.swing.JLabel lblNoPol8;
     private javax.swing.JLabel lblNoPol9;
     private javax.swing.JLabel lblService1;

@@ -7,9 +7,18 @@ package Kasir;
 
 import Class.DatabaseConnection;
 import Class.Login;
+import java.io.File;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -28,88 +37,24 @@ public class LaporanPemasukan extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setLocationRelativeTo(null);
         koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
-        SetCMBTahun();
-        SetCMBBBds();
-    }
-
-    //FORM
-    public void SetCMBBBds() {
-        if (cmbCari.getSelectedIndex() == 0) {
-            cmbBerdasarkan.setEnabled(true);
-            cmbTahun.setEnabled(true);
-            cmbBerdasarkan.removeAllItems();
-            lblBulan.setText("Bulan :");
-            cmbBerdasarkan.addItem("JANUARI");
-            cmbBerdasarkan.addItem("FEBRUARI");
-            cmbBerdasarkan.addItem("MARET");
-            cmbBerdasarkan.addItem("APRIL");
-            cmbBerdasarkan.addItem("MEI");
-            cmbBerdasarkan.addItem("JUNI");
-            cmbBerdasarkan.addItem("JULI");
-            cmbBerdasarkan.addItem("AGUSTUS");
-            cmbBerdasarkan.addItem("SEPTEMBER");
-            cmbBerdasarkan.addItem("OKTOBER");
-            cmbBerdasarkan.addItem("NOVEMBER");
-            cmbBerdasarkan.addItem("DESEMBER");
-        } else if (cmbCari.getSelectedIndex() == 1) {
-            cmbBerdasarkan.setEnabled(true);
-            cmbTahun.setEnabled(true);
-            cmbBerdasarkan.removeAllItems();
-            lblBulan.setText("Triwulan :");
-            cmbBerdasarkan.addItem("TRIWULAN 1");
-            cmbBerdasarkan.addItem("TRIWULAN 2");
-            cmbBerdasarkan.addItem("TRIWULAN 3");
-            cmbBerdasarkan.addItem("TRIWULAN 4");
-        } else if (cmbCari.getSelectedIndex() == 2) {
-            cmbBerdasarkan.setEnabled(true);
-            cmbTahun.setEnabled(true);
-            cmbBerdasarkan.removeAllItems();
-            lblBulan.setText("Semester :");
-            cmbBerdasarkan.addItem("SEMESTER 1");
-            cmbBerdasarkan.addItem("SEMESTER 2");
-        } else if (cmbCari.getSelectedIndex() == 3) {
-            cmbBerdasarkan.removeAllItems();
-            lblBulan.setText("Bulan :");
-            cmbBerdasarkan.setEnabled(false);
-            cmbTahun.setEnabled(true);
-        }
-    }
-
-    public void SetCMBTahun() {
-        try {
-            Statement stmt = koneksi.createStatement();
-            String SelectYear = "SELECT YEAR(Tanggal) AS Tahun FROM t_Faktur GROUP BY Tahun ORDER BY Tahun ASC";
-            ResultSet rs = stmt.executeQuery(SelectYear);
-            while (rs.next()) {
-                String Tahun = rs.getString("Tahun");
-                cmbTahun.removeAllItems();
-                cmbTahun.addItem(Tahun);
-            }
-        } catch (SQLException e) {
-
-        }
+        showData();
+        setJDate();
     }
 
     //SELECT FROM DB
-    public void TampilPerBulan() {
+    public void showData() {
         DefaultTableModel tableModel = (DefaultTableModel) tblPemasukan.getModel();
         tableModel.setRowCount(0);
         String kolom[] = {"No", "Nomor Faktur", "ID Customer", "Total Service", "Total Sparepart", "Total Bayar"};
-        int Bulan = cmbBerdasarkan.getSelectedIndex() + 1;
-        String BulanToString = String.valueOf(Bulan);
-        String Tahun = cmbTahun.getSelectedItem().toString();
         DefaultTableModel dtm = new DefaultTableModel(null, kolom);
         String query = null, query2;
         int No = 1;
         try {
-            String Tanggal = Tahun + "-" + BulanToString + "-1";
             Statement stmt = koneksi.createStatement();
             query = "SELECT T_Faktur.Id_Faktur, T_Faktur.Id_Customer, T_Faktur.Total_Jasa, T_Faktur.Total_Sparepart, T_Faktur.Total_Bayar "
                     + "FROM T_Faktur "
-                    + "WHERE STATUS = 'BERES' AND Tanggal BETWEEN '" + Tanggal + "' AND LAST_DAY('" + Tanggal + "')";
-
+                    + "WHERE STATUS = 'BERES'";
             ResultSet rs = stmt.executeQuery(query);
-
             while (rs.next()) {
                 String Id_Faktur = rs.getString("Id_Faktur");
                 String Id_Customer = rs.getString("Id_Customer");
@@ -121,7 +66,7 @@ public class LaporanPemasukan extends javax.swing.JFrame {
             }
             query2 = "SELECT SUM(T_Faktur.Total_Bayar) AS Total_Pemasukan,COUNT(Id_Faktur) AS BanyakService "
                     + "FROM T_Faktur "
-                    + "WHERE STATUS = 'BERES' AND Tanggal BETWEEN '" + Tanggal + "' AND LAST_DAY('" + Tanggal + "')";
+                    + "WHERE STATUS = 'BERES'";
             ResultSet rs2 = stmt.executeQuery(query2);
             if (rs2.next()) {
                 String Total_Pemasukan = rs2.getString("Total_Pemasukan");
@@ -138,35 +83,23 @@ public class LaporanPemasukan extends javax.swing.JFrame {
         tblPemasukan.setModel(dtm);
     }
 
-    public void TampilPerTriWulan() {
+    public void cariData() {
         DefaultTableModel tableModel = (DefaultTableModel) tblPemasukan.getModel();
         tableModel.setRowCount(0);
         String kolom[] = {"No", "Nomor Faktur", "ID Customer", "Total Service", "Total Sparepart", "Total Bayar"};
         DefaultTableModel dtm = new DefaultTableModel(null, kolom);
-
-        int TriWulan = cmbBerdasarkan.getSelectedIndex();
-        String Bulan = "1";
-        if (TriWulan == 0) {
-            Bulan = "1";
-        } else if (TriWulan == 1) {
-            Bulan = "4";
-        } else if (TriWulan == 2) {
-            Bulan = "7";
-        } else if (TriWulan == 3) {
-            Bulan = "10";
-        }
-        String Tahun = cmbTahun.getSelectedItem().toString();
         String query = null, query2;
         int No = 1;
+        String tanggalLahir = "yyyy-MM-dd";
+        SimpleDateFormat fm = new SimpleDateFormat(tanggalLahir);
+        String tglAwal = String.valueOf(fm.format(txtTglAwal.getDate()));
+        String tglAkhir = String.valueOf(fm.format(txtTglAkhir.getDate()));
         try {
-            String Tanggal = Tahun + "-" + Bulan + "-1";
             Statement stmt = koneksi.createStatement();
             query = "SELECT T_Faktur.Id_Faktur, T_Faktur.Id_Customer, T_Faktur.Total_Jasa, T_Faktur.Total_Sparepart, T_Faktur.Total_Bayar "
                     + "FROM T_Faktur "
-                    + "WHERE STATUS = 'BERES' AND Tanggal BETWEEN '" + Tanggal + "' AND LAST_DAY('" + Tanggal + "'+ INTERVAL 2 MONTH)";
-
+                    + "WHERE STATUS = 'BERES' AND Tanggal BETWEEN '" + tglAwal + "' AND '" + tglAkhir + "'";
             ResultSet rs = stmt.executeQuery(query);
-            System.out.println(query);
             while (rs.next()) {
                 String Id_Faktur = rs.getString("Id_Faktur");
                 String Id_Customer = rs.getString("Id_Customer");
@@ -178,7 +111,7 @@ public class LaporanPemasukan extends javax.swing.JFrame {
             }
             query2 = "SELECT SUM(T_Faktur.Total_Bayar) AS Total_Pemasukan,COUNT(Id_Faktur) AS BanyakService "
                     + "FROM T_Faktur "
-                    + "WHERE STATUS = 'BERES' AND Tanggal BETWEEN '" + Tanggal + "' AND LAST_DAY('" + Tanggal + "'+ INTERVAL 2 MONTH)";
+                    + "WHERE STATUS = 'BERES' AND Tanggal BETWEEN '" + tglAwal + "' AND '" + tglAkhir + "'";
             ResultSet rs2 = stmt.executeQuery(query2);
             if (rs2.next()) {
                 String Total_Pemasukan = rs2.getString("Total_Pemasukan");
@@ -195,108 +128,10 @@ public class LaporanPemasukan extends javax.swing.JFrame {
         tblPemasukan.setModel(dtm);
     }
 
-    public void TampilPerSemester() {
-        DefaultTableModel tableModel = (DefaultTableModel) tblPemasukan.getModel();
-        tableModel.setRowCount(0);
-        String kolom[] = {"No", "Nomor Faktur", "ID Customer", "Total Service", "Total Sparepart", "Total Bayar"};
-        DefaultTableModel dtm = new DefaultTableModel(null, kolom);
-
-        int TriWulan = cmbBerdasarkan.getSelectedIndex();
-        String Bulan = "1";
-        if (TriWulan == 0) {
-            Bulan = "1";
-        } else if (TriWulan == 1) {
-            Bulan = "4";
-        } else if (TriWulan == 2) {
-            Bulan = "7";
-        } else if (TriWulan == 3) {
-            Bulan = "10";
-        }
-        String Tahun = cmbTahun.getSelectedItem().toString();
-        String query = null, query2;
-        int No = 1;
-        try {
-            String Tanggal = Tahun + "-" + Bulan + "-1";
-            Statement stmt = koneksi.createStatement();
-            query = "SELECT T_Faktur.Id_Faktur, T_Faktur.Id_Customer, T_Faktur.Total_Jasa, T_Faktur.Total_Sparepart, T_Faktur.Total_Bayar "
-                    + "FROM T_Faktur "
-                    + "WHERE STATUS = 'BERES' AND Tanggal BETWEEN '" + Tanggal + "' AND LAST_DAY('" + Tanggal + "'+ INTERVAL 5 MONTH)";
-
-            ResultSet rs = stmt.executeQuery(query);
-            System.out.println(query);
-            while (rs.next()) {
-                String Id_Faktur = rs.getString("Id_Faktur");
-                String Id_Customer = rs.getString("Id_Customer");
-                String Total_Jasa = rs.getString("Total_Jasa");
-                String Total_Sparepart = rs.getString("Total_Sparepart");
-                String Total_Bayar = rs.getString("Total_Bayar");
-                dtm.addRow(new String[]{"" + No, Id_Faktur, Id_Customer, Total_Jasa, Total_Sparepart, Total_Bayar});
-                No = No + 1;
-            }
-            query2 = "SELECT SUM(T_Faktur.Total_Bayar) AS Total_Pemasukan,COUNT(Id_Faktur) AS BanyakService "
-                    + "FROM T_Faktur "
-                    + "WHERE STATUS = 'BERES' AND Tanggal BETWEEN '" + Tanggal + "' AND LAST_DAY('" + Tanggal + "'+ INTERVAL 5 MONTH)";
-            ResultSet rs2 = stmt.executeQuery(query2);
-            if (rs2.next()) {
-                String Total_Pemasukan = rs2.getString("Total_Pemasukan");
-                String BanyakService = rs2.getString("BanyakService");
-                if (Total_Pemasukan == null) {
-                    Total_Pemasukan = "0";
-                }
-                txtTotalPemasukan.setText(Total_Pemasukan);
-                txtTotalService.setText(BanyakService);
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Kesalahan Pada Database" + ex);
-        }
-        tblPemasukan.setModel(dtm);
-    }
-
-    public void TampilPerTahun() {
-        DefaultTableModel tableModel = (DefaultTableModel) tblPemasukan.getModel();
-        tableModel.setRowCount(0);
-        String kolom[] = {"No", "Nomor Faktur", "ID Customer", "Total Service", "Total Sparepart", "Total Bayar"};
-        DefaultTableModel dtm = new DefaultTableModel(null, kolom);
-
-        String Bulan = "1";
-        String Tahun = cmbTahun.getSelectedItem().toString();
-        String query = null, query2;
-        int No = 1;
-        try {
-            String Tanggal = Tahun + "-" + Bulan + "-1";
-            Statement stmt = koneksi.createStatement();
-            query = "SELECT T_Faktur.Id_Faktur, T_Faktur.Id_Customer, T_Faktur.Total_Jasa, T_Faktur.Total_Sparepart, T_Faktur.Total_Bayar "
-                    + "FROM T_Faktur "
-                    + "WHERE STATUS = 'BERES' AND Tanggal BETWEEN '" + Tanggal + "' AND LAST_DAY('" + Tanggal + "'+ INTERVAL 11 MONTH)";
-
-            ResultSet rs = stmt.executeQuery(query);
-            System.out.println(query);
-            while (rs.next()) {
-                String Id_Faktur = rs.getString("Id_Faktur");
-                String Id_Customer = rs.getString("Id_Customer");
-                String Total_Jasa = rs.getString("Total_Jasa");
-                String Total_Sparepart = rs.getString("Total_Sparepart");
-                String Total_Bayar = rs.getString("Total_Bayar");
-                dtm.addRow(new String[]{"" + No, Id_Faktur, Id_Customer, Total_Jasa, Total_Sparepart, Total_Bayar});
-                No = No + 1;
-            }
-            query2 = "SELECT SUM(T_Faktur.Total_Bayar) AS Total_Pemasukan,COUNT(Id_Faktur) AS BanyakService "
-                    + "FROM T_Faktur "
-                    + "WHERE STATUS = 'BERES' AND Tanggal BETWEEN '" + Tanggal + "' AND LAST_DAY('" + Tanggal + "'+ INTERVAL 11 MONTH)";
-            ResultSet rs2 = stmt.executeQuery(query2);
-            if (rs2.next()) {
-                String Total_Pemasukan = rs2.getString("Total_Pemasukan");
-                String BanyakService = rs2.getString("BanyakService");
-                if (Total_Pemasukan == null) {
-                    Total_Pemasukan = "0";
-                }
-                txtTotalPemasukan.setText(Total_Pemasukan);
-                txtTotalService.setText(BanyakService);
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Kesalahan Pada Database" + ex);
-        }
-        tblPemasukan.setModel(dtm);
+    public void setJDate() {
+        Calendar today = Calendar.getInstance();
+        txtTglAwal.setDate(today.getTime());
+        txtTglAkhir.setDate(today.getTime());
     }
 
     /**
@@ -311,10 +146,6 @@ public class LaporanPemasukan extends javax.swing.JFrame {
         mainPanel1 = new javax.swing.JPanel();
         PanelDirectory = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        btnTransaksi = new javax.swing.JPanel();
-        lblNoPol6 = new javax.swing.JLabel();
-        btnPendaftaran = new javax.swing.JPanel();
-        lblNoPol7 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblPemasukan = new javax.swing.JTable();
         btnPrint1 = new javax.swing.JButton();
@@ -324,12 +155,10 @@ public class LaporanPemasukan extends javax.swing.JFrame {
         jLabel19 = new javax.swing.JLabel();
         txtTotalPemasukan = new javax.swing.JLabel();
         txtTotalService = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
-        cmbCari = new javax.swing.JComboBox<>();
-        cmbBerdasarkan = new javax.swing.JComboBox<>();
-        lblBulan = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
-        cmbTahun = new javax.swing.JComboBox<>();
+        txtTglAwal = new com.toedter.calendar.JDateChooser();
+        jLabel10 = new javax.swing.JLabel();
+        txtTglAkhir = new com.toedter.calendar.JDateChooser();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Laporan Service");
@@ -359,63 +188,6 @@ public class LaporanPemasukan extends javax.swing.JFrame {
                 .addContainerGap(29, Short.MAX_VALUE)
                 .addComponent(jLabel8)
                 .addGap(39, 39, 39))
-        );
-
-        btnTransaksi.setBackground(new java.awt.Color(255, 255, 255));
-        btnTransaksi.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnTransaksiMouseClicked(evt);
-            }
-        });
-
-        lblNoPol6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        lblNoPol6.setForeground(new java.awt.Color(51, 51, 51));
-        lblNoPol6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblNoPol6.setText("  Transaksi >");
-
-        javax.swing.GroupLayout btnTransaksiLayout = new javax.swing.GroupLayout(btnTransaksi);
-        btnTransaksi.setLayout(btnTransaksiLayout);
-        btnTransaksiLayout.setHorizontalGroup(
-            btnTransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnTransaksiLayout.createSequentialGroup()
-                .addContainerGap(33, Short.MAX_VALUE)
-                .addComponent(lblNoPol6)
-                .addGap(20, 20, 20))
-        );
-        btnTransaksiLayout.setVerticalGroup(
-            btnTransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnTransaksiLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblNoPol6, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        btnPendaftaran.setBackground(new java.awt.Color(255, 255, 255));
-        btnPendaftaran.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnPendaftaranMouseClicked(evt);
-            }
-        });
-
-        lblNoPol7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        lblNoPol7.setForeground(new java.awt.Color(51, 51, 51));
-        lblNoPol7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblNoPol7.setText("    < Pendaftaran");
-
-        javax.swing.GroupLayout btnPendaftaranLayout = new javax.swing.GroupLayout(btnPendaftaran);
-        btnPendaftaran.setLayout(btnPendaftaranLayout);
-        btnPendaftaranLayout.setHorizontalGroup(
-            btnPendaftaranLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnPendaftaranLayout.createSequentialGroup()
-                .addComponent(lblNoPol7)
-                .addGap(0, 53, Short.MAX_VALUE))
-        );
-        btnPendaftaranLayout.setVerticalGroup(
-            btnPendaftaranLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnPendaftaranLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblNoPol7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
         );
 
         tblPemasukan.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
@@ -473,132 +245,89 @@ public class LaporanPemasukan extends javax.swing.JFrame {
         txtTotalService.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         txtTotalService.setText("0");
 
-        jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel21.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel21.setText("Cari Berdasarkan :");
+        txtTglAwal.setBackground(new java.awt.Color(255, 255, 255));
+        txtTglAwal.setForeground(new java.awt.Color(51, 51, 51));
 
-        cmbCari.setBackground(new java.awt.Color(255, 255, 255));
-        cmbCari.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        cmbCari.setForeground(new java.awt.Color(51, 51, 51));
-        cmbCari.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bulan", "Triwulan", "Semester", "Tahun" }));
-        cmbCari.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cmbCariItemStateChanged(evt);
-            }
-        });
+        jLabel10.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel10.setText("Tanggal Awal :");
 
-        cmbBerdasarkan.setBackground(new java.awt.Color(255, 255, 255));
-        cmbBerdasarkan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        cmbBerdasarkan.setForeground(new java.awt.Color(51, 51, 51));
-        cmbBerdasarkan.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cmbBerdasarkanItemStateChanged(evt);
-            }
-        });
+        txtTglAkhir.setBackground(new java.awt.Color(255, 255, 255));
+        txtTglAkhir.setForeground(new java.awt.Color(51, 51, 51));
 
-        lblBulan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblBulan.setForeground(new java.awt.Color(51, 51, 51));
-        lblBulan.setText("Bulan :");
-
-        jLabel22.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel22.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel22.setText("Tahun :");
-
-        cmbTahun.setBackground(new java.awt.Color(255, 255, 255));
-        cmbTahun.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        cmbTahun.setForeground(new java.awt.Color(51, 51, 51));
-        cmbTahun.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bulanan", "Triwulan", "Semester", "Tahun" }));
-        cmbTahun.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cmbTahunItemStateChanged(evt);
-            }
-        });
+        jLabel12.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel12.setText("Tanggal Akhir :");
 
         javax.swing.GroupLayout mainPanel1Layout = new javax.swing.GroupLayout(mainPanel1);
         mainPanel1.setLayout(mainPanel1Layout);
         mainPanel1Layout.setHorizontalGroup(
             mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanel1Layout.createSequentialGroup()
-                .addComponent(btnPendaftaran, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34))
             .addGroup(mainPanel1Layout.createSequentialGroup()
                 .addComponent(PanelDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(mainPanel1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(mainPanel1Layout.createSequentialGroup()
-                            .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(cmbCari, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel21))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(mainPanel1Layout.createSequentialGroup()
-                                    .addComponent(lblBulan)
-                                    .addGap(113, 113, 113)
-                                    .addComponent(jLabel22))
-                                .addGroup(mainPanel1Layout.createSequentialGroup()
-                                    .addComponent(cmbBerdasarkan, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cmbTahun, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(65, 65, 65))))
-                        .addGroup(mainPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel16)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jLabel19)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(txtTotalPemasukan, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel17)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtTotalService, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(mainPanel1Layout.createSequentialGroup()
-                        .addGap(225, 225, 225)
-                        .addComponent(btnPrint1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(mainPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel17)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtTotalService, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(mainPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel16)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel19)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtTotalPemasukan, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnPrint1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(mainPanel1Layout.createSequentialGroup()
+                            .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel10)
+                                .addComponent(txtTglAwal, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(18, 18, 18)
+                            .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel12)
+                                .addGroup(mainPanel1Layout.createSequentialGroup()
+                                    .addComponent(txtTglAkhir, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 664, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         mainPanel1Layout.setVerticalGroup(
             mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanel1Layout.createSequentialGroup()
-                .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnTransaksi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnPendaftaran, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(71, 71, 71)
                 .addComponent(PanelDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainPanel1Layout.createSequentialGroup()
-                        .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel21)
-                            .addComponent(lblBulan))
-                        .addGap(9, 9, 9))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addGap(9, 9, 9)
+                        .addComponent(txtTglAkhir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(mainPanel1Layout.createSequentialGroup()
                         .addGap(3, 3, 3)
-                        .addComponent(jLabel22)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbBerdasarkan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbTahun, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel10)
+                        .addGap(6, 6, 6)
+                        .addComponent(txtTglAwal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCari, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16)
-                    .addComponent(jLabel17)
-                    .addComponent(jLabel19)
-                    .addComponent(txtTotalPemasukan)
-                    .addComponent(txtTotalService))
                 .addGap(18, 18, 18)
-                .addComponent(btnPrint1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnPrint1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(mainPanel1Layout.createSequentialGroup()
+                        .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel17)
+                            .addComponent(txtTotalService))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(mainPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel16)
+                            .addComponent(jLabel19)
+                            .addComponent(txtTotalPemasukan))))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -617,50 +346,41 @@ public class LaporanPemasukan extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+int Click = 0;
     private void btnPrint1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPrint1MouseClicked
-        // TODO add your handling code here:
+        String Berdasarkan = "Semua Pemasukkan", tglAwal = "", tglAkhir = "";
+        try {
+            //Koneksi Database
+            com.mysql.jdbc.Connection c = (com.mysql.jdbc.Connection) DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+            //CETAK DATA
+            HashMap parameter = new HashMap();
+            //AMBIL FILE
+            if (Click == 1) {
+                String tanggalLahir = "yyyy-MM-dd";
+                SimpleDateFormat fm = new SimpleDateFormat(tanggalLahir);
+                tglAwal = String.valueOf(fm.format(txtTglAwal.getDate()));
+                tglAkhir = String.valueOf(fm.format(txtTglAkhir.getDate()));
+                Berdasarkan = "Tanggal";
+            }
+            parameter.put("bds", Berdasarkan);
+            parameter.put("tglAwal", tglAwal);
+            parameter.put("tglAkhir", tglAkhir);
+            File file = new File("src/Report/LaporanPemasukkan.jasper");
+            JasperReport jr = (JasperReport) JRLoader.loadObject(file);
+            JasperPrint jp = JasperFillManager.fillReport(jr, parameter, c);
+            //AGAR TIDAK MENGCLOSE APLIKASi
+            JasperViewer.viewReport(jp, false);
+            JasperViewer.setDefaultLookAndFeelDecorated(true);
 
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "" + e);
+        }
     }//GEN-LAST:event_btnPrint1MouseClicked
 
     private void btnCariMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCariMouseClicked
-        // TODO add your handling code here:
-        
+        cariData();
+        Click = 1;
     }//GEN-LAST:event_btnCariMouseClicked
-
-    private void cmbCariItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbCariItemStateChanged
-        SetCMBBBds();
-    }//GEN-LAST:event_cmbCariItemStateChanged
-
-    private void cmbBerdasarkanItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbBerdasarkanItemStateChanged
-        if (cmbCari.getSelectedIndex() == 0) {
-            TampilPerBulan();
-        } else if (cmbCari.getSelectedIndex() == 1) {
-            TampilPerTriWulan();
-        } else if (cmbCari.getSelectedIndex() == 2) {
-            TampilPerSemester();
-        } else if (cmbCari.getSelectedIndex() == 3) {
-            TampilPerTahun();
-        }
-    }//GEN-LAST:event_cmbBerdasarkanItemStateChanged
-
-    private void cmbTahunItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbTahunItemStateChanged
-
-    }//GEN-LAST:event_cmbTahunItemStateChanged
-
-    private void btnPendaftaranMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPendaftaranMouseClicked
-        // TODO add your handling code here:
-        PendaftaranService ps = new PendaftaranService();
-        ps.show();
-        this.dispose();
-    }//GEN-LAST:event_btnPendaftaranMouseClicked
-
-    private void btnTransaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTransaksiMouseClicked
-        // TODO add your handling code here:
-        TransaksiService ts= new TransaksiService();
-        ts.show();
-        this.dispose();
-    }//GEN-LAST:event_btnTransaksiMouseClicked
 
     /**
      * @param args the command line arguments
@@ -715,24 +435,18 @@ public class LaporanPemasukan extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelDirectory;
     private javax.swing.JButton btnCari;
-    private javax.swing.JPanel btnPendaftaran;
     private javax.swing.JButton btnPrint1;
-    private javax.swing.JPanel btnTransaksi;
-    private javax.swing.JComboBox<String> cmbBerdasarkan;
-    private javax.swing.JComboBox<String> cmbCari;
-    private javax.swing.JComboBox<String> cmbTahun;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel lblBulan;
-    private javax.swing.JLabel lblNoPol6;
-    private javax.swing.JLabel lblNoPol7;
     private javax.swing.JPanel mainPanel1;
     private javax.swing.JTable tblPemasukan;
+    private com.toedter.calendar.JDateChooser txtTglAkhir;
+    private com.toedter.calendar.JDateChooser txtTglAwal;
     private javax.swing.JLabel txtTotalPemasukan;
     private javax.swing.JLabel txtTotalService;
     // End of variables declaration//GEN-END:variables

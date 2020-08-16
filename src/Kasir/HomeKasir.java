@@ -366,7 +366,7 @@ public class HomeKasir extends javax.swing.JFrame {
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(30, 132, 234));
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel18.setText("Laporan");
+        jLabel18.setText("Data Pemasukan");
 
         javax.swing.GroupLayout pnlLaporanLayout = new javax.swing.GroupLayout(pnlLaporan);
         pnlLaporan.setLayout(pnlLaporanLayout);

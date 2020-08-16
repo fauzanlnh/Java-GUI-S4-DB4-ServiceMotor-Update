@@ -7,12 +7,18 @@ package Admin;
 
 import Sparepart.*;
 import Class.DatabaseConnection;
-import Class.Login;
+import java.io.File;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -24,13 +30,13 @@ public class LaporanPembelianAdmin extends javax.swing.JFrame {
      * Creates new form LaporanPemasukkanService
      */
     Connection koneksi;
+    int Click = 0;
 
     public LaporanPembelianAdmin() {
         initComponents();
         this.setLocationRelativeTo(null);
         koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
         showData();
-        btnPrint.setVisible(false);
         setJDate();
     }
 
@@ -64,11 +70,11 @@ public class LaporanPembelianAdmin extends javax.swing.JFrame {
     public void cariData() {
         String kolom[] = {"NO", "Kode Sparepart", "Nama Sparepart", "Jumlah Masuk", "Total Pembelian"};
         DefaultTableModel dtm = new DefaultTableModel(null, kolom);
-        String query = null;
         String tanggalLahir = "yyyy-MM-dd";
         SimpleDateFormat fm = new SimpleDateFormat(tanggalLahir);
         String tglAwal = String.valueOf(fm.format(txtTglAwal.getDate()));
         String tglAkhir = String.valueOf(fm.format(txtTglAkhir.getDate()));
+        String query = null;
         try {
             Statement stmt = koneksi.createStatement();
             //query = "SELECT * FROM T_Det_Sparepart_Masuk";
@@ -145,7 +151,7 @@ public class LaporanPembelianAdmin extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("Laporan/Laporan Pembelian");
+        jLabel9.setText("Admin/Laporan Pembelian");
 
         javax.swing.GroupLayout PanelDirectoryLayout = new javax.swing.GroupLayout(PanelDirectory);
         PanelDirectory.setLayout(PanelDirectoryLayout);
@@ -197,6 +203,11 @@ public class LaporanPembelianAdmin extends javax.swing.JFrame {
                 btnPrintMouseClicked(evt);
             }
         });
+        btnPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintActionPerformed(evt);
+            }
+        });
 
         btnCari.setBackground(new java.awt.Color(240, 240, 240));
         btnCari.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
@@ -215,26 +226,23 @@ public class LaporanPembelianAdmin extends javax.swing.JFrame {
             mainPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(PanelDirectory, javax.swing.GroupLayout.DEFAULT_SIZE, 710, Short.MAX_VALUE)
             .addGroup(mainPanel2Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
                 .addGroup(mainPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainPanel2Layout.createSequentialGroup()
-                        .addGap(72, 72, 72)
                         .addGroup(mainPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10)
+                            .addComponent(txtTglAwal, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(mainPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel12)
                             .addGroup(mainPanel2Layout.createSequentialGroup()
-                                .addGroup(mainPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel10)
-                                    .addComponent(txtTglAwal, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(mainPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel12)
-                                    .addGroup(mainPanel2Layout.createSequentialGroup()
-                                        .addComponent(txtTglAkhir, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                    .addGroup(mainPanel2Layout.createSequentialGroup()
-                        .addGap(296, 296, 296)
-                        .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(72, Short.MAX_VALUE))
+                                .addComponent(txtTglAkhir, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnCari, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(mainPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 664, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         mainPanel2Layout.setVerticalGroup(
             mainPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -258,7 +266,7 @@ public class LaporanPembelianAdmin extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -269,9 +277,10 @@ public class LaporanPembelianAdmin extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(mainPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(mainPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 689, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
 
         pack();
@@ -279,12 +288,44 @@ public class LaporanPembelianAdmin extends javax.swing.JFrame {
 
     private void btnPrintMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPrintMouseClicked
         // TODO add your handling code here:
+
     }//GEN-LAST:event_btnPrintMouseClicked
 
     private void btnCariMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCariMouseClicked
         // TODO add your handling code here:
         cariData();
+        Click = 1;
     }//GEN-LAST:event_btnCariMouseClicked
+
+    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
+        String Berdasarkan = "Semua Pembelian", tglAwal = "", tglAkhir = "";
+        try {
+            //Koneksi Database
+            com.mysql.jdbc.Connection c = (com.mysql.jdbc.Connection) DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+            //CETAK DATA
+            HashMap parameter = new HashMap();
+            //AMBIL FILE
+            if (Click == 1) {
+                String tanggalLahir = "yyyy-MM-dd";
+                SimpleDateFormat fm = new SimpleDateFormat(tanggalLahir);
+                tglAwal = String.valueOf(fm.format(txtTglAwal.getDate()));
+                tglAkhir = String.valueOf(fm.format(txtTglAkhir.getDate()));
+                Berdasarkan = "Tanggal";
+            }
+            parameter.put("bds", Berdasarkan);
+            parameter.put("tglAwal", tglAwal);
+            parameter.put("tglAkhir", tglAkhir);
+            File file = new File("src/Report/LaporanPembelian2.jasper");
+            JasperReport jr = (JasperReport) JRLoader.loadObject(file);
+            JasperPrint jp = JasperFillManager.fillReport(jr, parameter, c);
+            //AGAR TIDAK MENGCLOSE APLIKASi
+            JasperViewer.viewReport(jp, false);
+            JasperViewer.setDefaultLookAndFeelDecorated(true);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "" + e);
+        }
+    }//GEN-LAST:event_btnPrintActionPerformed
 
     /**
      * @param args the command line arguments
