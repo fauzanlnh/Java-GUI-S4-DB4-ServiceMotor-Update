@@ -38,7 +38,7 @@ public class LaporanPemasukanAdmin extends javax.swing.JFrame {
     public LaporanPemasukanAdmin() {
         initComponents();
         this.setLocationRelativeTo(null);
-        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "fauzan", "10118227_Fauzanlukmanulhakim_servicemotoryamaha");
         showData();
         setJDate();
     }
@@ -1437,7 +1437,7 @@ int Click = 0;
         String Berdasarkan = "Semua Pemasukkan", tglAwal = "", tglAkhir = "";
         try {
             //Koneksi Database
-            com.mysql.jdbc.Connection c = (com.mysql.jdbc.Connection) DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+            com.mysql.jdbc.Connection c = (com.mysql.jdbc.Connection) DatabaseConnection.getKoneksi("localhost", "3306", "root", "fauzan", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
             //CETAK DATA
             HashMap parameter = new HashMap();
             //AMBIL FILE

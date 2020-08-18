@@ -35,7 +35,7 @@ public class Gudang extends javax.swing.JFrame {
     public Gudang() {
         initComponents();
         this.setLocationRelativeTo(null);
-        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "fauzan", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
         showData();
     }
 
@@ -538,7 +538,7 @@ public class Gudang extends javax.swing.JFrame {
         //EXPORT PDF
         try {
             //Koneksi Database
-            com.mysql.jdbc.Connection c = (com.mysql.jdbc.Connection) DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+            com.mysql.jdbc.Connection c = (com.mysql.jdbc.Connection) DatabaseConnection.getKoneksi("localhost", "3306", "root", "fauzan", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
             //CETAK DATA
             HashMap parameter = new HashMap();
             //AMBIL FILE

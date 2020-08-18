@@ -34,7 +34,7 @@ public class LaporanPenjualan extends javax.swing.JFrame {
     public LaporanPenjualan() {
         initComponents();
         this.setLocationRelativeTo(null);
-        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "fauzan", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
         showData();
         setJDate();
     }
@@ -319,7 +319,7 @@ int Click = 0;
         String Berdasarkan = "Semua Pembelian", tglAwal = "", tglAkhir = "";
         try {
             //Koneksi Database
-            com.mysql.jdbc.Connection c = (com.mysql.jdbc.Connection) DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+            com.mysql.jdbc.Connection c = (com.mysql.jdbc.Connection) DatabaseConnection.getKoneksi("localhost", "3306", "root", "fauzan", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
             //CETAK DATA
             HashMap parameter = new HashMap();
             //AMBIL FILE

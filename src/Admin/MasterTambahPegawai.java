@@ -24,7 +24,7 @@ public class MasterTambahPegawai extends javax.swing.JFrame {
     public MasterTambahPegawai() {
         initComponents();
         this.setLocationRelativeTo(null);
-        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "fauzan", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
         SetIdPegawai();
         txtAlamat.setLineWrap(true);
         txtAlamat.setWrapStyleWord(true);
@@ -63,20 +63,31 @@ public class MasterTambahPegawai extends javax.swing.JFrame {
 
     public void SetIdPegawai() {
         String Bagian = cmbBagian.getSelectedItem().toString();
-        int IdPegawaiTerakhir = 0;
-        int IdPegawaiBaru = 1;
+        String IdPegawaiTerakhir = "";
+        String IdPegawaiBaru = "";
         try {
             Statement stmt = koneksi.createStatement();
             String SelectIdPegawai = "SELECT * FROM T_PEGAWAI WHERE Bagian = '" + Bagian + "' ORDER BY Id_Pegawai DESC LIMIT 1";
             ResultSet rs = stmt.executeQuery(SelectIdPegawai);
             if (rs.next()) {
-                IdPegawaiTerakhir = rs.getInt("Id_Pegawai");
+                IdPegawaiTerakhir = rs.getString("Id_Pegawai");
                 IdPegawaiBaru = IdPegawaiBaru + IdPegawaiTerakhir;
+                String[] kode = IdPegawaiBaru.split("-");
+                String bagian1 = kode[0];
+                String bagian2 = kode[1];
+                int intBagian2 = Integer.valueOf(bagian2);
+                String strBagina2 = String.valueOf(intBagian2);
+                System.out.println(strBagina2);
+                IdPegawaiBaru = IdPegawaiBaru + 1;
+                if (strBagina2.length() == 1) {
+                    IdPegawaiBaru = "" + bagian1 + "-" + "00" + (intBagian2 + 1);
+                } else if (strBagina2.length() == 2) {
+                    IdPegawaiBaru = "" + bagian1 + "-" + "00" + (intBagian2 + 1);
+                }
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
-
         txtIdPegawai.setText("" + IdPegawaiBaru);
     }
 
@@ -92,9 +103,15 @@ public class MasterTambahPegawai extends javax.swing.JFrame {
             Statement stmt = koneksi.createStatement();
             if (!IdPegawai.equals("") && !Nama.equals("") && !Alamat.equals("") && !NoTelp.equals("") && !Bagian.equals("-") && !User.equals("") && !Pass.equals("")) {
                 String TambahPegawai = "INSERT INTO T_Pegawai VALUES ('" + IdPegawai + "','" + Nama + "','" + Alamat + "','" + NoTelp + "','" + Bagian + "')";
-                String TambahLogin = "INSERT INTO T_Login VALUES ('" + User + "', '" + Pass + "','" + Bagian + "','" + IdPegawai + "')";
+                System.out.println(TambahPegawai);
                 int BerhasilTPegawai = stmt.executeUpdate(TambahPegawai);
-                int BerhasilTLogin = stmt.executeUpdate(TambahLogin);
+                int BerhasilTLogin = 1;
+                String TambahLogin = "";
+                if (!Bagian.equals("TEKNISI")) {
+                    TambahLogin = "INSERT INTO T_Login VALUES ('" + User + "', '" + Pass + "','" + Bagian + "','" + IdPegawai + "')";
+                    System.out.println(TambahLogin);
+                    BerhasilTLogin = stmt.executeUpdate(TambahLogin);
+                }
                 if (BerhasilTPegawai == 1 && BerhasilTLogin == 1) {
                     System.out.println("INSERT TABEL PEGAWAI");
                     System.out.println(TambahPegawai);
@@ -128,7 +145,7 @@ public class MasterTambahPegawai extends javax.swing.JFrame {
                 } else if (User.equals("")) {
                     JOptionPane.showMessageDialog(null, "USERNAME HARUS DIISI");
                     txtUsernameBaru.requestFocus();
-                } else if (Pass.equals("")) {
+                } else if (Pass.equals("") && !Bagian.equals("TEKNISI")) {
                     JOptionPane.showMessageDialog(null, "PASSWORD HARUS DIISI");
                     txtPassword1.requestFocus();
                 } else {
@@ -437,6 +454,15 @@ public class MasterTambahPegawai extends javax.swing.JFrame {
 
     private void cmbBagianItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbBagianItemStateChanged
         SetIdPegawai();
+        if (cmbBagian.getSelectedItem().equals("TEKNISI")) {
+            txtUsernameBaru.setEnabled(false);
+            txtPassword1.setEnabled(false);
+            txtPassword1.setText(" ");
+        } else {
+            txtUsernameBaru.setEnabled(true);
+            txtPassword1.setEnabled(true);
+            txtPassword1.setText("");
+        }
     }//GEN-LAST:event_cmbBagianItemStateChanged
 
     /**

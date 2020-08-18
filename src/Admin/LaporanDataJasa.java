@@ -33,7 +33,7 @@ public class LaporanDataJasa extends javax.swing.JFrame {
 
     public LaporanDataJasa() {
         initComponents();
-        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "fauzan", "10118227_Fauzanlukmanulhakim_servicemotoryamaha");
         this.setLocationRelativeTo(null);
         showData();
     }
@@ -93,7 +93,7 @@ public class LaporanDataJasa extends javax.swing.JFrame {
             String getKdMotor = "SELECT * FROM T_Jenis_Jasa WHERE Nama_Jasa = '" + tblJasa.getValueAt(tblJasa.getSelectedRow(), 1) + "'";
             ResultSet rs = stmt.executeQuery(getKdMotor);
             if (rs.next()) {
-                txtIdJasa.setText(rs.getString("Id_Jasa"));
+                txtIdJasa1.setText(rs.getString("Id_Jasa"));
                 txtNamaJasa1.setText(rs.getString("Nama_Jasa"));
                 txtHargaJasa1.setText(rs.getString("Harga_Jasa"));
                 cmbTipeMotor1.setSelectedIndex(rs.getInt("Id_Jenis"));
@@ -106,15 +106,19 @@ public class LaporanDataJasa extends javax.swing.JFrame {
 
     public void UbahData() {
         try {
-            Statement stmt = koneksi.createStatement();
-            String Update = "UPDATE T_Jenis_Jasa SET Nama_Jasa = '" + txtNamaJasa1.getText().toUpperCase() + "', "
-                    + "Id_Jenis = '" + cmbTipeMotor1.getSelectedIndex() + "', Harga_Jasa = '" + txtHargaJasa1.getText() + "' "
-                    + "WHERE Id_Jasa = '" + txtIdJasa.getText() + "'";
-            int berhasil = stmt.executeUpdate(Update);
-            if (berhasil > 0) {
-                JOptionPane.showMessageDialog(null, "DATA BERHASIL DIUBAH");
-                showData();
-                UbahJasa.dispose();
+            if (!txtNamaJasa1.getText().equals("") && cmbTipeMotor1.getSelectedIndex() != 0 && !txtHargaJasa1.getText().equals("")) {
+                Statement stmt = koneksi.createStatement();
+                String Update = "UPDATE T_Jenis_Jasa SET Nama_Jasa = '" + txtNamaJasa1.getText().toUpperCase() + "', "
+                        + "Id_Jenis = '" + cmbTipeMotor1.getSelectedIndex() + "', Harga_Jasa = '" + txtHargaJasa1.getText() + "' "
+                        + "WHERE Id_Jasa = '" + txtIdJasa1.getText() + "'";
+                int berhasil = stmt.executeUpdate(Update);
+                if (berhasil > 0) {
+                    JOptionPane.showMessageDialog(null, "DATA BERHASIL DIUBAH");
+                    showData();
+                    UbahJasa.dispose();
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "FORM MASIH ADA YANG KOSONG");
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -123,17 +127,22 @@ public class LaporanDataJasa extends javax.swing.JFrame {
 
     public void SimpanData() {
         try {
-            Statement stmt = koneksi.createStatement();
-            String Insert = "INSERT INTO T_Jenis_Jasa (Nama_Jasa, Id_Jenis, Harga_Jasa) VALUES "
-                    + "('" + txtNamaJasa.getText().toUpperCase() + "', "
-                    + " '" + cmbTipeMotor.getSelectedIndex() + "', "
-                    + "'" + txtHargaJasa.getText().toUpperCase() + "' )";
-            int berhasil = stmt.executeUpdate(Insert);
-            if (berhasil > 0) {
-                JOptionPane.showMessageDialog(null, "DATA BERHASIL DIMASUKKAn");
-                showData();
-                TambahJasa.dispose();
+            if (!txtNamaJasa.getText().equals("") && cmbTipeMotor.getSelectedIndex() != 0 && !txtHargaJasa.getText().equals("")) {
+                Statement stmt = koneksi.createStatement();
+                String Insert = "INSERT INTO T_Jenis_Jasa (Nama_Jasa, Id_Jenis, Harga_Jasa) VALUES "
+                        + "('" + txtNamaJasa.getText().toUpperCase() + "', "
+                        + " '" + cmbTipeMotor.getSelectedIndex() + "', "
+                        + "'" + txtHargaJasa.getText().toUpperCase() + "' )";
+                int berhasil = stmt.executeUpdate(Insert);
+                if (berhasil > 0) {
+                    JOptionPane.showMessageDialog(null, "DATA BERHASIL DIMASUKKAn");
+                    showData();
+                    TambahJasa.dispose();
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "FORM MASIH ADA YANG KOSONG");
             }
+
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -164,7 +173,7 @@ public class LaporanDataJasa extends javax.swing.JFrame {
         mainPanel3 = new javax.swing.JPanel();
         PanelDirectory2 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        txtIdJasa = new javax.swing.JTextField();
+        txtIdJasa1 = new javax.swing.JTextField();
         lblNoPol4 = new javax.swing.JLabel();
         txtNamaJasa1 = new javax.swing.JTextField();
         lblService1 = new javax.swing.JLabel();
@@ -267,38 +276,35 @@ public class LaporanDataJasa extends javax.swing.JFrame {
         mainPanel4.setLayout(mainPanel4Layout);
         mainPanel4Layout.setHorizontalGroup(
             mainPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(PanelDirectory3, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(mainPanel4Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
                 .addGroup(mainPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(PanelDirectory3, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(mainPanel4Layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
+                        .addComponent(lblService2)
+                        .addGap(18, 18, 18)
                         .addGroup(mainPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(mainPanel4Layout.createSequentialGroup()
-                                .addComponent(lblService2)
-                                .addGap(18, 18, 18)
-                                .addGroup(mainPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(mainPanel4Layout.createSequentialGroup()
-                                        .addComponent(btnCancel2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnSubmit2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(cmbTipeMotor, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(mainPanel4Layout.createSequentialGroup()
-                                .addComponent(lblNoPol9)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtHargaJasa, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(mainPanel4Layout.createSequentialGroup()
-                                .addComponent(lblNoPol7)
-                                .addGap(22, 22, 22)
-                                .addComponent(txtNamaJasa, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(0, 0, 0))
+                                .addComponent(btnCancel2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnSubmit2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cmbTipeMotor, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(mainPanel4Layout.createSequentialGroup()
+                        .addComponent(lblNoPol9)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtHargaJasa, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(mainPanel4Layout.createSequentialGroup()
+                        .addComponent(lblNoPol7)
+                        .addGap(22, 22, 22)
+                        .addComponent(txtNamaJasa, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         mainPanel4Layout.setVerticalGroup(
             mainPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanel4Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(PanelDirectory3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addGap(31, 31, 31)
                 .addGroup(mainPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNoPol7, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtNamaJasa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -314,7 +320,7 @@ public class LaporanDataJasa extends javax.swing.JFrame {
                 .addGroup(mainPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSubmit2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancel2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout TambahJasaLayout = new javax.swing.GroupLayout(TambahJasa.getContentPane());
@@ -363,11 +369,11 @@ public class LaporanDataJasa extends javax.swing.JFrame {
                 .addGap(39, 39, 39))
         );
 
-        txtIdJasa.setEditable(false);
-        txtIdJasa.setBackground(new java.awt.Color(255, 255, 255));
-        txtIdJasa.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
-        txtIdJasa.setForeground(new java.awt.Color(51, 51, 51));
-        txtIdJasa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
+        txtIdJasa1.setEditable(false);
+        txtIdJasa1.setBackground(new java.awt.Color(255, 255, 255));
+        txtIdJasa1.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        txtIdJasa1.setForeground(new java.awt.Color(51, 51, 51));
+        txtIdJasa1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51)));
 
         lblNoPol4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblNoPol4.setForeground(new java.awt.Color(51, 51, 51));
@@ -452,7 +458,7 @@ public class LaporanDataJasa extends javax.swing.JFrame {
                                 .addGap(22, 22, 22)
                                 .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtNamaJasa1, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-                                    .addComponent(txtIdJasa))))))
+                                    .addComponent(txtIdJasa1))))))
                 .addGap(0, 0, 0))
         );
         mainPanel3Layout.setVerticalGroup(
@@ -462,7 +468,7 @@ public class LaporanDataJasa extends javax.swing.JFrame {
                 .addComponent(PanelDirectory2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtIdJasa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtIdJasa1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblNoPol5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(mainPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -652,7 +658,7 @@ public class LaporanDataJasa extends javax.swing.JFrame {
         //EXPORT PDF
         try {
             //Koneksi Database
-            com.mysql.jdbc.Connection c = (com.mysql.jdbc.Connection) DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+            com.mysql.jdbc.Connection c = (com.mysql.jdbc.Connection) DatabaseConnection.getKoneksi("localhost", "3306", "root", "fauzan", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
             //CETAK DATA
             HashMap parameter = new HashMap();
             //AMBIL FILE
@@ -785,7 +791,7 @@ public class LaporanDataJasa extends javax.swing.JFrame {
     private javax.swing.JTextField txtCari;
     private javax.swing.JTextField txtHargaJasa;
     private javax.swing.JTextField txtHargaJasa1;
-    private javax.swing.JTextField txtIdJasa;
+    private javax.swing.JTextField txtIdJasa1;
     private javax.swing.JTextField txtNamaJasa;
     private javax.swing.JTextField txtNamaJasa1;
     // End of variables declaration//GEN-END:variables

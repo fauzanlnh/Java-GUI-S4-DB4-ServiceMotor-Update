@@ -24,7 +24,7 @@ public class MasterGantiPassword extends javax.swing.JFrame {
     public MasterGantiPassword() {
         initComponents();
         this.setLocationRelativeTo(null);
-        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "fauzan", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
     }
 
     public void ClearFormUbah() {

@@ -26,7 +26,6 @@ public class MenuLaporan extends javax.swing.JFrame {
     public MenuLaporan() {
         initComponents();
         this.setLocationRelativeTo(null);
-        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
     }
 
     //FORM
@@ -94,7 +93,7 @@ public class MenuLaporan extends javax.swing.JFrame {
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("Data/");
+        jLabel12.setText("Admin/Data");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -379,7 +378,7 @@ public class MenuLaporan extends javax.swing.JFrame {
         });
 
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Report Business_VLB.png"))); // NOI18N
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Mechanic_VLB.png"))); // NOI18N
 
         jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(30, 132, 234));
@@ -421,7 +420,7 @@ public class MenuLaporan extends javax.swing.JFrame {
         });
 
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Report Business_VLB.png"))); // NOI18N
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Report Money_VLB.png"))); // NOI18N
 
         jLabel22.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel22.setForeground(new java.awt.Color(30, 132, 234));
@@ -465,7 +464,7 @@ public class MenuLaporan extends javax.swing.JFrame {
         });
 
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Report Business_VLB.png"))); // NOI18N
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Motor_VLB.png"))); // NOI18N
 
         jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(30, 132, 234));
@@ -528,7 +527,7 @@ public class MenuLaporan extends javax.swing.JFrame {
         pnlLogout4Layout.setVerticalGroup(
             pnlLogout4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLogout4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(61, Short.MAX_VALUE)
                 .addComponent(jLabel29)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel30)
@@ -586,7 +585,7 @@ public class MenuLaporan extends javax.swing.JFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(pnlLaporanPemasukan, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
                                     .addComponent(pnlHome, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE))

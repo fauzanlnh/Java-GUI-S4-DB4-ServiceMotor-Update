@@ -27,13 +27,12 @@ public class TransaksiService extends javax.swing.JFrame {
      * Creates new form TransaksiService
      */
     Connection koneksi;
-    String KdJenisMotor, IdPegawai;
-    int KdTeknisi;
+    String KdJenisMotor, IdPegawai, KdTeknisi;
 
     public TransaksiService() {
         initComponents();
         this.setLocationRelativeTo(null);
-        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "fauzan", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
         CariNoFaktur.setSize(575, 440);
         CariNoFaktur.setLocationRelativeTo(null);
         getListTeknisi();
@@ -370,14 +369,14 @@ public class TransaksiService extends javax.swing.JFrame {
         return KdJenisMotor;
     }
 
-    public int getKdTeknisi() {
+    public String getKdTeknisi() {
         String NamaTeknisi = cmbTeknisi.getSelectedItem().toString();
         try {
             String SelectKD = "SELECT * FROM T_Pegawai WHERE Nama_Pegawai = '" + NamaTeknisi + "' AND Bagian = 'TEKNISI'";
             Statement st = koneksi.createStatement();
             ResultSet rs = st.executeQuery(SelectKD);
             while (rs.next()) {
-                KdTeknisi = rs.getInt("Id_Pegawai");
+                KdTeknisi = rs.getString("Id_Pegawai");
             }
         } catch (SQLException e) {
 
@@ -740,7 +739,7 @@ public class TransaksiService extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("Kasir/Pendaftaran Service");
+        jLabel9.setText("Kasir/Transaksi Service");
 
         javax.swing.GroupLayout PanelDirectory3Layout = new javax.swing.GroupLayout(PanelDirectory3);
         PanelDirectory3.setLayout(PanelDirectory3Layout);
@@ -749,7 +748,7 @@ public class TransaksiService extends javax.swing.JFrame {
             .addGroup(PanelDirectory3Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(jLabel9)
-                .addContainerGap(431, Short.MAX_VALUE))
+                .addContainerGap(464, Short.MAX_VALUE))
         );
         PanelDirectory3Layout.setVerticalGroup(
             PanelDirectory3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1254,6 +1253,9 @@ public class TransaksiService extends javax.swing.JFrame {
 
     private void btnTambahSparepartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahSparepartActionPerformed
         setTableSparepart();
+        setTotalSparepart();
+        setTotalService();
+        setTotalBayar();
         if (tblSparepart.getRowCount() > 0 || tblService.getRowCount() > 0) {
             btnCariNopol.setEnabled(false);
         } else {
@@ -1263,6 +1265,9 @@ public class TransaksiService extends javax.swing.JFrame {
 
     private void btnTambahServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahServiceActionPerformed
         setTableService();
+        setTotalSparepart();
+        setTotalService();
+        setTotalBayar();
         if (tblSparepart.getRowCount() > 0 || tblService.getRowCount() > 0) {
             btnCariNopol.setEnabled(false);
         } else {

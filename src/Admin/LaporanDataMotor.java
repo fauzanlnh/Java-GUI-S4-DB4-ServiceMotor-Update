@@ -33,7 +33,7 @@ public class LaporanDataMotor extends javax.swing.JFrame {
 
     public LaporanDataMotor() {
         initComponents();
-        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "fauzan", "10118227_Fauzanlukmanulhakim_servicemotoryamaha");
         this.setLocationRelativeTo(null);
         showData();
     }
@@ -120,13 +120,17 @@ public class LaporanDataMotor extends javax.swing.JFrame {
     public void SimpanData() {
         try {
             Statement stmt = koneksi.createStatement();
-            String Insert = "INSERT INTO T_Tipe (Nama_Tipe, Id_Jenis) VALUES ('" + txtNamaTipe.getText().toUpperCase() + "', "
-                    + " '" + cmbTipeMotor.getSelectedIndex() + "')";
-            int berhasil = stmt.executeUpdate(Insert);
-            if (berhasil > 0) {
-                JOptionPane.showMessageDialog(null, "DATA BERHASIL DIMASUKKAn");
-                showData();
-                TambahMotor.dispose();
+            if (!txtNamaTipe.getText().equals("") && cmbTipeMotor.getSelectedIndex() != 0) {
+                String Insert = "INSERT INTO T_Tipe (Nama_Tipe, Id_Jenis) VALUES ('" + txtNamaTipe.getText().toUpperCase() + "', "
+                        + " '" + cmbTipeMotor.getSelectedIndex() + "')";
+                int berhasil = stmt.executeUpdate(Insert);
+                if (berhasil > 0) {
+                    JOptionPane.showMessageDialog(null, "DATA BERHASIL DIMASUKKAn");
+                    showData();
+                    TambahMotor.dispose();
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "FORM MASIH ADA YANG KOSONG");
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -602,7 +606,7 @@ public class LaporanDataMotor extends javax.swing.JFrame {
         //EXPORT PDF        
         try {
             //Koneksi Database
-            com.mysql.jdbc.Connection c = (com.mysql.jdbc.Connection) DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+            com.mysql.jdbc.Connection c = (com.mysql.jdbc.Connection) DatabaseConnection.getKoneksi("localhost", "3306", "root", "fauzan", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
             //CETAK DATA
             HashMap parameter = new HashMap();
             //AMBIL FILE
@@ -642,15 +646,17 @@ public class LaporanDataMotor extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCariKeyReleased
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-        SimpanData();
+        int ok = JOptionPane.showConfirmDialog(null, "Yakin Akan Memasukkan Data?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if (ok == 0) {
+            SimpanData();
+        }
     }//GEN-LAST:event_btnSubmitActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
-        int ok = JOptionPane.showConfirmDialog(null, "Yakin Akan Memasukkan Data?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
-        if (ok == 0) {
-            TambahMotor.dispose();
-        }
+
+        TambahMotor.dispose();
+
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnSubmit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmit1ActionPerformed

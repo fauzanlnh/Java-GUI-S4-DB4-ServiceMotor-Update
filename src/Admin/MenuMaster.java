@@ -5,10 +5,11 @@
  */
 package Admin;
 
-import Kasir.*;
 import Class.Login;
-import Class.LoginSession;
 import java.awt.Color;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,6 +21,41 @@ public class MenuMaster extends javax.swing.JFrame {
     public MenuMaster() {
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+
+    public void Backupdbtosql() {
+        try {
+            String dbname = "10118227_fauzanlukmanulhakim_servicemotoryamaha";
+            String dbuser = "root";
+            String dbpass = "fauzan";
+            String folderpath = "E:" + "\\Backup database";
+            File fl = new File(folderpath);
+            fl.mkdir();
+            String savepath = "\"" + folderpath + "\\" + dbname + "" + ".sql\"";
+            /*String executeCmd = "cd.. "
+                    + "\nE: "
+                    + "\ncd E:\\Project\\xampp\\mysql\\bin\\ "
+                    + "\nmysqldump -u" + dbuser + " -p" + dbpass + " " + dbname + " > " + savepath + "\n";*/
+            String executeCmd[] = {"cd..\n", "E:\n", "cd E:\\Program Fies\\Pelajaran\\mysql\\MySQL Server\\MySQL Server 8.0\\bin\\ \n", "mysqldump -u" + dbuser + " -p" + dbpass + " " + dbname + " > " + savepath + "\n\n"};
+            //System.out.println(executeCmd);
+            //Process runtimeProcess = Runtime.getRuntime().exec(execudecmd);
+            int processcomplete = 1;
+            for (int i = 0; i < executeCmd.length; i++) {
+                System.out.print(executeCmd[i]);
+                Process runtimeProcess = Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", executeCmd[i]});
+                processcomplete = runtimeProcess.waitFor();
+                System.out.println("exit value: " + processcomplete);
+
+            }
+            //System.out.println("exit value: " + processcomplete);
+            if (processcomplete == 0) {
+                JOptionPane.showMessageDialog(null, "Backup Successfully");
+            } else {
+                JOptionPane.showMessageDialog(null, "Backup Failed");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }
 
     /**
@@ -52,9 +88,12 @@ public class MenuMaster extends javax.swing.JFrame {
         pnlGantiPassword = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        pnlTambahPegawai1 = new javax.swing.JPanel();
+        pnlBackUp = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
+        pnlLogout4 = new javax.swing.JPanel();
+        jLabel29 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -77,7 +116,7 @@ public class MenuMaster extends javax.swing.JFrame {
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("Master/");
+        jLabel12.setText("Admin/Master/");
 
         javax.swing.GroupLayout DirectoryPanelLayout = new javax.swing.GroupLayout(DirectoryPanel);
         DirectoryPanel.setLayout(DirectoryPanelLayout);
@@ -205,7 +244,7 @@ public class MenuMaster extends javax.swing.JFrame {
             .addGroup(pnlHomeLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -216,7 +255,7 @@ public class MenuMaster extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
 
         pnlTambahPegawai.setBackground(new java.awt.Color(234, 234, 234));
@@ -248,7 +287,7 @@ public class MenuMaster extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlTambahPegawaiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlTambahPegawaiLayout.setVerticalGroup(
@@ -290,7 +329,7 @@ public class MenuMaster extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlGantiPasswordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE))
+                    .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlGantiPasswordLayout.setVerticalGroup(
@@ -303,45 +342,88 @@ public class MenuMaster extends javax.swing.JFrame {
                 .addGap(21, 21, 21))
         );
 
-        pnlTambahPegawai1.setBackground(new java.awt.Color(234, 234, 234));
-        pnlTambahPegawai1.addMouseListener(new java.awt.event.MouseAdapter() {
+        pnlBackUp.setBackground(new java.awt.Color(234, 234, 234));
+        pnlBackUp.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pnlTambahPegawai1MouseClicked(evt);
+                pnlBackUpMouseClicked(evt);
             }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                pnlTambahPegawai1MouseEntered(evt);
+                pnlBackUpMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                pnlTambahPegawai1MouseExited(evt);
+                pnlBackUpMouseExited(evt);
             }
         });
 
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Add User_VLB.png"))); // NOI18N
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_database_VLB.png"))); // NOI18N
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(30, 132, 234));
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel17.setText("Backup Database");
 
-        javax.swing.GroupLayout pnlTambahPegawai1Layout = new javax.swing.GroupLayout(pnlTambahPegawai1);
-        pnlTambahPegawai1.setLayout(pnlTambahPegawai1Layout);
-        pnlTambahPegawai1Layout.setHorizontalGroup(
-            pnlTambahPegawai1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlTambahPegawai1Layout.createSequentialGroup()
+        javax.swing.GroupLayout pnlBackUpLayout = new javax.swing.GroupLayout(pnlBackUp);
+        pnlBackUp.setLayout(pnlBackUpLayout);
+        pnlBackUpLayout.setHorizontalGroup(
+            pnlBackUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBackUpLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
                 .addContainerGap())
             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        pnlTambahPegawai1Layout.setVerticalGroup(
-            pnlTambahPegawai1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlTambahPegawai1Layout.createSequentialGroup()
+        pnlBackUpLayout.setVerticalGroup(
+            pnlBackUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlBackUpLayout.createSequentialGroup()
                 .addGap(49, 49, 49)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel17)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+
+        pnlLogout4.setBackground(new java.awt.Color(234, 234, 234));
+        pnlLogout4.setPreferredSize(new java.awt.Dimension(182, 163));
+        pnlLogout4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlLogout4MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                pnlLogout4MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                pnlLogout4MouseExited(evt);
+            }
+        });
+
+        jLabel29.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel29.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/HIS_Logout_VLB.png"))); // NOI18N
+
+        jLabel30.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel30.setForeground(new java.awt.Color(30, 132, 234));
+        jLabel30.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel30.setText("Logout");
+
+        javax.swing.GroupLayout pnlLogout4Layout = new javax.swing.GroupLayout(pnlLogout4);
+        pnlLogout4.setLayout(pnlLogout4Layout);
+        pnlLogout4Layout.setHorizontalGroup(
+            pnlLogout4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlLogout4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlLogout4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel29, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                    .addComponent(jLabel30, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        pnlLogout4Layout.setVerticalGroup(
+            pnlLogout4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLogout4Layout.createSequentialGroup()
+                .addContainerGap(49, Short.MAX_VALUE)
+                .addComponent(jLabel29)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel30)
+                .addGap(9, 9, 9))
         );
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
@@ -354,36 +436,41 @@ public class MenuMaster extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(DirectoryPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 958, Short.MAX_VALUE)
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addGap(278, 278, 278)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(pnlHome, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(pnlGantiPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(pnlTambahPegawai1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(pnlTambahPegawai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                        .addComponent(pnlHome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(pnlGantiPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(pnlTambahPegawai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                        .addComponent(pnlBackUp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(pnlLogout4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(87, 87, 87)))
+                .addGap(195, 195, 195))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+            .addGroup(mainPanelLayout.createSequentialGroup()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(minimizePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
                 .addComponent(DirectoryPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(105, 105, 105)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(pnlGantiPassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlHome, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(pnlTambahPegawai1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlTambahPegawai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(112, 112, 112))
+                .addGap(93, 93, 93)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(pnlBackUp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(pnlGantiPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pnlTambahPegawai, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pnlHome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6)
+                        .addComponent(pnlLogout4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(114, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -473,17 +560,39 @@ public class MenuMaster extends javax.swing.JFrame {
         minimizePanel.setBackground(new java.awt.Color(255, 255, 255));
     }//GEN-LAST:event_minimizePanelMouseExited
 
-    private void pnlTambahPegawai1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlTambahPegawai1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pnlTambahPegawai1MouseClicked
+    private void pnlBackUpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBackUpMouseClicked
+        int ok = JOptionPane.showConfirmDialog(null, "Backup Database?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if (ok == 0) {
+            Backupdbtosql();
+        }
+    }//GEN-LAST:event_pnlBackUpMouseClicked
 
-    private void pnlTambahPegawai1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlTambahPegawai1MouseEntered
+    private void pnlBackUpMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBackUpMouseEntered
         // TODO add your handling code here:
-    }//GEN-LAST:event_pnlTambahPegawai1MouseEntered
+        pnlBackUp.setBackground(new java.awt.Color(115, 163, 239));
+    }//GEN-LAST:event_pnlBackUpMouseEntered
 
-    private void pnlTambahPegawai1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlTambahPegawai1MouseExited
+    private void pnlBackUpMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlBackUpMouseExited
         // TODO add your handling code here:
-    }//GEN-LAST:event_pnlTambahPegawai1MouseExited
+        pnlBackUp.setBackground(new java.awt.Color(234, 234, 234));
+    }//GEN-LAST:event_pnlBackUpMouseExited
+
+    private void pnlLogout4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlLogout4MouseClicked
+        int ok = JOptionPane.showConfirmDialog(null, "Anda Akan Logout?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if (ok == 0) {
+            dispose();
+            Login ps = new Login();
+            ps.show();
+        }
+    }//GEN-LAST:event_pnlLogout4MouseClicked
+
+    private void pnlLogout4MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlLogout4MouseEntered
+        pnlLogout4.setBackground(new java.awt.Color(115, 163, 239));
+    }//GEN-LAST:event_pnlLogout4MouseEntered
+
+    private void pnlLogout4MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnlLogout4MouseExited
+        pnlLogout4.setBackground(new java.awt.Color(234, 234, 234));
+    }//GEN-LAST:event_pnlLogout4MouseExited
     /**
      * @param args the command line arguments
      */
@@ -498,16 +607,24 @@ public class MenuMaster extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MenuMaster.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MenuMaster.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MenuMaster.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MenuMaster.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MenuMaster.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MenuMaster.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MenuMaster.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MenuMaster.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -536,16 +653,19 @@ public class MenuMaster extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JPanel minimizePanel;
+    private javax.swing.JPanel pnlBackUp;
     private javax.swing.JPanel pnlGantiPassword;
     private javax.swing.JPanel pnlHome;
+    private javax.swing.JPanel pnlLogout4;
     private javax.swing.JPanel pnlTambahPegawai;
-    private javax.swing.JPanel pnlTambahPegawai1;
     private javax.swing.JLabel txtClose;
     private javax.swing.JLabel txtMinimize;
     // End of variables declaration//GEN-END:variables

@@ -25,20 +25,20 @@ public class BarangMasuk extends javax.swing.JFrame {
      * Creates new form BarangMasuk
      */
     Connection koneksi;
-
+    
     public BarangMasuk() {
         initComponents();
         this.setLocationRelativeTo(null);
-        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "fauzan", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
         setJDate();
         txtIdPegawai.setText(LoginSession.getIdPegawai());
     }
-
+    
     public void setJDate() {
         Calendar today = Calendar.getInstance();
         txtTanggal.setDate(today.getTime());
     }
-
+    
     public void cariData() {
         String kolom[] = {"Id Sparepart", "Nama Sparepart", "Stok", "Nama Jenis"};
         DefaultTableModel dtm = new DefaultTableModel(null, kolom);
@@ -68,7 +68,7 @@ public class BarangMasuk extends javax.swing.JFrame {
         }
         tblLihat.setModel(dtm);
     }
-
+    
     public void lihatSparepart() {
         String kolom[] = {"Id Sparepart", "Nama Sparepart", "Stok", "Nama Jenis"};
         DefaultTableModel dtm = new DefaultTableModel(null, kolom);
@@ -90,7 +90,7 @@ public class BarangMasuk extends javax.swing.JFrame {
         }
         tblLihat.setModel(dtm);
     }
-
+    
     public void TambahTabel() {
         DefaultTableModel tableModel = (DefaultTableModel) tblDetail.getModel();
         String KdBarang = null;
@@ -102,7 +102,7 @@ public class BarangMasuk extends javax.swing.JFrame {
                 KdBarang = rs.getString("Id_Sparepart");
             }
         } catch (SQLException e) {
-
+            
         }
         int tHarga = Integer.parseInt(txtHarga.getText()) * Integer.parseInt(txtQty.getText());
         String harga = String.valueOf(tHarga);
@@ -117,7 +117,7 @@ public class BarangMasuk extends javax.swing.JFrame {
         txtHarga.setText("");
         txtQty.setText("");
     }
-
+    
     public void SimpanFaktur() {
         String tanggalLahir = "yyyy-MM-dd";
         SimpleDateFormat fm = new SimpleDateFormat(tanggalLahir);
@@ -129,47 +129,52 @@ public class BarangMasuk extends javax.swing.JFrame {
         try {
             Statement stmt = koneksi.createStatement();
             //QUERY 1
-            String InsertFaktur = "INSERT INTO T_Faktur_Sparepart_Masuk (Id_Sprt_Masuk, Tanggal,Id_Pegawai) VALUES ('" + KdFaktur + "', '" + tanggal + "', '" + IdPegawai + "')";
-            System.out.println(InsertFaktur);
-            BerhasilInserFaktur = stmt.executeUpdate(InsertFaktur);
-
-            for (int i = 0; i < tableModel.getRowCount(); i++) {
-                //QUERY 2
-                String InsertDetail = ("INSERT INTO T_Det_Sparepart_Masuk (Id_Sprt_Masuk, Id_Sparepart, Jmlh_Masuk, Harga_Masuk, Total_Per_Detail) VALUES("
-                        + "'" + KdFaktur + "',"
-                        + "'" + tableModel.getValueAt(i, 0) + "',"
-                        + "'" + tableModel.getValueAt(i, 3) + "',"
-                        + "'" + tableModel.getValueAt(i, 2) + "',"
-                        + "'" + tableModel.getValueAt(i, 4) + "')");
-                BerhasilInsertDetail = stmt.executeUpdate(InsertDetail);
-
-                String Id_Sparepart = (String) tableModel.getValueAt(i, 0);
-                String Banyak = tableModel.getValueAt(i, 3).toString();
-                int QTY = Integer.valueOf(Banyak);
-                //QUERY 3
-                String UpdateStok = "UPDATE T_Jenis_Sparepart SET Stok = (Stok +'" + QTY + "') WHERE Id_Sparepart = '" + Id_Sparepart + "'";
-                berhasilUpdate = stmt.executeUpdate(UpdateStok);
-
-                String HS = tableModel.getValueAt(i, 4).toString();
-                int HargaSatuan = Integer.valueOf(HS);
-                TotalFaktur = HargaSatuan + TotalFaktur;
-            }
-            
-            //QUERY 4
-            String UpdateTotalHarga = "UPDATE T_Faktur_Sparepart_Masuk SET Total_Harga = '" + TotalFaktur + "' WHERE Id_Sprt_Masuk = '" + KdFaktur + "' ";
-            BerhasilUpdateHarga = stmt.executeUpdate(UpdateTotalHarga);
-
-            if (BerhasilInserFaktur == 1 && BerhasilInsertDetail == 1 && berhasilUpdate == 1 && BerhasilUpdateHarga == 1) {
-                JOptionPane.showMessageDialog(null, "DATA BERHASIL DIMASUKKAN");
+            String SelectKdFaktur = "SELECT * FROM T_Faktur_Sparepart_Masuk WHERE Id_Sprt_Masuk = '" + KdFaktur + "'";
+            ResultSet select = stmt.executeQuery(SelectKdFaktur);
+            if (select.next()) {
+                JOptionPane.showMessageDialog(null, "KODE FAKTUR SUDAH ADA");
             } else {
-                JOptionPane.showMessageDialog(null, "DATA GAGAL DIMASUKKAN");
+                String InsertFaktur = "INSERT INTO T_Faktur_Sparepart_Masuk (Id_Sprt_Masuk, Tanggal,Id_Pegawai) VALUES ('" + KdFaktur + "', '" + tanggal + "', '" + IdPegawai + "')";
+                System.out.println(InsertFaktur);
+                BerhasilInserFaktur = stmt.executeUpdate(InsertFaktur);
+                for (int i = 0; i < tableModel.getRowCount(); i++) {
+                    //QUERY 2
+                    String InsertDetail = ("INSERT INTO T_Det_Sparepart_Masuk (Id_Sprt_Masuk, Id_Sparepart, Jmlh_Masuk, Harga_Masuk, Total_Per_Detail) VALUES("
+                            + "'" + KdFaktur + "',"
+                            + "'" + tableModel.getValueAt(i, 0) + "',"
+                            + "'" + tableModel.getValueAt(i, 3) + "',"
+                            + "'" + tableModel.getValueAt(i, 2) + "',"
+                            + "'" + tableModel.getValueAt(i, 4) + "')");
+                    BerhasilInsertDetail = stmt.executeUpdate(InsertDetail);
+                    
+                    String Id_Sparepart = (String) tableModel.getValueAt(i, 0);
+                    String Banyak = tableModel.getValueAt(i, 3).toString();
+                    int QTY = Integer.valueOf(Banyak);
+                    //QUERY 3
+                    String UpdateStok = "UPDATE T_Jenis_Sparepart SET Stok = (Stok +'" + QTY + "') WHERE Id_Sparepart = '" + Id_Sparepart + "'";
+                    berhasilUpdate = stmt.executeUpdate(UpdateStok);
+                    
+                    String HS = tableModel.getValueAt(i, 4).toString();
+                    int HargaSatuan = Integer.valueOf(HS);
+                    TotalFaktur = HargaSatuan + TotalFaktur;
+                }
+                //QUERY 4
+                String UpdateTotalHarga = "UPDATE T_Faktur_Sparepart_Masuk SET Total_Harga = '" + TotalFaktur + "' WHERE Id_Sprt_Masuk = '" + KdFaktur + "' ";
+                BerhasilUpdateHarga = stmt.executeUpdate(UpdateTotalHarga);
+                
+                if (BerhasilInserFaktur == 1 && BerhasilInsertDetail == 1 && berhasilUpdate == 1 && BerhasilUpdateHarga == 1) {
+                    JOptionPane.showMessageDialog(null, "DATA BERHASIL DIMASUKKAN");
+                    Clear();
+                } else {
+                    JOptionPane.showMessageDialog(null, "DATA GAGAL DIMASUKKAN");
+                }
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "KESALAHAN PADA DATABASE" + ex);
         }
     }
-
+    
     public void Clear() {
         setJDate();
         txtNoFaktur.setText("");
@@ -659,7 +664,6 @@ public class BarangMasuk extends javax.swing.JFrame {
             int ok = JOptionPane.showConfirmDialog(null, "Data Yang Dimasukkan Benar?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
             if (ok == 0) {
                 SimpanFaktur();
-                Clear();
             }
         } else if (txtNoFaktur.getText().equals("") && tblDetail.getRowCount() > 0) {
             JOptionPane.showMessageDialog(null, "NO FAKTUR MASIH KOSONG");
@@ -697,7 +701,7 @@ public class BarangMasuk extends javax.swing.JFrame {
     private void btnAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddMouseClicked
         // TODO add your handling code here:
         String getKodeAa = tblLihat.getValueAt(tblLihat.getSelectedRow(), 1).toString();
-
+        
         txtSparepart.setText(getKodeAa);
         F_LihatBarang.dispose();
     }//GEN-LAST:event_btnAddMouseClicked
@@ -731,9 +735,9 @@ public class BarangMasuk extends javax.swing.JFrame {
         try {
             Qty = Integer.parseInt(getQty);
         } catch (NumberFormatException e) {
-
+            
         }
-
+        
         int Harga = Integer.parseInt(getHarga);
         Total = Qty * Harga;
         tblDetail.setValueAt(Total, tblDetail.getSelectedRow(), 4);        // TODO add your handling code here:
@@ -754,21 +758,21 @@ public class BarangMasuk extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-
+                    
                 }
             }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(BarangMasuk.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
+            
         } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(BarangMasuk.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
+            
         } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(BarangMasuk.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
+            
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(BarangMasuk.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);

@@ -8,6 +8,7 @@ package Kasir;
 import Class.DatabaseConnection;
 import Class.Login;
 import java.sql.*;
+import java.util.Calendar;
 import javafx.scene.paint.Color;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -28,7 +29,7 @@ public class PendaftaranService extends javax.swing.JFrame {
     public PendaftaranService() {
         initComponents();
         this.setLocationRelativeTo(null);
-        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
+        koneksi = DatabaseConnection.getKoneksi("localhost", "3306", "root", "fauzan", "10118227_fauzanlukmanulhakim_servicemotoryamaha");
         CariNoPolisi.setSize(575, 440);
         CariNoPolisi.setLocationRelativeTo(null);
         TambahCustomer.setSize(625, 450);
@@ -53,15 +54,38 @@ public class PendaftaranService extends javax.swing.JFrame {
     }
 
     public void SetKodeFaktur() {
-        int No_Faktur = 0;
+        String No_Faktur = "";
+        String Bulan, Tahun;
         try {
-            String SelectKD = "SELECT * FROM T_Faktur ORDER BY Id_Faktur DESC LIMIT 1";
+            String SelectKD = "SELECT (Id_Faktur) AS'NFaktur', MONTH(NOW()) AS 'Bulan', YEAR(NOW()) AS 'Tahun' FROM t_faktur "
+                    + "WHERE MONTH(tanggal) = MONTH(NOW()) AND YEAR(Tanggal) = YEAR(NOW()) ORDER BY Id_Faktur DESC LIMIT 1";
             Statement st = koneksi.createStatement();
             ResultSet rs = st.executeQuery(SelectKD);
-            while (rs.next()) {
-                No_Faktur = rs.getInt("Id_Faktur");
+            if (rs.next()) {
+                No_Faktur = rs.getString("NFaktur");
+                Bulan = rs.getString("Bulan");
+                Tahun = rs.getString("Tahun");
+                String[] kode = No_Faktur.split("-");
+                String bagian2 = kode[1];
+                int intBagian2 = Integer.valueOf(bagian2);
+                String strBagina2 = String.valueOf(intBagian2);
+                System.out.println(strBagina2);
+                No_Faktur = No_Faktur + 1;
+                if (strBagina2.length() == 1) {
+                    No_Faktur = "" + Tahun + Bulan + "-" + "00" + (intBagian2 + 1);
+                } else if (strBagina2.length() == 2) {
+                    No_Faktur = "" + Tahun + Bulan + "-" + "0" + (intBagian2 + 1);
+                }
+            } else {
+                SelectKD = "SELECT MONTH(NOW()) AS 'Bulan', YEAR(NOW()) AS 'Tahun'";
+                ResultSet rs2 = st.executeQuery(SelectKD);
+                if (rs2.next()) {
+                    Bulan = rs2.getString("Bulan");
+                    Tahun = rs2.getString("Tahun");
+                    No_Faktur = "" + Tahun + Bulan + "-" + "00" + (1);
+                }
             }
-            No_Faktur = No_Faktur + 1;
+
             txtNoFaktur.setText("" + No_Faktur);
         } catch (SQLException e) {
 
@@ -425,7 +449,8 @@ public class PendaftaranService extends javax.swing.JFrame {
             //QUERY
             if (!NoPolisi.equals("")) {
                 //INSERT TABEL FAKTUR
-                String InsertFaktur = "INSERT INTO T_Faktur (Id_Faktur, No_Polisi, Id_Customer, Status)VALUES ('" + NoFaktur + "', '" + NoPolisi + "','" + GetIdCustomer() + "', 'PROSES')";
+                String InsertFaktur = "INSERT INTO T_Faktur (Id_Faktur, No_Polisi, Id_Customer, Status, Tanggal)VALUES ('" + NoFaktur + "', '" + NoPolisi + "','" + GetIdCustomer() + "', 'PROSES', (SELECT DATE(NOW()))) ";
+
                 BerhasilFaktur = stmt.executeUpdate(InsertFaktur);
                 System.out.println("INSERT TABEL FAKTUR");
                 System.out.println(InsertFaktur);
@@ -463,6 +488,7 @@ public class PendaftaranService extends javax.swing.JFrame {
                 //VALIDASI QUERY
                 if (BerhasiDetSparepart == 1 && BerhasiDetService == 1 && BerhasilFaktur == 1) {
                     JOptionPane.showMessageDialog(null, "DATA PENDAFTARAN BERHASIL DIMASUKKAN");
+                    SetKodeFaktur();
                 } else if (BerhasiDetSparepart == 0) {
                     JOptionPane.showMessageDialog(null, "DATA DETAIL SPAREPART GAGAL DIMASUKKAN");
                 } else if (BerhasiDetService == 0) {
@@ -1309,6 +1335,14 @@ public class PendaftaranService extends javax.swing.JFrame {
         if (ok == 0) {
             InsertDataCustomer();
             TampilDataCustomer();
+            txtIdCustomer.setText("");
+            txtNamaCustomer.setText("");
+            txtAlamat.setText("");
+            txtNoTelp.setText("");
+            txtNoPolisi.setText("");
+            txtNoRangka.setText("");
+            txtNoMesin.setText("");
+            cmbTipeMotor.setSelectedIndex(0);
         }
     }//GEN-LAST:event_btnTambahCustomerActionPerformed
 
@@ -1319,6 +1353,14 @@ public class PendaftaranService extends javax.swing.JFrame {
         if (txtCariNopol.getText().equals("")) {
             txtDataTidakDitemukan.setForeground(new java.awt.Color(255, 255, 255));
             TampilDataCustomer();
+            txtIdCustomer.setText("");
+            txtNamaCustomer.setText("");
+            txtAlamat.setText("");
+            txtNoTelp.setText("");
+            txtNoPolisi.setText("");
+            txtNoRangka.setText("");
+            txtNoMesin.setText("");
+            cmbTipeMotor.setSelectedIndex(0);
         }
     }//GEN-LAST:event_btnCancelTambahActionPerformed
 
