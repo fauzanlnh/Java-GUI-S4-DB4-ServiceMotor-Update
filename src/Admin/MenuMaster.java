@@ -10,6 +10,8 @@ import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,34 +26,27 @@ public class MenuMaster extends javax.swing.JFrame {
     }
 
     public void Backupdbtosql() {
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         try {
             String dbname = "10118227_fauzanlukmanulhakim_servicemotoryamaha";
             String dbuser = "root";
             String dbpass = "fauzan";
-            String folderpath = "E:" + "\\Backup database";
+            //String folderpath = "src" + "\\Backup database";
+            String folderpath = "D:" + "\\Backup database";
+            //10118227_fauzanlukmanulhakim_servicemotoryamaha
             File fl = new File(folderpath);
             fl.mkdir();
-            String savepath = "\"" + folderpath + "\\" + dbname + "" + ".sql\"";
-            /*String executeCmd = "cd.. "
-                    + "\nE: "
-                    + "\ncd E:\\Project\\xampp\\mysql\\bin\\ "
-                    + "\nmysqldump -u" + dbuser + " -p" + dbpass + " " + dbname + " > " + savepath + "\n";*/
-            String executeCmd[] = {"cd..\n", "E:\n", "cd E:\\Program Fies\\Pelajaran\\mysql\\MySQL Server\\MySQL Server 8.0\\bin\\ \n", "mysqldump -u" + dbuser + " -p" + dbpass + " " + dbname + " > " + savepath + "\n\n"};
-            //System.out.println(executeCmd);
-            //Process runtimeProcess = Runtime.getRuntime().exec(execudecmd);
-            int processcomplete = 1;
-            for (int i = 0; i < executeCmd.length; i++) {
-                System.out.print(executeCmd[i]);
-                Process runtimeProcess = Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", executeCmd[i]});
-                processcomplete = runtimeProcess.waitFor();
-                System.out.println("exit value: " + processcomplete);
-
-            }
-            //System.out.println("exit value: " + processcomplete);
+            String savepath = "\"" + folderpath + "\\" + "" + dbname + "" + "_" + date + ".sql\"";
+            String execudecmd = "mysqldump -u" + dbuser + " -p" + dbpass + " -P3306 --database " + dbname + " -r " + savepath;
+            System.out.println(execudecmd);
+            Process runtimeprocess = Runtime.getRuntime().exec(execudecmd);
+            int processcomplete = runtimeprocess.waitFor();
             if (processcomplete == 0) {
-                JOptionPane.showMessageDialog(null, "Backup Successfully");
+                JOptionPane.showMessageDialog(rootPane, "Backup Successfully");
             } else {
-                JOptionPane.showMessageDialog(null, "Backup Failed");
+                JOptionPane.showMessageDialog(rootPane, "Backup Failed");
+                File f2 = new File("src\\Backup Database\\" + dbname + ".sql");
+                f2.delete();
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
